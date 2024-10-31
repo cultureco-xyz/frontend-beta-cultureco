@@ -1,5 +1,5 @@
 import { motion, useAnimationControls } from "framer-motion";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 function ProductTypesSvg() {
   return (
@@ -154,7 +154,6 @@ function ProductTypesSvg() {
 }
 
 const ProductTypes = () => {
-  const [currImage, setcurrImage] = useState(1);
   const TIME = 3000;
 
   const imageControls = useAnimationControls();
@@ -166,18 +165,17 @@ const ProductTypes = () => {
         opacity: 0,
       });
       if (imageRef.current) {
-        let src = (imageRef.current as any).src;
-        let c = src
-          .split("/")
-          [src.split("/").length - 1].split(".")[0]
-          .split("c")[1];
-        if (c == 6) {
+        const src = (imageRef.current as { src: string }).src;
+        let c = Number(
+          src.split("/")[src.split("/").length - 1].split(".")[0].split("c")[1]
+        );
+        if (Number(c) == 6) {
           c = 1;
         }
         requestAnimationFrame(() => {
-          (imageRef.current as any).src = `/landing/creators/c${
-            parseInt(c) + 1
-          }.png`;
+          (
+            imageRef.current as unknown as { src: string }
+          ).src = `/landing/creators/c${c + 1}.png`;
         });
       }
       imageControls.start({
