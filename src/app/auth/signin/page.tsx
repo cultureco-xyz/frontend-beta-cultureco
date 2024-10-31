@@ -153,7 +153,7 @@ function BasicDetails() {
         profilePicture,
       });
       if (res.status == 200) {
-        alert("Success");
+        location.href = "/account";
       }
     }
   };

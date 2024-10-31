@@ -2,6 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useContext, createContext, ReactNode } from "react";
 import axios from "axios";
+import { UserData } from "@/types";
 
 const AuthContext = createContext(null);
 
@@ -27,7 +28,8 @@ function AuthContextProvider({ children }: { children: ReactNode }) {
 }
 
 export const useAuthContext = () => {
-  const user = useContext(AuthContext);
+  const user = useContext(AuthContext) as UserData | null;
+  console.log(user);
   return user;
 };
 
