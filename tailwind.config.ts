@@ -10,6 +10,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      spacing: {
+        mobile: "430px",
+      },
       backgroundImage: {
         "grad-bg": "url(/splash-bg.png)",
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

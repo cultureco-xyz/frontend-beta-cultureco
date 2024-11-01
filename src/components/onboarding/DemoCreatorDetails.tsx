@@ -1,80 +1,96 @@
-import React, { useState } from "react";
-import { Button } from "../ui/button";
-import axios from "axios";
-import { create } from "zustand";
-import { ChevronLeft, User2 } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import UploadCircle from "@/assets/svgs/upload-circle";
-import { handleProfilePicUpload } from "@/lib/utils";
-import Spinner from "../common/spinner";
+import { Button } from "@/components/ui/button";
+import { create } from "zustand";
+import Spinner from "@/components/common/spinner";
 
-type Store = {
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import { useState } from "react";
+import axios from "axios";
+import { handleProfilePicUpload } from "@/lib/utils";
+
+enum CREATOR_TYPES {
+  ARTIST = "Artist",
+  MUSICIAN = "Musician",
+}
+
+type labels = "name" | "bio" | "username" | "profilePicture" | "creatorType";
+
+type DemoCreatorStore = {
   name: string;
-  username: string;
   bio: string;
   profilePicture: string;
-  setValue: (
-    label: "name" | "username" | "bio" | "profilePicture",
-    value: string
-  ) => void;
+  creatorType: string;
+  username: string;
+  setValue: (label: labels, value: string) => void;
 };
 
-const useStore = create<Store>()((set) => ({
+const useDemoCreatorStore = create<DemoCreatorStore>()((set) => ({
   name: "",
-  username: "",
   bio: "",
   profilePicture: "",
-  setValue: (
-    label: "name" | "username" | "bio" | "profilePicture",
-    value: string
-  ) => {
+  creatorType: "",
+  username: "",
+  setValue: (label: labels, value: string) => {
     set({ [`${label}`]: value });
   },
 }));
 
-function BasicDetails() {
-  const { name, username, bio, profilePicture, setValue } = useStore();
+const DemoCreatorDetails = () => {
+  const { name, bio, username, creatorType, profilePicture, setValue } =
+    useDemoCreatorStore();
   const [profilePicUploadProgress, setProfilePicUploadProgress] =
     useState<number>();
-  console.log({ name, username, bio, profilePicture });
 
-  const saveDetails = async () => {
-    const SIGNUPTOKEN = localStorage.getItem("SIGNUPTOKEN") as string;
-    if (SIGNUPTOKEN) {
-      localStorage.removeItem("SIGNUPTOKEN");
-      const res = await axios.post("/backend/user/create-user", {
-        SIGNUPTOKEN,
-        username,
+  const updateDetails = async () => {
+    const res = await axios.post(
+      "/backend/user/create-demo-profile",
+      {
         name,
+        username,
         bio,
+        creatorType,
         profilePicture,
-      });
-      if (res.status == 200) {
-        location.href = "/account";
+      },
+      {
+        withCredentials: true,
       }
+    );
+    if (res.status == 200) {
+      alert("Demo creator saved");
+      location.href = "/account";
     }
+    //save local state
+    // localStorage.setItem("user", JSON.stringify(res.data));
   };
 
   return (
-    <div className="flex flex-col w-full h-full p-4 py-6 pb-8">
+    <div className="flex flex-col w-full h-max p-4 py-6 pb-0  min-h-full">
       <span className="flex w-full text-white">
-        <span className="flex items-center h-fit text-base">
-          <ChevronLeft
-            onClick={() => {
-              location.href = "/";
-            }}
-            className="h-4 w-4"
-          />{" "}
-          Back
+        <span
+          onClick={() => {
+            location.href = "/";
+          }}
+          className="flex items-center h-fit text-base"
+        >
+          <ChevronLeft className="h-4 w-4" /> Back
         </span>
       </span>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          saveDetails();
+          updateDetails();
         }}
-        className="flex h-full flex-col w-full text-white px-2 mt-5"
+        className="flex h-fit flex-col w-full text-white px-2 mt-5 mb-12"
       >
-        <h1 className="text-lg">Set up your profile</h1>
+        <h1 className="text-lg">Set up Demo creator profile</h1>
         <label
           htmlFor="fileupload"
           className="flex cursor-pointer w-[128px] h-[128px] mx-auto mt-6 relative"
@@ -108,38 +124,60 @@ function BasicDetails() {
             />
           )}
         </label>
-        {/* username */}
+        {/* name */}
         <label className="mt-4" htmlFor="">
-          <p>Username*:</p>
+          <p>Name*:</p>
           <span className="mt-1 flex items-center px-2 w-full h-[41px] bg-cultureGray border-white border-[1px] rounded-lg">
-            <User2 className="h-4" />
             <input
+              value={name}
+              onChange={(e) => {
+                setValue("name", e.target.value);
+              }}
               required
               type="text"
+              className="bg-transparent w-full h-full hover:outline-none active:outline-none"
+            />
+          </span>
+        </label>
+        {/* username */}
+        <label className="mt-4" htmlFor="">
+          <p>username*:</p>
+          <span className="mt-1 flex items-center px-2 w-full h-[41px] bg-cultureGray border-white border-[1px] rounded-lg">
+            <input
               value={username}
               onChange={(e) => {
                 setValue("username", e.target.value);
               }}
+              required
+              type="text"
               className="bg-transparent w-full h-full hover:outline-none active:outline-none"
             />
           </span>
         </label>
         {/* name */}
         <label className="mt-4" htmlFor="">
-          <p>Name*:</p>
-          <span className="mt-1 flex items-center px-2 w-full h-[41px] bg-cultureGray border-white border-[1px] rounded-lg">
-            <input
-              required
-              type="text"
-              value={name}
-              onChange={(e) => {
-                setValue("name", e.target.value);
-              }}
-              className="bg-transparent w-full h-full hover:outline-none active:outline-none"
-            />
-          </span>
+          <p className="mb-1">Creator type*:</p>
+          <Select
+            required
+            value={creatorType || undefined}
+            onValueChange={(v) => {
+              setValue("creatorType", v);
+            }}
+          >
+            <SelectTrigger className="w-[180px] bg-cultureGray">
+              <SelectValue placeholder="Select Creator Type" />
+            </SelectTrigger>
+            <SelectContent className="bg-cultureGray text-white">
+              {Object.values(CREATOR_TYPES).map((ele, key) => {
+                return (
+                  <SelectItem key={key + ele} value={ele}>
+                    {ele}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
         </label>
-
         {/* Bio */}
         <label className="mt-4" htmlFor="">
           <p>Bio(optional):</p>
@@ -158,7 +196,7 @@ function BasicDetails() {
         {/* Save */}
         <Button
           type="submit"
-          className="mt-6 h-[52px] text-cultureOrange bg-cultureGray font-groteskBold"
+          className="mt-6 h-[52px] text-cultureOrange bg-cultureGray font-groteskBold "
           variant={"outline"}
         >
           Save And Proceed
@@ -166,6 +204,6 @@ function BasicDetails() {
       </form>
     </div>
   );
-}
+};
 
-export default BasicDetails;
+export default DemoCreatorDetails;
