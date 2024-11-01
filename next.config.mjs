@@ -7,7 +7,7 @@ const nextConfig = {
         return [
             {
                 source: '/backend/:path*',
-                destination: `${process.env.BACKEND_URL || "https://api.cultureco.xyz"}/:path*`, // Replace with your backend URL
+                destination: `${process.env.BACKEND_URL || "https://api.cultureco.xyz"}/:path*`,
             },
         ];
     },

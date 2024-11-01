@@ -65,7 +65,7 @@ function Signin() {
     }
 
     if (res.data.newUser === false) {
-      location.href = "/account";
+      location.href = "/account/creator";
     }
 
     return res;
@@ -73,7 +73,7 @@ function Signin() {
 
   return (
     <div className="bg-black flex w-full h-svh justify-center items-center">
-      <div className="flex  flex-col justify-center items-center w-[361px] min-h-[603px] h-[603px] bg-grad-bg rounded-2xl overflow-y-auto">
+      <div className="flex  flex-col justify-center items-center w-[361px] min-h-[603px] h-[650px] bg-grad-bg rounded-2xl overflow-y-auto">
         {screen == "SIGNIN" && (
           <GoogleAuth>
             <GoogleLogin
