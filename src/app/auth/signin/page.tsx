@@ -39,8 +39,7 @@ function Signin() {
     const step = urlParams.get("step");
     if (step == "apply") {
       setscreen("CREATOR_FORM");
-    }
-    if (step == "create-demo") {
+    } else if (step == "create-demo") {
       setscreen("DEMO_CREATOR_FORM");
     } else if (user) {
       location.href = "/account/creator";

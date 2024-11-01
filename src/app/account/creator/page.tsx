@@ -12,10 +12,10 @@ function CreatorProfile() {
   return (
     <>
       {User ? (
-        <div className="flex flex-col w-full h-svh bg-black max-w-mobile mx-auto">
+        <div className="flex flex-col w-full h-svh bg-black max-w-mobile mx-auto ">
           <TopNav className="z-50" />
           <img
-            className="absolute w-ful max-w-mobile mx-auto"
+            className="absolute w-full max-w-mobile mx-auto"
             src={User.profilePicture}
             alt=""
           />

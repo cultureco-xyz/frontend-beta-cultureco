@@ -1,5 +1,6 @@
 import { Variants, motion } from "framer-motion";
 import React from "react";
+
 const variants = {
   initial: {
     scaleY: 0.5,

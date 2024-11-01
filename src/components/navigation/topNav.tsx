@@ -107,7 +107,12 @@ function TopNav({ className }: { className?: string }) {
             >
               <LogOut /> Sign Out
             </span>
-            <Button className="bg-cultureWhite text-cultureGray text-base h-[52px] mb-8">
+            <Button
+              onClick={() => {
+                location.href = "/auth/signin?step=apply";
+              }}
+              className="bg-cultureWhite text-cultureGray text-base h-[52px] mb-8"
+            >
               <FileUser size={12} />
               Apply To Become A Creator
             </Button>
