@@ -5,6 +5,7 @@ import { Users } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
 import { useAuthContext } from "@/app/providers/AuthContextProvider";
 import CultureLoader from "@/components/common/cultureLoader";
+import BottomNav from "@/components/navigation/bottomNav";
 
 function CreatorProfile() {
   const User = useAuthContext();
@@ -62,6 +63,7 @@ function CreatorProfile() {
               </span>
             </div>
           </div>
+          <BottomNav />
         </div>
       ) : (
         <CultureLoader />

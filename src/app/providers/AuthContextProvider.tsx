@@ -18,8 +18,11 @@ function AuthContextProvider({ children }: { children: ReactNode }) {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         return res.data.user;
       } else {
+        localStorage.removeItem("user");
         location.href = "/auth/signin";
       }
+      localStorage.removeItem("user");
+      location.href = "/auth/signin";
       return null; // return null if not logged in
     },
   });
