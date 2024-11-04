@@ -33,12 +33,12 @@ function TopNav({ className }: { className?: string }) {
         height: navOpen ? "100svh" : "fit",
       }}
       className={twMerge(
-        `flex flex-col text-white fixed top-0  max-w-mobile w-full mx-auto left-0 right-0 h-fit`,
+        `flex flex-col text-white fixed top-0  max-w-mobile w-full mx-auto left-0 right-0 max-h-fit z-[200]`,
         className
       )}
     >
-      <div className="p-4 flex justify-between w-full items-center">
-        <div className="flex flex-row mt-1 justify-center items-center">
+      <div className="p-4 flex justify-between w-full items-center h-fit">
+        <div className="flex flex-row mt-1 justify-center items-center h-fit">
           <CultureCoLogoIcon fillColor="#fff" size={24} />
           <span className="bg-cultureOrange text-black font-groteskSemiBold text-[8px] rounded-md w-[30px] text-center">
             Beta

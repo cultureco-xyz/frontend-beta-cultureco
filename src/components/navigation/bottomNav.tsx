@@ -9,9 +9,10 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import { GoHome } from "react-icons/go";
 import { FaRegCircleUser } from "react-icons/fa6";
+import { twMerge } from "tailwind-merge";
 //laptop:hidden desktop:hidden mac:hidden fhd:hidden whd:hidden uhd:hidden
 
-function BottomNav() {
+function BottomNav({ className }: { className?: string }) {
   const [currentPath, setcurrentPath] = useState<"home" | "feed" | "account">(
     "home"
   );
@@ -38,11 +39,14 @@ function BottomNav() {
           background:
             "linear-gradient(to right, #282B284f, #0066AF4f,#f5f1ed4f, #AF38004f, #FE621D4f)",
         }}
-        className="h-[80px] px-4 flex justify-around items-center relative max-w-[430px] mx-auto w-full"
+        className={twMerge(
+          "h-[80px] px-4 flex justify-around items-center relative max-w-[430px] mx-auto w-full z-50",
+          className
+        )}
       >
         <div className="absolute blur-sm mt-[2px] inset-0 bg-gradient-to-b from-[rgba(0,0,0,0.8)] to-[rgba(50,50,50,0.7)]"></div>
         <div className="z-[1] flex justify-around items-center w-full">
-          <Link href="/">
+          <Link href="/search">
             <CultureCoLogoIcon
               fillColor={currentPath == "feed" ? "#FE621D" : "#FFFFFF"}
             />

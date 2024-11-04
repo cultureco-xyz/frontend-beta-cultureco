@@ -18,10 +18,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased font-groteskRegular min-h-svh`}>
-        <ReactQueryProvider>
-          <GoogleAuthProvider>{children}</GoogleAuthProvider>
-        </ReactQueryProvider>
+      <body className={`antialiased font-groteskRegular `}>
+        <div className="min-h-svh w-full max-w-mobile mx-auto">
+          <ReactQueryProvider>
+            <GoogleAuthProvider>{children}</GoogleAuthProvider>
+          </ReactQueryProvider>
+        </div>
       </body>
     </html>
   );

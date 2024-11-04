@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import BasicDetails from "@/components/onboarding/BasicDetails";
 import CreatorDetails from "@/components/onboarding/CreatorDetails";
 import DemoCreatorDetails from "@/components/onboarding/DemoCreatorDetails";
+import ClaimDemoCreator from "@/components/onboarding/ClaimDemoCreator";
 
 const GoogleAuth = ({ children }: { children: ReactNode }) => {
   return (
@@ -41,13 +42,19 @@ function Signin() {
       setscreen("CREATOR_FORM");
     } else if (step == "create-demo") {
       setscreen("DEMO_CREATOR_FORM");
+    } else if (step == "claim-profile") {
+      setscreen("CLAIM_DEMO_CREATOR");
     } else if (user) {
       location.href = "/account/creator";
     }
   }, []);
 
   const [screen, setscreen] = useState<
-    "SIGNIN" | "USER_FORM" | "CREATOR_FORM" | "DEMO_CREATOR_FORM"
+    | "SIGNIN"
+    | "USER_FORM"
+    | "CREATOR_FORM"
+    | "DEMO_CREATOR_FORM"
+    | "CLAIM_DEMO_CREATOR"
   >("SIGNIN");
 
   const SendAccessToken = async (access_token: string) => {
@@ -86,6 +93,7 @@ function Signin() {
         {screen == "USER_FORM" && <BasicDetails />}
         {screen == "CREATOR_FORM" && <CreatorDetails />}
         {screen == "DEMO_CREATOR_FORM" && <DemoCreatorDetails />}
+        {screen == "CLAIM_DEMO_CREATOR" && <ClaimDemoCreator />}
       </div>
     </div>
   );

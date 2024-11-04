@@ -14,7 +14,7 @@ function CreatorProfile() {
     <>
       {User ? (
         <div className="flex flex-col w-full h-svh bg-black max-w-mobile mx-auto ">
-          <TopNav className="z-50" />
+          <TopNav />
           <img
             className="absolute w-full max-w-mobile mx-auto"
             src={User.profilePicture}
