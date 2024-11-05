@@ -13,11 +13,9 @@ import Spinner from "@/components/common/spinner";
 //   SelectValue,
 // } from "@/components/ui/select";
 
-import { UserData } from "@/types";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { handleProfilePicUpload } from "@/lib/utils";
-import { h1 } from "framer-motion/client";
 
 // enum CREATOR_TYPES {
 //   ARTIST = "Artist",
@@ -55,8 +53,7 @@ const ToggleFormElments = (isEnabled: boolean) => {
 };
 
 const ClaimDemoCreator = () => {
-  const { name, bio, creatorType, profilePicture, setValue } =
-    useCreatorStore();
+  const { name, bio, profilePicture, setValue } = useCreatorStore();
   const [demoCreatorID, setdemoCreatorID] = useState("");
   const [profilePicUploadProgress, setProfilePicUploadProgress] =
     useState<number>();
@@ -68,7 +65,6 @@ const ClaimDemoCreator = () => {
   }, [formDisable]);
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
     const urlParams = new URLSearchParams(window.location.search);
     const did = urlParams.get("did");
     if (did) {
