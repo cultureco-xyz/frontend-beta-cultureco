@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import DigitalFrame from "../SellForm/frames/DigitalFrame";
+import React from "react";
+
 import { PiFireLight } from "react-icons/pi";
 import { MessageSquare, Share } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
