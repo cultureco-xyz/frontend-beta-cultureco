@@ -35,12 +35,8 @@ function BottomNav({ className }: { className?: string }) {
           damping: 40,
           duration: 1.5,
         }}
-        style={{
-          background:
-            "linear-gradient(to right, #282B284f, #0066AF4f,#f5f1ed4f, #AF38004f, #FE621D4f)",
-        }}
         className={twMerge(
-          "h-[80px] px-4 flex justify-around items-center relative max-w-[430px] mx-auto w-full z-50",
+          "h-[56px] px-4 flex justify-around items-center relative max-w-[430px] mx-auto w-full z-50 bg-black",
           className
         )}
       >

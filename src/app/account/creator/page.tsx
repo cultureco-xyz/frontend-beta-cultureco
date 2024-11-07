@@ -1,19 +1,36 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 import TopNav from "@/components/navigation/topNav";
-import React from "react";
-import { Users } from "lucide-react";
+import React, { useState } from "react";
+import { Plus, Users } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
 import { useAuthContext } from "@/app/providers/AuthContextProvider";
 import CultureLoader from "@/components/common/cultureLoader";
 import BottomNav from "@/components/navigation/bottomNav";
+import SellForm from "@/components/products/SellForm/SellForm";
+import DigitalFrame from "@/components/products/Cards/DigitalCard";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { IProductData } from "@/types";
+import { div, image } from "framer-motion/client";
+import DigitalCard from "@/components/products/Cards/DigitalCard";
 
 function CreatorProfile() {
   const User = useAuthContext();
+  const [openForm, setopenForm] = useState(false);
+
+  const products = useQuery({
+    queryKey: ["get-all-products"],
+    queryFn: async () => {
+      const res = await axios.get("/backend/product/get-all-products");
+      return res.data as IProductData[];
+    },
+  });
 
   return (
     <>
       {User ? (
-        <div className="flex flex-col w-full h-svh bg-black max-w-mobile mx-auto ">
+        <div className="flex flex-col w-full h-svh bg-black max-w-mobile mx-auto overflow-y-auto">
           <TopNav />
           <img
             className="absolute w-full max-w-mobile mx-auto"
@@ -25,7 +42,7 @@ function CreatorProfile() {
               background:
                 "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 54%, rgba(0,0,0,0) 69%, rgba(0,0,0,0) 100%)",
             }}
-            className="flex flex-col z-10 pt-[270px] h-full"
+            className="flex flex-col z-10 pt-[270px] h-full relative"
           >
             <div className="flex w-full  text-white px-4 flex-col mb-1 ">
               <span>
@@ -62,11 +79,47 @@ function CreatorProfile() {
                 Events
               </span>
             </div>
+            {products.isSuccess && (
+              <div className="flex flex-col w-full   items-center my-4 gap-4 pb-24 h-fit">
+                {products.data.map((dc, idx) => {
+                  return React.cloneElement(
+                    <DigitalCard
+                      title={dc.title}
+                      image={dc.imageURL}
+                      memberPrice={Number(dc.memberPrice)}
+                      regularPrice={Number(dc.regularPrice)}
+                      key={idx + dc.title}
+                    />
+                  );
+                })}
+              </div>
+            )}
+            {/* Sell form button */}
+            <div className="right-0 left-0 fixed bottom-40  shadow-2xl z-50  w-full h-0 max-w-mobile mx-auto bg-red-200">
+              <span
+                onClick={() => {
+                  setopenForm(true);
+                }}
+                className="cursor-pointer flex w-16 h-16 rounded-full bg-cultureOrange items-center justify-center shadow-2xl ml-auto mr-4"
+              >
+                <Plus className="w-10 h-10" />
+              </span>
+            </div>
           </div>
-          <BottomNav />
+          {/* sell form */}
+          {openForm && (
+            <SellForm
+              close={() => {
+                setopenForm(false);
+              }}
+            />
+          )}
+          <BottomNav className="fixed bottom-0 w-full max-w-mobile " />
         </div>
       ) : (
-        <CultureLoader />
+        <div className="flex flex-col w-full h-svh items-center justify-center">
+          <CultureLoader />
+        </div>
       )}
     </>
   );

@@ -24,3 +24,32 @@ export interface UserData {
   updatedAt: Date;
   isClaimed: boolean;
 }
+
+export interface IProductData {
+  _id: string;
+  title: string;
+  description: string;
+  productType: string;
+  productFormat: string;
+  imageURL: string;
+  creator: string;
+  dropDate: Date;
+  quantity: number;
+  regularPrice: number;
+  memberPrice: number;
+  rarity: string;
+  productIsLive: boolean;
+  category: string[];
+  membersOnly: boolean;
+  isDemo: boolean;
+  fanlimit: number;
+  printSize: string;
+  audioUrl: string;
+  artist: string;
+  songName: string;
+  duration: number; //in minutes
+  location: string;
+  enabled: boolean;
+  collaborator: string;
+  album: string;
+}
