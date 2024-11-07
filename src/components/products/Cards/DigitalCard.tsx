@@ -124,8 +124,6 @@ const GetDate = ({ date }: { date: string }) => {
 };
 
 import { twMerge } from "tailwind-merge";
-import { frame } from "framer-motion";
-import axios from "axios";
 
 const DigitalBG = ({
   className,

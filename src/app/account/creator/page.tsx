@@ -8,11 +8,10 @@ import { useAuthContext } from "@/app/providers/AuthContextProvider";
 import CultureLoader from "@/components/common/cultureLoader";
 import BottomNav from "@/components/navigation/bottomNav";
 import SellForm from "@/components/products/SellForm/SellForm";
-import DigitalFrame from "@/components/products/Cards/DigitalCard";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IProductData } from "@/types";
-import { div, image } from "framer-motion/client";
+
 import DigitalCard from "@/components/products/Cards/DigitalCard";
 
 function CreatorProfile() {
