@@ -1,97 +1,101 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 import { PiFireLight } from "react-icons/pi";
 import { MessageSquare, Share } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
 import { GoArrowRight } from "react-icons/go";
 import { Digital } from "../SellForm/icons";
+import { IProductData } from "@/types";
+import DetailedView from "../DetailedView";
 
-function DigitalCard({
-  image,
-  title,
-  memberPrice,
-  regularPrice,
-}: {
-  image: string;
-  title: string;
-  memberPrice: number;
-  regularPrice: number;
-}) {
+function DigitalCard({ product }: { product: IProductData }) {
+  const { imageURL: image, title, memberPrice, regularPrice } = product;
+  const [detailedView, setdetailedView] = useState(false);
   return (
-    <div className="h-[480px] w-[360px] relative text-cultureWhite">
-      <DigitalBG image={image + "#" + title} key={image + title} />
-      {/* Top-most details */}
-      <div className="top-4 px-4 absolute flex flex-row justify-between items-center w-full">
-        <div className="flex flex-row items-center justify-center gap-1 bg-cultureGray text-digitalArtYellow w-24 h-8 rounded-md text-xs text-nowrap font-groteskRegular">
-          <Digital /> Digital Art
-        </div>
-        {/* <div className="flex flex-row items-center justify-center gap-1 bg-cultureGray w-24 h-8 rounded-md text-xs text-nowrap">
+    <>
+      <div
+        onClick={() => {
+          setdetailedView(true);
+        }}
+        className="h-[480px] w-[360px] relative text-cultureWhite"
+      >
+        <DigitalFrame image={image + "#" + title} key={image + title} />
+        {/* Top-most details */}
+        <div className="top-4 px-4 absolute flex flex-row justify-between items-center w-full">
+          <div className="flex flex-row items-center justify-center gap-1 bg-cultureGray text-digitalArtYellow w-24 h-8 rounded-md text-xs text-nowrap font-groteskRegular">
+            <Digital /> Digital Art
+          </div>
+          {/* <div className="flex flex-row items-center justify-center gap-1 bg-cultureGray w-24 h-8 rounded-md text-xs text-nowrap">
           <CountdownTimer
             fanLimit={post.productId.fanlimit}
             textColor="#FFB800"
           />
         </div> */}
-      </div>
-      {/* Comment, like, share options */}
-      <div className="absolute right-4 top-[45%] transform -translate-y-1/2 flex flex-col items-end gap-4">
-        <span className="flex gap-1 items-center cursor-pointer">
-          <p className="text-xs">{0}</p>
-          <PiFireLight
-            style={{
-              color: true ? "#FE621D" : "white",
-            }}
-            className="text-2xl"
-          />
-        </span>
-        <span className="flex gap-1 items-center">
-          <p className="text-xs">{0}</p>
-          <MessageSquare />
-        </span>
-        <span className="flex flex-row justify-end w-full">
-          <Share />
-        </span>
-      </div>
-      {/* Details */}
-      <div className="flex justify-between py-4 px-4 flex-col w-full h-fit absolute bottom-0">
-        <div className="flex justify-between w-full">
-          {/* Left side: Profile Picture, Username, Description, and Date */}
-          <div className="flex flex-col">
-            <div className="flex items-center text-xl font-groteskSemiBold pt-10">
-              {title}
+        </div>
+        {/* Comment, like, share options */}
+        <div className="absolute right-4 top-[45%] transform -translate-y-1/2 flex flex-col items-end gap-4">
+          <span className="flex gap-1 items-center cursor-pointer">
+            <p className="text-xs">{0}</p>
+            <PiFireLight
+              style={{
+                color: true ? "#FE621D" : "white",
+              }}
+              className="text-2xl"
+            />
+          </span>
+          <span className="flex gap-1 items-center">
+            <p className="text-xs">{0}</p>
+            <MessageSquare />
+          </span>
+          <span className="flex flex-row justify-end w-full">
+            <Share />
+          </span>
+        </div>
+        {/* Details */}
+        <div className="flex justify-between py-4 px-4 flex-col w-full h-fit absolute bottom-0">
+          <div className="flex justify-between w-full">
+            {/* Left side: Profile Picture, Username, Description, and Date */}
+            <div className="flex flex-col">
+              <div className="flex items-center text-xl font-groteskSemiBold pt-10">
+                {title}
+              </div>
+              <div className="flex flex-row items-center justify-center gap-1 bg-cultureGray text-digitalArtYellow w-20 h-6 my-3 rounded-md text-xs text-nowrap font-groteskSemiBold">
+                {0} collected
+              </div>
+              {/* Date */}
+              <p className="text-xs text-cultureBeige">
+                <GetDate date={`${new Date()}`} />
+              </p>
             </div>
-            <div className="flex flex-row items-center justify-center gap-1 bg-cultureGray text-digitalArtYellow w-20 h-6 my-3 rounded-md text-xs text-nowrap font-groteskSemiBold">
-              {0} collected
-            </div>
-            {/* Date */}
-            <p className="text-xs text-cultureBeige">
-              <GetDate date={`${new Date()}`} />
-            </p>
-          </div>
 
-          {/* Right side: Pricing Info */}
-          <div className="flex flex-col justify-center items-end">
-            <div className="flex text-cultureWhite w-[60px] h-[60px] flex-col items-center justify-center border-2 rounded-md mb-4 z-50">
-              <GoArrowRight />
-              <span>{!true ? "Buy" : "View"}</span>
+            {/* Right side: Pricing Info */}
+            <div className="flex flex-col justify-center items-end">
+              <div className="flex text-cultureWhite w-[60px] h-[60px] flex-col items-center justify-center border-2 rounded-md mb-4 z-50">
+                <GoArrowRight />
+                <span>{!true ? "Buy" : "View"}</span>
+              </div>
+              {true && (
+                <>
+                  <span className="flex items-center gap-1">
+                    <CultureCoLogoIcon fillColor="#fe621d" size={24} />
+                    <h1 className="font-groteskBold text-cultureOrange text-[24px]">
+                      ₹{memberPrice}
+                    </h1>
+                  </span>
+                  <p className="text-xs text-cultureBeige">
+                    <strong className="text-base">₹{regularPrice}</strong>{" "}
+                    Regular
+                  </p>
+                </>
+              )}
             </div>
-            {true && (
-              <>
-                <span className="flex items-center gap-1">
-                  <CultureCoLogoIcon fillColor="#fe621d" size={24} />
-                  <h1 className="font-groteskBold text-cultureOrange text-[24px]">
-                    ₹{memberPrice}
-                  </h1>
-                </span>
-                <p className="text-xs text-cultureBeige">
-                  <strong className="text-base">₹{regularPrice}</strong> Regular
-                </p>
-              </>
-            )}
           </div>
         </div>
       </div>
-    </div>
+      {detailedView && <DetailedView product={product} />}
+    </>
   );
 }
 
@@ -123,9 +127,7 @@ const GetDate = ({ date }: { date: string }) => {
   return <>{formattedDate}</>;
 };
 
-import { twMerge } from "tailwind-merge";
-
-const DigitalBG = ({
+const DigitalFrame = ({
   className,
   image: imageurl,
 }: {

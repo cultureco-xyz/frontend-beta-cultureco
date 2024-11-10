@@ -19,11 +19,14 @@ function CreatorProfile() {
   const [openForm, setopenForm] = useState(false);
 
   const products = useQuery({
-    queryKey: ["get-all-products"],
+    queryKey: ["get-user-products", User?._id],
     queryFn: async () => {
-      const res = await axios.get("/backend/product/get-all-products");
+      const res = await axios.get(
+        `/backend/product/get-user-products/${User?._id}`
+      );
       return res.data as IProductData[];
     },
+    enabled: Boolean(User?._id),
   });
 
   return (
@@ -82,19 +85,13 @@ function CreatorProfile() {
               <div className="flex flex-col w-full   items-center my-4 gap-4 pb-24 h-fit">
                 {products.data.map((dc, idx) => {
                   return React.cloneElement(
-                    <DigitalCard
-                      title={dc.title}
-                      image={dc.imageURL}
-                      memberPrice={Number(dc.memberPrice)}
-                      regularPrice={Number(dc.regularPrice)}
-                      key={idx + dc.title}
-                    />
+                    <DigitalCard product={dc} key={"dc" + idx} />
                   );
                 })}
               </div>
             )}
             {/* Sell form button */}
-            <div className="right-0 left-0 fixed bottom-40  shadow-2xl z-50  w-full h-0 max-w-mobile mx-auto bg-red-200">
+            <div className="right-0 left-0 fixed bottom-40  shadow-2xl z-50  w-full h-0 max-w-mobile mx-auto ">
               <span
                 onClick={() => {
                   setopenForm(true);

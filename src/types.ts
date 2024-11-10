@@ -32,7 +32,7 @@ export interface IProductData {
   productType: string;
   productFormat: string;
   imageURL: string;
-  creator: string;
+  creator: UserData;
   dropDate: Date;
   quantity: number;
   regularPrice: number;
@@ -52,4 +52,12 @@ export interface IProductData {
   enabled: boolean;
   collaborator: string;
   album: string;
+}
+
+export interface IComment {
+  _id?: string;
+  productId: string | IProductData;
+  userId: string | UserData;
+  content: string;
+  isDeleted?: boolean; // Soft delete functionality
 }

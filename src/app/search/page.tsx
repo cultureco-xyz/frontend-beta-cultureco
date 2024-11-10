@@ -78,7 +78,14 @@ const FetchAllCreators = () => {
                         Claim
                       </Button>
                     )}
-                    <Button className="bg-cultureOrange">View</Button>
+                    <Button
+                      onClick={() => {
+                        location.href = `/profile/${ele._id}`;
+                      }}
+                      className="bg-cultureOrange"
+                    >
+                      View
+                    </Button>
                   </div>
                 </div>
               );
