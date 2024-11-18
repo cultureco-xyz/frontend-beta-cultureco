@@ -18,8 +18,12 @@ import { DigitalAudioFrame } from "../SellForm/frames/DigitalAudioFrame";
 import PhyiscalFrame from "../SellForm/frames/PhyiscalFrame";
 import { VinylPhysicalFrame } from "../SellForm/frames/VinylPhysicalFrame";
 import { TicketFrame } from "../SellForm/frames/TicketFrame";
+import { useAuthenticated } from "@/hooks/useAuthenticated";
 
 function ProductCard({ product }: { product: IProductData }) {
+  const { isLogedIn, user: authData } = useAuthenticated();
+  const isAdminUser = authData?.email.endsWith("@cultureco.xyz");
+
   const { imageURL: image, title, memberPrice, regularPrice } = product;
   const [detailedView, setdetailedView] = useState(false);
   return (
@@ -122,6 +126,19 @@ function ProductCard({ product }: { product: IProductData }) {
               <p className="text-xs text-cultureBeige">
                 <GetDate date={`${new Date()}`} />
               </p>
+              {/* Admin edit/delete for products */}
+              {isAdminUser && (
+                <>
+                  <div className="flex flex-row gap-2 mt-2">
+                    <div className="bg-cultureGray text-cultureOrange rounded-md w-12 h-8 items-center justify-center flex font-groteskSemiBold">
+                      Edit
+                    </div>
+                    <div className="bg-cultureRed text-black rounded-md w-16 h-8 items-center justify-center flex font-groteskSemiBold">
+                      Delete
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Right side: Pricing Info */}

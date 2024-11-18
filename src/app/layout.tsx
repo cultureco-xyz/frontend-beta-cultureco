@@ -4,10 +4,38 @@ import GoogleAuthProvider from "./providers/GoogleAuthProvider";
 import ReactQueryProvider from "./providers/ReactQueryProvider";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://cultureco.xyz"),
   title: "CultureCo",
-  description: "Culture Co",
+  description: "Built by Fans, For the Culture",
   icons: {
-    icon: "/header-logo.svg",
+    icon: "/ccLogo.png",
+  },
+  openGraph: {
+    type: "website",
+    url: "https://cultureco.xyz", // Update with your website URL
+    title: "CultureCo",
+    description: "Built by Fans, For the Culture",
+    images: [
+      {
+        url: "/images/landingpage-linkpreview.png", // Path to your preview image
+        width: 393,
+        height: 719,
+        alt: "CultureCo Preview Image",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CultureCo",
+    description: "Built by Fans, For the Culture",
+    images: [
+      {
+        url: "/images/landingpage-linkpreview.png", // Path to your preview image
+        width: 393,
+        height: 719,
+        alt: "CultureCo Preview Image",
+      },
+    ],
   },
 };
 
