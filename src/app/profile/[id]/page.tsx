@@ -1,18 +1,18 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import TopNav from "@/components/navigation/topNav";
-import React, { useEffect, useState } from "react";
-import { Plus, Users } from "lucide-react";
+import React from "react";
+import { Users } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
 
 import CultureLoader from "@/components/common/cultureLoader";
 import BottomNav from "@/components/navigation/bottomNav";
-import SellForm from "@/components/products/SellForm/SellForm";
+// import SellForm from "@/components/products/SellForm/SellForm";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IProductData, UserData } from "@/types";
 import { useParams } from "next/navigation";
-import DigitalCard from "@/components/products/Cards/DigitalCard";
+import DigitalCard from "@/components/products/Cards/ProductCard";
 import { Button } from "@/components/ui/button";
 import TipJar from "@/assets/svgs/tip-jar";
 
@@ -59,18 +59,9 @@ const profileMethods = {
 
 function Profile() {
   const params = useParams();
-  const [openForm, setopenForm] = useState(false);
-  const [authData, setauthData] = useState<UserData>();
-  const isLogedIn = useAuthenticated();
+  // const [openForm, setopenForm] = useState(false);
+  const { isLogedIn, user: authData } = useAuthenticated();
   const store = useStore();
-
-  useEffect(() => {
-    const auth = localStorage.getItem("user");
-    if (auth) {
-      const authData = JSON.parse(auth) as UserData;
-      setauthData(authData);
-    }
-  }, []);
 
   const userQuery = useQuery({
     queryKey: ["get-user", params.id],
@@ -232,7 +223,7 @@ function Profile() {
               </div>
             )}
             {/* Sell form button */}
-            <div className="right-0 left-0 fixed bottom-40  shadow-2xl z-50  w-full h-0 max-w-mobile mx-auto bg-red-200">
+            {/* <div className="right-0 left-0 fixed bottom-40  shadow-2xl z-50  w-full h-0 max-w-mobile mx-auto bg-red-200">
               <span
                 onClick={() => {
                   setopenForm(true);
@@ -241,16 +232,8 @@ function Profile() {
               >
                 <Plus className="w-10 h-10" />
               </span>
-            </div>
+            </div> */}
           </div>
-          {/* sell form */}
-          {openForm && (
-            <SellForm
-              close={() => {
-                setopenForm(false);
-              }}
-            />
-          )}
           <BottomNav className="fixed bottom-0 w-full max-w-mobile " />
         </div>
       ) : (

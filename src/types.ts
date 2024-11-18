@@ -61,3 +61,10 @@ export interface IComment {
   content: string;
   isDeleted?: boolean; // Soft delete functionality
 }
+
+export interface IAlbum {
+  _id: string;
+  name: string;
+  cover_url: string;
+  userID: string | UserData;
+}

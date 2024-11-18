@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IProductData } from "@/types";
 
-import DigitalCard from "@/components/products/Cards/DigitalCard";
+import ProductCard from "@/components/products/Cards/ProductCard";
 
 function CreatorProfile() {
   const User = useAuthContext();
@@ -85,7 +85,7 @@ function CreatorProfile() {
               <div className="flex flex-col w-full   items-center my-4 gap-4 pb-24 h-fit">
                 {products.data.map((dc, idx) => {
                   return React.cloneElement(
-                    <DigitalCard product={dc} key={"dc" + idx} />
+                    <ProductCard product={dc} key={"dc" + idx} />
                   );
                 })}
               </div>

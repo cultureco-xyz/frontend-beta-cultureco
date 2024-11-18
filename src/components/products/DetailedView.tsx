@@ -12,6 +12,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import { create } from "zustand";
+import { useAuthenticated } from "@/hooks/useAuthenticated";
 
 interface DetailedStore {
   likeCount: number;
@@ -48,25 +49,34 @@ const useStore = create<DetailedState>()((set) => ({
 function DetailedView({ product }: { product: IProductData }) {
   const { setStore, newComment, likeCount, toggleLike, isLiked, comments } =
     useStore();
-
+  const { isLogedIn, user: authData } = useAuthenticated();
   console.log(comments);
+
+  console.log(isLogedIn, authData);
 
   //fetch product
   const productDetails = useQuery({
-    queryKey: ["product-details", product._id],
+    queryKey: ["product-details", product._id, isLogedIn],
     queryFn: async () => {
       //product detailes
-      const res = await axios.get(
+      const detailsReq = axios.get(
         `/backend/product/get-product/${product._id}`
       );
       //liked status
-      const isLiked = await axios.post("/backend/like/is-liked", {
-        productId: product._id,
-      });
+      const isLikedReq = isLogedIn
+        ? axios.post("/backend/like/is-liked", {
+            productId: product._id,
+          })
+        : Promise.resolve({ data: { isLiked: false } });
       //get comments
-      const comments = await axios.get(
-        `/backend/comment/product/${product._id}`
-      );
+
+      const commentsReq = axios.get(`/backend/comment/product/${product._id}`);
+
+      const [details, isLiked, comments] = await Promise.all([
+        detailsReq,
+        isLogedIn ? isLikedReq : Promise.resolve({ data: { isLiked: false } }),
+        commentsReq,
+      ]);
 
       setStore({
         comments: comments.data.comments.reverse(),
@@ -74,12 +84,12 @@ function DetailedView({ product }: { product: IProductData }) {
 
       // set intial state
       setStore({
-        likeCount: res.data.likeCount,
+        likeCount: details.data.likeCount,
         isLiked: isLiked.data.isLiked,
       });
       return {
-        productData: res.data.productData,
-        likeCount: res.data.likeCount,
+        productData: details.data.productData,
+        likeCount: details.data.likeCount,
         isLiked: isLiked.data.isLiked,
       } as { productData: IProductData; likeCount: number; isLiked: boolean };
     },
@@ -128,13 +138,13 @@ function DetailedView({ product }: { product: IProductData }) {
         //reset field
         setStore({ newComment: "" });
         // add comment to local state
-        const user = localStorage.getItem("user");
+        const user = authData;
         setStore({
           comments: [
             {
               content: newComment,
               productId: product._id,
-              userId: JSON.parse(user!) as UserData,
+              userId: user as UserData,
             },
             ...comments,
           ],
@@ -163,6 +173,9 @@ function DetailedView({ product }: { product: IProductData }) {
             {likeCount > 0 && <p className="text-xs text-white">{likeCount}</p>}
             <PiFireBold
               onClick={() => {
+                if (!isLogedIn) {
+                  location.href = "/auth/signin";
+                }
                 if (isLiked) {
                   likeMutation.mutate("UNLIKE");
                 } else {
@@ -176,7 +189,7 @@ function DetailedView({ product }: { product: IProductData }) {
             />
           </span>
           <span className="flex gap-1 items-center text-white">
-            <p className="text-xs">{0}</p>
+            <p className="text-xs">{comments.length}</p>
             <MessageSquare />
           </span>
           <span className="flex flex-row justify-end w-full text-white">
@@ -241,6 +254,9 @@ function DetailedView({ product }: { product: IProductData }) {
             <LuArrowRightCircle
               onClick={() => {
                 //post comment
+                if (!isLogedIn) {
+                  location.href = "/auth/signin";
+                }
                 commentMutation.mutate();
               }}
               className="text-2xl text-cultureOrange ml-auto my-2"
@@ -254,6 +270,7 @@ function DetailedView({ product }: { product: IProductData }) {
                     key={cmnt._id}
                     content={cmnt.content}
                     user={cmnt.userId as UserData}
+                    commentId={cmnt._id as string}
                   />
                 );
               })}
@@ -267,10 +284,33 @@ function DetailedView({ product }: { product: IProductData }) {
 const PrevComment = ({
   user,
   content,
+  commentId,
 }: {
   user: UserData;
   content: string;
+  commentId: string;
 }) => {
+  const commentLikeQuery = useQuery({
+    queryKey: ["like-comment-query", commentId],
+    queryFn: async () => {
+      const count = axios.get(`/backend/comment-like/${commentId}/count`);
+      const isLiked = axios.post(`/backend/comment-like/${commentId}/isLiked`);
+      const res = await Promise.all([count, isLiked]);
+      return { count: res[0].data.likeCount, isLiked: res[1].data.isLiked };
+    },
+  });
+
+  const mutateCommentLikeQuery = useMutation({
+    mutationKey: ["like-comment-mutation", commentId],
+    mutationFn: async () => {
+      const res = await axios.post(`/backend/comment-like/toggle`, {
+        commentId: commentId,
+      });
+      commentLikeQuery.refetch();
+      return res.data;
+    },
+  });
+
   return (
     <div className="flex items-center px-3">
       <img
@@ -290,12 +330,26 @@ const PrevComment = ({
 
       <span className="ml-auto flex flex-col items-center">
         <PiFire
-          style={{
-            color: true ? "#FE621D" : "#CAC5BF",
+          onClick={() => {
+            if (
+              commentLikeQuery.isSuccess &&
+              !mutateCommentLikeQuery.isPending
+            ) {
+              mutateCommentLikeQuery.mutate();
+            }
           }}
-          className="text-2xl"
+          style={{
+            color: (
+              commentLikeQuery.isSuccess ? commentLikeQuery.data.isLiked : false
+            )
+              ? "#FE621D"
+              : "#CAC5BF",
+          }}
+          className="text-2xl "
         />
-        <p className="text-[8px] mt-1 text-cultureBeige">{1}</p>
+        <p className="text-[8px] mt-1 text-cultureBeige">
+          {commentLikeQuery.isSuccess ? commentLikeQuery.data.count : 0}
+        </p>
       </span>
     </div>
   );

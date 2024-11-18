@@ -1,35 +1,40 @@
 import { useEffect, useState } from "react";
-import { DigitalProductTypes } from "./config";
+import {
+  DigitalProductTypes,
+  EventProductTypes,
+  PhysicalProductTypes,
+} from "./config";
 import { ProductTypeIcon } from "./icons";
 import { twMerge } from "tailwind-merge";
 
 export const ProductTypeSelector = ({
   className,
   setProductFormat,
+  configType,
 }: {
   className: string;
   setProductFormat: (p: string) => void;
+  configType: "digital" | "physical" | "event";
 }) => {
   let productList = DigitalProductTypes;
-  const configType = "digital";
   switch (configType) {
     case "digital": {
       productList = DigitalProductTypes;
       break;
     }
-    // case "physical": {
-    //   productList = PhysicalProductTypes;
-    //   break;
-    // }
-    // case "event": {
-    //   productList = EventProductTypes;
-    // }
+    case "physical": {
+      productList = PhysicalProductTypes;
+      break;
+    }
+    case "event": {
+      productList = EventProductTypes;
+    }
   }
 
   const [selectedMetaProduct, setselectedMetaProduct] = useState<
     string | undefined
   >();
-
+  console.log(selectedMetaProduct);
   useEffect(() => {
     setProductFormat(selectedMetaProduct || "");
   }, [selectedMetaProduct]);

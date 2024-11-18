@@ -60,3 +60,50 @@ export const handleProfilePicUpload = async (
     }
   }
 };
+
+export function truncateText(text: string, maxLength: number): string {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.substring(0, maxLength - 3) + "...";
+}
+
+export function formatDateAndTime(dateString: string) {
+  const date = new Date(dateString);
+
+  // Array to map month index to month name
+  const monthNames: string[] = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  // Get month name
+  const monthName = monthNames[date.getMonth()]; // getMonth() returns month index (0-11)
+
+  // Get day of the month
+  const day = date.getDate();
+
+  // Get year
+  const year = date.getFullYear();
+
+  // Get hours and minutes
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0"); // add leading zero if needed
+
+  // Determine AM/PM
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12; // Convert 24-hour format to 12-hour format
+
+  // Format date and time
+  return { monthName, day, year, hours, minutes, ampm };
+}

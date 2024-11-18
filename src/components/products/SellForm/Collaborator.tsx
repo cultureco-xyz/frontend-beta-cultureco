@@ -73,7 +73,7 @@ export const Collaborator = ({
           exit={{
             y: "100%",
           }}
-          className="flex py-2 flex-col rounded-t-lg fixed left-0 right-0 bottom-0 max-w-[430px] w-full mx-auto bg-[#282B28] h-[500px]  z-50"
+          className="flex py-2 flex-col rounded-t-lg fixed left-0 right-0 bottom-0 max-w-[430px] w-full mx-auto  bg-[#151715] h-[500px]  z-50"
         >
           <div className="flex w-full">
             <Button

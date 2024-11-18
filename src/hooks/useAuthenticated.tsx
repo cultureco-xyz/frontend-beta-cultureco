@@ -1,28 +1,25 @@
+import { UserData } from "@/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const authCheck = async () => {
-  const res = await axios.get("/backend/auth/logedin", {
-    withCredentials: true,
-  });
-  if (res.status === 200 && res.data.logedIn) {
-    return true;
-  } else {
-    return false;
-  }
-  return false;
-};
-
 export const useAuthenticated = () => {
   const [isLogedIn, setisLogedIn] = useState(false);
+  const [user, setuser] = useState<UserData>();
 
   useEffect(() => {
-    authCheck().then((res) => {
-      if (res) {
-        setisLogedIn(true);
-      }
-    });
+    axios
+      .get("/backend/auth/logedin", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (res.status == 200) {
+          if (res.data.logedIn) {
+            setisLogedIn(true);
+            setuser(res.data.user);
+          }
+        }
+      });
   }, []);
 
-  return isLogedIn;
+  return { isLogedIn, user };
 };
