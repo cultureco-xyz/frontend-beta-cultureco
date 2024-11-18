@@ -35,7 +35,6 @@ function ProductCard({ product }: { product: IProductData }) {
 
   const deleteProductMutation = useMutation({
     mutationFn: async (id: string) => {
-      // Send the delete request to the backend
       await axios.delete(`/backend/product/delete/${product._id}`);
     },
     onSuccess: () => {
@@ -45,12 +44,19 @@ function ProductCard({ product }: { product: IProductData }) {
       });
     },
     onError: (error) => {
-      // Optionally handle error (show a toast, alert, etc.)
       console.error("Error deleting product:", error);
     },
   });
 
-  // Function to handle confirm delete
+  // Function to display edit product pop-up for admin
+  const handleEditProductPopup = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
+    setIsEditFormOpen(true);
+  };
+
+  // Function to display confirmation pop-up for product deletion by admin
   const handleConfirmDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowDeleteConfirm(true);
@@ -72,6 +78,7 @@ function ProductCard({ product }: { product: IProductData }) {
   const { imageURL: image, title, memberPrice, regularPrice } = product;
   const [detailedView, setdetailedView] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   return (
     <>
       <div
@@ -176,9 +183,12 @@ function ProductCard({ product }: { product: IProductData }) {
               {isAdminUser && (
                 <>
                   <div className="flex flex-row gap-2 mt-2">
-                    <div className="bg-cultureGray text-cultureOrange rounded-md w-12 h-8 items-center justify-center flex font-groteskSemiBold">
+                    <button
+                      className="bg-cultureGray text-cultureOrange rounded-md w-12 h-8 items-center justify-center flex font-groteskSemiBold"
+                      onClick={(e) => handleEditProductPopup(e)}
+                    >
                       Edit
-                    </div>
+                    </button>
                     <button
                       className="bg-cultureRed text-black rounded-md w-16 h-8 items-center justify-center flex font-groteskSemiBold"
                       onClick={(e) => handleConfirmDelete(e)}
@@ -209,6 +219,8 @@ function ProductCard({ product }: { product: IProductData }) {
                       </div>
                     </div>
                   )}
+                  {/* TO-DO: Edit product functionality and UI for Admin */}
+                  {isEditFormOpen && <>Edit</>}
                 </>
               )}
             </div>
