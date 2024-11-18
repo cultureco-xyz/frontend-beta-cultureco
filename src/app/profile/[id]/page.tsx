@@ -154,12 +154,12 @@ function Profile() {
                             }
                           }
                         }}
-                        className="bg-cultureWhite text-black font-groteskSemiBold p-1 text-xs h-6 w-8 ml-2 hover:text-cultureOrange"
+                        className="bg-cultureWhite text-black font-groteskSemiBold p-1 text-xs h-6 w-14 rounded-md ml-2 hover:text-cultureOrange"
                       >
                         Follow
                       </motion.button>
                     ) : (
-                      <Button className="bg-cultureGray text-cultureOrange font-groteskSemiBold p-1 text-xs h-6 ml-2">
+                      <Button className="bg-cultureGray text-cultureOrange font-groteskSemiBold p-1 text-xs h-6 w-20 rounded-md ml-2">
                         Following
                       </Button>
                     )}

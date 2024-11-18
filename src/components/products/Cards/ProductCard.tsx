@@ -19,13 +19,59 @@ import PhyiscalFrame from "../SellForm/frames/PhyiscalFrame";
 import { VinylPhysicalFrame } from "../SellForm/frames/VinylPhysicalFrame";
 import { TicketFrame } from "../SellForm/frames/TicketFrame";
 import { useAuthenticated } from "@/hooks/useAuthenticated";
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import axios from "axios";
+import { useParams } from "next/navigation";
 
 function ProductCard({ product }: { product: IProductData }) {
+  const params = useParams();
+  const queryClient = useQueryClient();
   const { isLogedIn, user: authData } = useAuthenticated();
   const isAdminUser = authData?.email.endsWith("@cultureco.xyz");
 
+  const deleteProductMutation = useMutation({
+    mutationFn: async (id: string) => {
+      // Send the delete request to the backend
+      await axios.delete(`/backend/product/delete/${product._id}`);
+    },
+    onSuccess: () => {
+      // Invalidate the "get-user-products" query to refetch and update the product list
+      queryClient.invalidateQueries({
+        queryKey: ["get-user-products", params.id],
+      });
+    },
+    onError: (error) => {
+      // Optionally handle error (show a toast, alert, etc.)
+      console.error("Error deleting product:", error);
+    },
+  });
+
+  // Function to handle confirm delete
+  const handleConfirmDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setShowDeleteConfirm(true);
+  };
+
+  // Function to actually delete the product
+  const handleDeleteProduct = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    deleteProductMutation.mutate(product._id);
+    setShowDeleteConfirm(false);
+  };
+
+  // Function to cancel the delete action
+  const handleCancelDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setShowDeleteConfirm(false);
+  };
+
   const { imageURL: image, title, memberPrice, regularPrice } = product;
   const [detailedView, setdetailedView] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   return (
     <>
       <div
@@ -133,10 +179,36 @@ function ProductCard({ product }: { product: IProductData }) {
                     <div className="bg-cultureGray text-cultureOrange rounded-md w-12 h-8 items-center justify-center flex font-groteskSemiBold">
                       Edit
                     </div>
-                    <div className="bg-cultureRed text-black rounded-md w-16 h-8 items-center justify-center flex font-groteskSemiBold">
+                    <button
+                      className="bg-cultureRed text-black rounded-md w-16 h-8 items-center justify-center flex font-groteskSemiBold"
+                      onClick={(e) => handleConfirmDelete(e)}
+                    >
                       Delete
-                    </div>
+                    </button>
                   </div>
+                  {showDeleteConfirm && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999]">
+                      <div className="bg-cultureGray p-4 rounded-md w-80 flex flex-col items-center">
+                        <p className="text-cultureWhite text-center mb-4">
+                          Are you sure you want to delete this product?
+                        </p>
+                        <div className="flex gap-4">
+                          <button
+                            className="bg-cultureRed text-black px-4 py-2 rounded-md font-groteskSemiBold"
+                            onClick={(e) => handleDeleteProduct(e)}
+                          >
+                            Delete
+                          </button>
+                          <button
+                            className="bg-cultureWhite text-black px-4 py-2 rounded-md font-groteskSemiBold"
+                            onClick={(e) => handleCancelDelete(e)}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
             </div>
