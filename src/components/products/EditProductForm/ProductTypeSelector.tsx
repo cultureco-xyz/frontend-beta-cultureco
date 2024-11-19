@@ -18,6 +18,7 @@ export const ProductTypeSelector = ({
   configType: "digital" | "physical" | "event";
   selectedProductFormat: string;
 }) => {
+  // Determine the product list based on the configType
   let productList = DigitalProductTypes;
   switch (configType) {
     case "digital":
@@ -35,14 +36,16 @@ export const ProductTypeSelector = ({
   const initialProductRef = useRef<string | undefined>(selectedProductFormat);
 
   // State for selected product type
-  const [selectedMetaProduct, setselectedMetaProduct] = useState<string | undefined>(initialProductRef.current);
+  const [selectedMetaProduct, setselectedMetaProduct] = useState<string | undefined>(
+    selectedProductFormat || initialProductRef.current
+  );
 
-  // Effect to set the initial value when entering edit mode or configType changes
+  // Effect to update selectedMetaProduct when selectedProductFormat prop changes
   useEffect(() => {
     if (selectedProductFormat !== selectedMetaProduct) {
-      setselectedMetaProduct(selectedProductFormat); // Only update when product format prop changes
+      setselectedMetaProduct(selectedProductFormat); // Update only if there's a difference
     }
-  }, [selectedProductFormat]);
+  }, [selectedProductFormat, selectedMetaProduct]);
 
   // Effect to update the parent state when selectedMetaProduct changes
   useEffect(() => {
@@ -50,11 +53,6 @@ export const ProductTypeSelector = ({
       setProductFormat(selectedMetaProduct); // Pass the selected value to the parent
     }
   }, [selectedMetaProduct, setProductFormat]);
-
-  // Handle edit action: Update state or show form based on the current state
-  const handleEdit = () => {
-    setselectedMetaProduct(selectedProductFormat); // Ensure selected value is set for editing
-  };
 
   return (
     <div
@@ -83,7 +81,7 @@ export const ProductTypeSelector = ({
                     style={{
                       boxShadow: "0px 0px 4px 0px #5F5F5F",
                     }}
-                    className="flex p-2 rounded-lg items-center text-xs capitalize gap-1 "
+                    className="flex p-2 rounded-lg items-center text-xs capitalize gap-1"
                     key={prd.title + key}
                   >
                     <Icon />

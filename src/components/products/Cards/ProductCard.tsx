@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-
 import { PiFireLight } from "react-icons/pi";
 import { MessageSquare, Share } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
@@ -30,10 +29,6 @@ import EditProductForm from "../EditProductForm/EditProductForm";
 import { TProductTabs } from "../EditProductForm/config";
 
 function ProductCard({ product }: { product: IProductData }) {
-  const productData = {
-    type: product.productType as TProductTabs,
-    data: product,
-  };
   const params = useParams();
   const queryClient = useQueryClient();
   const { isLogedIn, user: authData } = useAuthenticated();
@@ -229,7 +224,7 @@ function ProductCard({ product }: { product: IProductData }) {
                   {isEditFormOpen && (
                     <EditProductForm
                       close={() => setIsEditFormOpen(false)}
-                      productData={productData}
+                      productData={product}
                     />
                   )}
                 </>
