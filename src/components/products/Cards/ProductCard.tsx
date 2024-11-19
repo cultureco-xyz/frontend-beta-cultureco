@@ -26,8 +26,14 @@ import {
 } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "next/navigation";
+import EditProductForm from "../EditProductForm/EditProductForm";
+import { TProductTabs } from "../EditProductForm/config";
 
 function ProductCard({ product }: { product: IProductData }) {
+  const productData = {
+    type: product.productType as TProductTabs,
+    data: product,
+  };
   const params = useParams();
   const queryClient = useQueryClient();
   const { isLogedIn, user: authData } = useAuthenticated();
@@ -220,11 +226,15 @@ function ProductCard({ product }: { product: IProductData }) {
                     </div>
                   )}
                   {/* TO-DO: Edit product functionality and UI for Admin */}
-                  {isEditFormOpen && <>Edit</>}
+                  {isEditFormOpen && (
+                    <EditProductForm
+                      close={() => setIsEditFormOpen(false)}
+                      productData={productData}
+                    />
+                  )}
                 </>
               )}
             </div>
-
             {/* Right side: Pricing Info */}
             <div className="flex flex-col justify-center items-end">
               <div className="flex text-cultureWhite w-[60px] h-[60px] flex-col items-center justify-center border-2 rounded-md mb-4 z-50">
