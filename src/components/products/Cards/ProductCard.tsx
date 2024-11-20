@@ -19,23 +19,21 @@ import { VinylPhysicalFrame } from "../SellForm/frames/VinylPhysicalFrame";
 import { TicketFrame } from "../SellForm/frames/TicketFrame";
 import { useAuthenticated } from "@/hooks/useAuthenticated";
 import {
-  QueryClient,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import EditProductForm from "../EditProductForm/EditProductForm";
-import { TProductTabs } from "../EditProductForm/config";
 
 function ProductCard({ product }: { product: IProductData }) {
   const params = useParams();
   const queryClient = useQueryClient();
-  const { isLogedIn, user: authData } = useAuthenticated();
+  const { user: authData } = useAuthenticated();
   const isAdminUser = authData?.email.endsWith("@cultureco.xyz");
 
   const deleteProductMutation = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async () => {
       await axios.delete(`/backend/product/delete/${product._id}`);
     },
     onSuccess: () => {
@@ -66,7 +64,7 @@ function ProductCard({ product }: { product: IProductData }) {
   // Function to actually delete the product
   const handleDeleteProduct = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    deleteProductMutation.mutate(product._id);
+    deleteProductMutation.mutate();
     setShowDeleteConfirm(false);
   };
 

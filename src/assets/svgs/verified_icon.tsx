@@ -1,12 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 
 interface SvgIconProps {
   fillColor: string;
   size?: number;
 }
 
-const VerifiedIcon: React.FC<SvgIconProps> = ({ fillColor, size = 20 }) => {
+const VerifiedIcon: React.FC<SvgIconProps> = ({ fillColor }) => {
   return (
     <svg
       width="16"

@@ -1,11 +1,5 @@
 import React, { useState } from "react";
 import { ChevronLeft } from "lucide-react";
-import {
-  TDigitalProductFormats,
-  TEventProductFormats,
-  TPhysicalProductFormats,
-  TProductTabs,
-} from "./config";
 import { motion } from "framer-motion";
 import { IProductData } from "@/types";
 import ImageUpload from "./ImageUpload";
@@ -25,12 +19,12 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
   const params = useParams();
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState<IProductData>(productData);
-  const [productType, setProductType] = useState<string>(
-    productData.productType
-  );
-  const [productFormat, setProductFormat] = useState<string>(
-    productData.productFormat
-  );
+  // const [productType, setProductType] = useState<string>(
+  //   productData.productType
+  // );
+  // const [productFormat, setProductFormat] = useState<string>(
+  //   productData.productFormat
+  // );
   const [imageURL, setImageURL] = useState<string>(productData.imageURL || "");
 
   const handleChange = (
@@ -63,38 +57,38 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     }));
   };
 
-  const handleProductTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setProductType(value);
-    setFormData((prevData) => ({
-      ...prevData,
-      productType: value,
-      productFormat: "", // Reset the format if the product type changes
-    }));
-  };
+  // const handleProductTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const value = e.target.value;
+  //   setProductType(value);
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     productType: value,
+  //     productFormat: "", // Reset the format if the product type changes
+  //   }));
+  // };
 
-  const handleProductFormatChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setProductFormat(e.target.value);
-    setFormData((prevData) => ({
-      ...prevData,
-      productFormat: e.target.value,
-    }));
-  };
+  // const handleProductFormatChange = (
+  //   e: React.ChangeEvent<HTMLSelectElement>
+  // ) => {
+  //   setProductFormat(e.target.value);
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     productFormat: e.target.value,
+  //   }));
+  // };
 
-  const getProductFormatOptions = () => {
-    if (productType === TProductTabs.DIGITAL) {
-      return Object.values(TDigitalProductFormats);
-    }
-    if (productType === TProductTabs.PHYSICAL) {
-      return Object.values(TPhysicalProductFormats);
-    }
-    if (productType === TProductTabs.EVENT) {
-      return Object.values(TEventProductFormats);
-    }
-    return [];
-  };
+  // const getProductFormatOptions = () => {
+  //   if (productType === TProductTabs.DIGITAL) {
+  //     return Object.values(TDigitalProductFormats);
+  //   }
+  //   if (productType === TProductTabs.PHYSICAL) {
+  //     return Object.values(TPhysicalProductFormats);
+  //   }
+  //   if (productType === TProductTabs.EVENT) {
+  //     return Object.values(TEventProductFormats);
+  //   }
+  //   return [];
+  // };
 
   const updateProduct = useMutation({
     mutationKey: ["update-product"],

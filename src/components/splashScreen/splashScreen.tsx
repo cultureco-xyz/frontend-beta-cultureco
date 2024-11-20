@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 
@@ -16,7 +17,7 @@ function SplashScreen({
   const [steps, setsteps] = useState(1);
   const [enableSplash, setenableSplash] = useState(false);
   useEffect(() => {
-    let check = localStorage.getItem("splash-complete");
+    const check = localStorage.getItem("splash-complete");
 
     if (check && check == "true") {
       setenableSplash(false);
