@@ -105,9 +105,21 @@
   }
   body {
     background: rgb(0, 0, 0);
-    background: -moz-linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(40, 43, 40, 1) 100%);
-    background: -webkit-linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(40, 43, 40, 1) 100%);
-    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(40, 43, 40, 1) 100%);
+    background: -moz-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(40, 43, 40, 1) 100%
+    );
+    background: -webkit-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(40, 43, 40, 1) 100%
+    );
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(40, 43, 40, 1) 100%
+    );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endColorstr="#282b28",GradientType=1);
   }
 }
@@ -119,7 +131,11 @@
     backdrop-filter: blur(90px);
   }
   .gradient-background {
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 1) 100%);
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(0, 0, 0, 1) 100%
+    );
   }
   .slick-prev,
   .slick-next,
@@ -184,4 +200,14 @@
   border-bottom-left-radius: 0.375rem; /* Equivalent to rounded-md */
   border-bottom-right-radius: 0.375rem;
   box-shadow: none !important;
+}
+
+.card-shadow {
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(135, 135, 135, 0.20354079131652658) 35%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }

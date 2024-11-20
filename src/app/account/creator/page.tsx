@@ -29,6 +29,21 @@ function CreatorProfile() {
     enabled: Boolean(User?._id),
   });
 
+  const statsQuery = useQuery({
+    queryKey: ["get-creator-stats", User?._id],
+    queryFn: async () => {
+      const res = await axios.get(
+        `/backend/user/get-creator-stats/${User?._id}`
+      );
+      return res.data as {
+        followerCount: number;
+        memberCount: number;
+        productCount: number;
+      };
+    },
+    enabled: Boolean(User?._id),
+  });
+
   return (
     <>
       {User ? (
@@ -57,16 +72,22 @@ function CreatorProfile() {
             <div className="flex justify-between text-white px-4 text-[14px] mb-4">
               <span className="flex gap-1 items-center">
                 <Users className="text-white h-6 w-4" />
-                <p className="font-groteskSemiBold">1.3k</p>
+                <p className="font-groteskSemiBold">
+                  {statsQuery.data?.followerCount || 0}
+                </p>
                 <p>fans</p>
               </span>
               <span className="flex gap-1 items-center">
                 <CultureCoLogoIcon fillColor={"white"} size={20} />
-                <p className="font-groteskSemiBold">800</p>
+                <p className="font-groteskSemiBold">
+                  {statsQuery.data?.memberCount || 0}
+                </p>
                 <p>Paid Members</p>
               </span>
               <span className="flex gap-1 items-center">
-                <p className="font-groteskSemiBold">4</p>
+                <p className="font-groteskSemiBold">
+                  {statsQuery.data?.productCount || 0}
+                </p>
                 <p>Posts</p>
               </span>
             </div>
@@ -82,7 +103,7 @@ function CreatorProfile() {
               </span>
             </div>
             {products.isSuccess && (
-              <div className="flex flex-col w-full   items-center my-4 gap-4 pb-24 h-fit">
+              <div className="flex flex-col w-full   items-center my-4 gap-4 pb-24 h-fit bg-black">
                 {products.data.map((dc, idx) => {
                   return React.cloneElement(
                     <ProductCard product={dc} key={"dc" + idx} />
