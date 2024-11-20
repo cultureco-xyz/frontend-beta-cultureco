@@ -57,14 +57,13 @@ function BasicDetails() {
   return (
     <div className="flex flex-col w-full h-full p-4 py-6 pb-8">
       <span className="flex w-full text-white">
-        <span className="flex items-center h-fit text-base">
-          <ChevronLeft
-            onClick={() => {
-              location.href = "/";
-            }}
-            className="h-4 w-4"
-          />{" "}
-          Back
+        <span
+          className="flex items-center h-fit text-base"
+          onClick={() => {
+            location.href = "/";
+          }}
+        >
+          <ChevronLeft className="h-4 w-4" /> Back
         </span>
       </span>
       <form

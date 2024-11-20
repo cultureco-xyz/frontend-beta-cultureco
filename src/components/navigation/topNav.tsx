@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { MdSort, MdClose } from "react-icons/md";
 import { motion } from "framer-motion";
-import { FileUser, LogOut, UserPlus } from "lucide-react";
+import { Bug, LogOut, UserPlus } from "lucide-react";
 import { Button } from "../ui/button";
 import axios from "axios";
 import { UserData } from "@/types";
 import Link from "next/link";
+import ApplyToBeCreatorIcon from "@/assets/apply-creator-icon";
 
 function TopNav({ className }: { className?: string }) {
   const [navOpen, setnavOpen] = useState(false);
@@ -44,6 +45,15 @@ function TopNav({ className }: { className?: string }) {
             Beta
           </span>
         </div>
+        <button
+          onClick={() => {
+            window.open("https://t.me/+tUElUGKkjd41YmE1", "_blank");
+          }}
+          className="text-white ml-auto mr-2 pr-3 px-[4px] gap-[2px] flex items-center justify-center text-[8px] h-[32px] border border-white rounded-[8px]"
+        >
+          <Bug className="h-3" />
+          Report Bugs
+        </button>
         {navOpen ? (
           <motion.span
             initial={{
@@ -57,7 +67,7 @@ function TopNav({ className }: { className?: string }) {
               onClick={() => {
                 setnavOpen(!true);
               }}
-              className="text-white h-6 w-6 "
+              className="text-white h-8 w-8"
             />
           </motion.span>
         ) : (
@@ -73,7 +83,7 @@ function TopNav({ className }: { className?: string }) {
               onClick={() => {
                 setnavOpen(true);
               }}
-              className="text-white h-6 w-6 scale-x-[-1]"
+              className="text-white h-8 w-8 scale-x-[-1]"
             />
           </motion.span>
         )}
@@ -89,8 +99,8 @@ function TopNav({ className }: { className?: string }) {
           className="flex flex-col w-full h-full  p-4"
         >
           {isAdmin && (
-            <Link href={"/auth/signin?step=create-demo"} className="flex gap-3">
-              <UserPlus /> Create Demo profiles
+            <Link href={"/auth/signin?step=create-demo"} className="flex gap-3 font-groteskSemiBold">
+              <UserPlus /> Create Demo Creator Profile
             </Link>
           )}
           <div className="flex flex-col w-full mt-auto gap-8">
@@ -103,7 +113,7 @@ function TopNav({ className }: { className?: string }) {
                   }
                 });
               }}
-              className="flex gap-3 "
+              className="flex gap-3 font-groteskBold"
             >
               <LogOut /> Sign Out
             </span>
@@ -111,9 +121,9 @@ function TopNav({ className }: { className?: string }) {
               onClick={() => {
                 location.href = "/auth/signin?step=apply";
               }}
-              className="bg-cultureWhite text-cultureGray text-base h-[52px] mb-8"
+              className="bg-cultureWhite text-black font-groteskBold text-base h-[52px] mb-8"
             >
-              <FileUser size={12} />
+              <ApplyToBeCreatorIcon size={20} fillColor="#000000" />{" "}
               Apply To Become A Creator
             </Button>
           </div>

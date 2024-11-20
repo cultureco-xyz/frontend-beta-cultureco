@@ -69,7 +69,7 @@ function Landing() {
                   onClick={() => {
                     location.href = `/auth/signin`;
                   }}
-                  className="bg-cultureOrange w-full h-[50px] hover:text-cultureOrange hover:bg-cultureGrayVariant"
+                  className="bg-cultureOrange w-full h-[50px] hover:text-cultureOrange hover:bg-cultureGrayVariant font-groteskSemiBold text-cultureWhite"
                 >
                   ENTER
                 </Button>
@@ -77,19 +77,19 @@ function Landing() {
                 <Button
                   onClick={handleCreatorClick}
                   variant={"outline"}
-                  className="text-cultureOrange h-[50px] w-full bg-[#2E2F32] hover:text-cultureBeige hover:border-cultureBeige"
+                  className="text-cultureOrange h-[50px] w-full bg-[#2E2F32] hover:text-cultureBeige hover:border-cultureBeige font-groteskSemiBold"
                 >
                   Apply to Become a Creator
                 </Button>
               </div>
             </div>
             <span className="relative font-groteskRegular mt-2 -top-5 flex w-full items-center justify-center">
-              <p className="text-sm">Scroll </p>
+              <p className="text-sm text-cultureWhite">Scroll </p>
               <motion.span
                 animate={{ y: [5, 0, 5, 0, 5] }}
                 transition={{ repeat: Infinity, duration: 4 }}
               >
-                <ChevronDown />
+                <ChevronDown className="text-cultureWhite" />
               </motion.span>
             </span>
           </div>
@@ -142,16 +142,16 @@ function Landing() {
           <div className="flex flex-col w-full items-center gap-2 mt-6 max-w-[361px] mx-auto ">
             <Button
               onClick={() => {
-                location.href = `/auth/user/sign-in`;
+                location.href = `/auth/signin`;
               }}
-              className="bg-cultureOrange w-full h-[50px] hover:text-cultureOrange hover:bg-cultureGrayVariant"
+              className="bg-cultureOrange font-groteskSemiBold text-cultureWhite w-full h-[50px] hover:text-cultureOrange hover:bg-cultureGrayVariant"
             >
               ENTER
             </Button>
 
             <Button
               variant={"outline"}
-              className="text-cultureOrange h-[50px] w-full bg-[#2E2F32] hover:text-cultureBeige hover:border-cultureBeige"
+              className="text-cultureOrange font-groteskSemiBold h-[50px] w-full bg-[#2E2F32] hover:text-cultureBeige hover:border-cultureBeige"
               onClick={handleCreatorClick}
             >
               Apply to Become a Creator

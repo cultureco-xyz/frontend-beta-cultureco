@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-
 import { PiFireLight } from "react-icons/pi";
 import { MessageSquare, Share } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
@@ -18,10 +17,67 @@ import { DigitalAudioFrame } from "../SellForm/frames/DigitalAudioFrame";
 import PhyiscalFrame from "../SellForm/frames/PhyiscalFrame";
 import { VinylPhysicalFrame } from "../SellForm/frames/VinylPhysicalFrame";
 import { TicketFrame } from "../SellForm/frames/TicketFrame";
+import { useAuthenticated } from "@/hooks/useAuthenticated";
+import {
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import axios from "axios";
+import { useParams } from "next/navigation";
+import EditProductForm from "../EditProductForm/EditProductForm";
 
 function ProductCard({ product }: { product: IProductData }) {
+  const params = useParams();
+  const queryClient = useQueryClient();
+  const { user: authData } = useAuthenticated();
+  const isAdminUser = authData?.email.endsWith("@cultureco.xyz");
+
+  const deleteProductMutation = useMutation({
+    mutationFn: async () => {
+      await axios.delete(`/backend/product/delete/${product._id}`);
+    },
+    onSuccess: () => {
+      // Invalidate the "get-user-products" query to refetch and update the product list
+      queryClient.invalidateQueries({
+        queryKey: ["get-user-products", params.id],
+      });
+    },
+    onError: (error) => {
+      console.error("Error deleting product:", error);
+    },
+  });
+
+  // Function to display edit product pop-up for admin
+  const handleEditProductPopup = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
+    setIsEditFormOpen(true);
+  };
+
+  // Function to display confirmation pop-up for product deletion by admin
+  const handleConfirmDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setShowDeleteConfirm(true);
+  };
+
+  // Function to actually delete the product
+  const handleDeleteProduct = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    deleteProductMutation.mutate();
+    setShowDeleteConfirm(false);
+  };
+
+  // Function to cancel the delete action
+  const handleCancelDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setShowDeleteConfirm(false);
+  };
+
   const { imageURL: image, title, memberPrice, regularPrice } = product;
   const [detailedView, setdetailedView] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   return (
     <>
       <div
@@ -122,8 +178,56 @@ function ProductCard({ product }: { product: IProductData }) {
               <p className="text-xs text-cultureBeige">
                 <GetDate date={`${new Date()}`} />
               </p>
+              {/* Admin edit/delete for products */}
+              {isAdminUser && (
+                <>
+                  <div className="flex flex-row gap-2 mt-2">
+                    <button
+                      className="bg-cultureGray text-cultureOrange rounded-md w-12 h-8 items-center justify-center flex font-groteskSemiBold"
+                      onClick={(e) => handleEditProductPopup(e)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="bg-cultureRed text-black rounded-md w-16 h-8 items-center justify-center flex font-groteskSemiBold"
+                      onClick={(e) => handleConfirmDelete(e)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                  {showDeleteConfirm && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999]">
+                      <div className="bg-cultureGray p-4 rounded-md w-80 flex flex-col items-center">
+                        <p className="text-cultureWhite text-center mb-4">
+                          Are you sure you want to delete this product?
+                        </p>
+                        <div className="flex gap-4">
+                          <button
+                            className="bg-cultureRed text-black px-4 py-2 rounded-md font-groteskSemiBold"
+                            onClick={(e) => handleDeleteProduct(e)}
+                          >
+                            Delete
+                          </button>
+                          <button
+                            className="bg-cultureWhite text-black px-4 py-2 rounded-md font-groteskSemiBold"
+                            onClick={(e) => handleCancelDelete(e)}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {/* TO-DO: Edit product functionality and UI for Admin */}
+                  {isEditFormOpen && (
+                    <EditProductForm
+                      close={() => setIsEditFormOpen(false)}
+                      productData={product}
+                    />
+                  )}
+                </>
+              )}
             </div>
-
             {/* Right side: Pricing Info */}
             <div className="flex flex-col justify-center items-end">
               <div className="flex text-cultureWhite w-[60px] h-[60px] flex-col items-center justify-center border-2 rounded-md mb-4 z-50">
