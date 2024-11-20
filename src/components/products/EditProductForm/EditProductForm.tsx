@@ -9,6 +9,9 @@ import {
 import { motion } from "framer-motion";
 import { IProductData } from "@/types";
 import ImageUpload from "./ImageUpload";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { useParams } from "next/navigation";
 
 interface EditProductFormProps {
   close: () => void;
@@ -19,6 +22,8 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
   close,
   productData,
 }) => {
+  const params = useParams();
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState<IProductData>(productData);
   const [productType, setProductType] = useState<string>(
     productData.productType
@@ -91,6 +96,32 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     return [];
   };
 
+  const updateProduct = useMutation({
+    mutationKey: ["update-product"],
+    mutationFn: async () => {
+      const res = await axios.put(
+        `/backend/product/update-product/${productData._id}`,
+        {
+          title: formData.title,
+          description: formData.description,
+          imageURL: formData.imageURL,
+          membersOnly: formData.membersOnly,
+          regularPrice: formData.regularPrice,
+          memberPrice: formData.memberPrice,
+          fanlimit: formData.fanlimit,
+        } as Partial<IProductData>
+      );
+      if (res.status == 201) {
+        return res.data;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["get-user-products", params.id],
+      });
+    },
+  });
+
   return (
     <div
       className="fixed top-0 left-0 inset-0 z-[999]"
@@ -154,7 +185,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
                 className="w-full p-2 rounded-md text-cultureOrange bg-cultureGrayVariant"
               />
             </div>
-
             {/* Description */}
             <div>
               <label className="text-cultureWhite block">Description</label>
@@ -166,9 +196,8 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
                 className="w-full p-2 rounded-md text-cultureOrange bg-cultureGrayVariant"
               />
             </div>
-
             {/* Product Type */}
-            <div>
+            {/* <div>
               <label className="text-cultureWhite block">Product Type</label>
               <select
                 name="productType"
@@ -182,10 +211,9 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
                   </option>
                 ))}
               </select>
-            </div>
-
+            </div> */}
             {/* Product Format */}
-            <div>
+            {/* <div>
               <label className="text-cultureWhite block">Product Format</label>
               <select
                 name="productFormat"
@@ -199,8 +227,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
                   </option>
                 ))}
               </select>
-            </div>
-
+            </div> */}
             {/* Quantity */}
             <div>
               <label className="text-cultureWhite block">Quantity</label>
@@ -213,7 +240,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
                 className="w-full p-2 rounded-md text-cultureOrange bg-cultureGrayVariant"
               />
             </div>
-
             {/* Regular Price */}
             <div>
               <label className="text-cultureWhite block">Regular Price</label>
@@ -226,7 +252,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
                 className="w-full p-2 rounded-md text-cultureOrange bg-cultureGrayVariant"
               />
             </div>
-
             {/* Member Price */}
             <div>
               <label className="text-cultureWhite block">Member Price</label>
@@ -239,7 +264,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
                 className="w-full p-2 rounded-md text-cultureOrange bg-cultureGrayVariant"
               />
             </div>
-
             {/* Members Only */}
             <div className="flex items-center">
               <input
@@ -251,10 +275,9 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
               />
               <label className="text-cultureOrange">Members Only</label>
             </div>
-
             {/* Fan Limit */}
             <div>
-              <label className="text-cultureWhite block">Fan Limit</label>
+              <label className="text-cultureWhite block">Early Fan Limit</label>
               <input
                 type="number"
                 name="fanlimit"
@@ -264,7 +287,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
                 className="w-full p-2 rounded-md text-cultureOrange bg-cultureGrayVariant"
               />
             </div>
-
             {/* Submit */}
             <div className="flex flex-row gap-4 items-center justify-between w-full">
               <button
@@ -276,7 +298,9 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
               </button>
               <button
                 type="submit"
-                onClick={() => {}}
+                onClick={() => {
+                  updateProduct.mutate();
+                }}
                 className="w-1/2 p-2 text-cultureGrayVariant bg-cultureOrange font-groteskSemiBold rounded-md hover:bg-cultureOrange"
               >
                 Save Changes
