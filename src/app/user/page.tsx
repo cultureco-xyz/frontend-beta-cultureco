@@ -19,6 +19,7 @@ import BottomNav from "@/components/navigation/bottomNav";
 // stats
 
 function page() {
+  const tempNumberOfTribes = 2;
   return (
     <div className="flex flex-col w-full h-svh px-4  max-w-mobile mx-auto overflow-y-auto pt-[70px]">
       <TopNav />
@@ -71,14 +72,14 @@ function page() {
       <div className="flex justify-between text-cultureWhite mb-1">
         <div className="flex flex-row items-center space-x-1">
           <TbUsers size={20} />
-          <p className="text-sm font-groteskSemiBold">{2}</p>
+          <p className="text-sm font-groteskSemiBold">{tempNumberOfTribes}</p>
           <p className="font-groteskRegular text-xs">
-            {2 === 1 ? "Tribe" : "Tribes"}
+            {tempNumberOfTribes as number === 1 ? "Tribe" : "Tribes"}
           </p>
         </div>
         <div className="flex flex-row items-center space-x-1">
           <GrDiamond size={20} />
-          <p className="text-sm font-groteskSemiBold">{3}</p>
+          <p className="text-sm font-groteskSemiBold">3</p>
           <p className="font-groteskRegular text-xs">Collected</p>
         </div>
         <div className="flex flex-row items-center space-x-1">
