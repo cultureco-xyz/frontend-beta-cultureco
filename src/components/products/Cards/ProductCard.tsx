@@ -5,11 +5,13 @@ import { PiFireLight } from "react-icons/pi";
 import { MessageSquare, Share } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
 import { GoArrowRight } from "react-icons/go";
-import { Digital } from "../SellForm/icons";
 import { IProductData } from "@/types";
 import DetailedView from "../DetailedView";
 import DigitalFrame from "../SellForm/frames/DigitalFrame";
 import {
+  DigitalProductTypes,
+  EventProductTypes,
+  PhysicalProductTypes,
   TDigitalProductFormats,
   TEventProductFormats,
   TPhysicalProductFormats,
@@ -18,17 +20,35 @@ import { DigitalAudioFrame } from "../SellForm/frames/DigitalAudioFrame";
 import PhyiscalFrame from "../SellForm/frames/PhyiscalFrame";
 import { VinylPhysicalFrame } from "../SellForm/frames/VinylPhysicalFrame";
 import { TicketFrame } from "../SellForm/frames/TicketFrame";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useAuthenticated } from "@/hooks/useAuthenticated";
 
 function ProductCard({ product }: { product: IProductData }) {
   const { imageURL: image, title, memberPrice, regularPrice } = product;
   const [detailedView, setdetailedView] = useState(false);
+  const { isLogedIn, user } = useAuthenticated();
+
+  const statsQuery = useQuery({
+    queryKey: ["get-stats", product._id],
+    queryFn: async () => {
+      const res = await axios.post("/backend/product/get-product-stats", {
+        productId: product._id,
+        userId: isLogedIn ? user?._id : undefined,
+      });
+      if (res.status == 200) {
+        return res.data;
+      }
+    },
+  });
+
   return (
     <>
       <div
         onClick={() => {
           setdetailedView(true);
         }}
-        className="h-[480px] w-[360px] relative text-cultureWhite"
+        className="h-[480px] w-[360px] relative text-cultureWhite "
       >
         {product.productFormat == TDigitalProductFormats.DIGITAL_ART && (
           <DigitalFrame image={image + "#" + title} key={image + title} />
@@ -78,8 +98,34 @@ function ProductCard({ product }: { product: IProductData }) {
 
         {/* Top-most details */}
         <div className="top-4 px-4 absolute flex flex-row justify-between items-center w-full">
-          <div className="flex flex-row items-center justify-center gap-1 bg-cultureGray text-digitalArtYellow w-24 h-8 rounded-md text-xs text-nowrap font-groteskRegular">
-            <Digital /> Digital Art
+          <div>
+            {[
+              ...DigitalProductTypes,
+              ...PhysicalProductTypes,
+              ...EventProductTypes,
+            ]
+              .filter((ele) => ele.title == product.productFormat)
+              .map((prd, key) => {
+                const Icon = prd.icon;
+                return (
+                  <span
+                    style={{
+                      boxShadow: "0px 0px 4px 0px #5F5F5F",
+                    }}
+                    className="flex p-2 rounded-lg items-center text-xs capitalize gap-1 bg-cultureGray"
+                    key={prd.title + key}
+                  >
+                    <Icon />
+                    <p
+                      style={{
+                        color: prd.color,
+                      }}
+                    >
+                      {prd.title}
+                    </p>
+                  </span>
+                );
+              })}
           </div>
           {/* <div className="flex flex-row items-center justify-center gap-1 bg-cultureGray w-24 h-8 rounded-md text-xs text-nowrap">
           <CountdownTimer
@@ -91,16 +137,17 @@ function ProductCard({ product }: { product: IProductData }) {
         {/* Comment, like, share options */}
         <div className="absolute right-4 top-[45%] transform -translate-y-1/2 flex flex-col items-end gap-4">
           <span className="flex gap-1 items-center cursor-pointer">
-            <p className="text-xs">{0}</p>
+            <p className="text-xs">{statsQuery.data?.likeCount || 0}</p>
             <PiFireLight
-              style={{
-                color: true ? "#FE621D" : "white",
-              }}
+              key={statsQuery.isSuccess + product._id}
+              style={
+                statsQuery.isSuccess ? { color: "#FE621D" } : { color: "white" }
+              }
               className="text-2xl"
             />
           </span>
           <span className="flex gap-1 items-center">
-            <p className="text-xs">{0}</p>
+            <p className="text-xs">{statsQuery.data?.commentCount || 0} </p>
             <MessageSquare />
           </span>
           <span className="flex flex-row justify-end w-full">
@@ -108,7 +155,7 @@ function ProductCard({ product }: { product: IProductData }) {
           </span>
         </div>
         {/* Details */}
-        <div className="flex justify-between py-4 px-4 flex-col w-full h-fit absolute bottom-0">
+        <div className="flex rounded-2xl justify-between py-4 px-4 flex-col w-full h-fit absolute bottom-0 ">
           <div className="flex justify-between w-full">
             {/* Left side: Profile Picture, Username, Description, and Date */}
             <div className="flex flex-col">
