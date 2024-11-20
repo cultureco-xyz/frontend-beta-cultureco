@@ -9,15 +9,21 @@ function PhyiscalFrame({
   className: string;
   imageUrl: string;
 }) {
-  console.log(imageUrl, "physical frmae");
   return (
     <div
       className={twMerge(
-        "flex overflow-hidden aspect-[361/480] border-2 border-white rounded-2xl w-full ",
+        "flex overflow-hidden aspect-[361/480] border-2 border-white rounded-2xl w-full relative",
         className
       )}
     >
-      <img src={imageUrl} className="flex w-full h-full object-cover" alt="" />
+      {imageUrl && (
+        <img
+          src={imageUrl}
+          className="flex w-full h-full object-cover "
+          alt=""
+        />
+      )}
+      <div className="flex w-full h-full absolute left-0 right-0 bottom-0 top-0 mx-auto card-shadow"></div>
     </div>
   );
 }

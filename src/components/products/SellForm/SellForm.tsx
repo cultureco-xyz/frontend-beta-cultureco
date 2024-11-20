@@ -31,19 +31,19 @@ function SellForm({ close }: { close: () => void }) {
       }}
       className="flex overflow-y-auto flex-col pt-4 w-full max-w-mobile mb-[56px] max-h-[86%]  h-fit rounded-t-xl shadow-2xl bg-cultureGray absolute bottom-0 z-50 px-4"
     >
-      <span
-        className="flex w-full text-white"
-        onClick={() => {
-          close();
-        }}
-      >
+      <span className="flex w-full text-white">
         <span
           onClick={() => {
             close();
           }}
           className="flex items-center h-fit text-base cursor-pointer"
         >
-          <ChevronLeft className="h-4 w-4" />
+          <ChevronLeft
+            onClick={() => {
+              close();
+            }}
+            className="h-4 w-4"
+          />
           Back
         </span>
       </span>
