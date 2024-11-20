@@ -71,7 +71,7 @@ function Signin() {
     }
 
     if (res.data.newUser === false) {
-      location.href = "/account/creator";
+      location.href = "/";
     }
 
     return res;
