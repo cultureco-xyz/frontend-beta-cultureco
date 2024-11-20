@@ -1,12 +1,12 @@
 /* eslint-disable */
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
-
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
 import UserFeedIcon from "@/assets/svgs/user-feed.icon";
 import UserIcon from "@/assets/svgs/user.icon";
+
 function SplashScreen({
   isOpen,
   close,
