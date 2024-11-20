@@ -2,17 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-
 import CultureCoLogoIcon from "../../assets/svgs/culture-logo.icon";
-
 import { AnimatePresence, motion } from "framer-motion";
-
 import { GoHome } from "react-icons/go";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { twMerge } from "tailwind-merge";
 //laptop:hidden desktop:hidden mac:hidden fhd:hidden whd:hidden uhd:hidden
 
 function BottomNav({ className }: { className?: string }) {
+  // const pathName = usePathname();
   const [currentPath, setcurrentPath] = useState<"home" | "feed" | "account">(
     "home"
   );
@@ -21,6 +19,10 @@ function BottomNav({ className }: { className?: string }) {
     const path = location.pathname;
     if (path && path == "/account/creator") {
       setcurrentPath("account");
+    } else if (path && path == "/search") {
+      setcurrentPath("feed");
+    } else {
+      setcurrentPath("home");
     }
   }, []);
 

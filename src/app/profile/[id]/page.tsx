@@ -49,6 +49,17 @@ const profileMethods = {
       return true;
     }
   },
+  unfollowUser: async (followerID: string, followingID: string) => {
+    const res = await axios.delete("/backend/follow/unfollow", {
+      data: {
+        followerId: followerID,
+        followingId: followingID,
+      },
+    });
+    if (res.status == 200) {
+      return true;
+    }
+  },
   joinTribe: async (followerID: string, follwingID: string) => {
     const res = await axios.post("/backend/follow/become-member", {
       followerId: followerID,
@@ -135,7 +146,6 @@ function Profile() {
                       {User.name}
                     </div>
                     <VerifiedIcon fillColor="#fe621d" />
-                    {/* TO-DO: Allow unfollow */}
                     {!store.isFollowing ? (
                       <motion.button
                         whileTap={{ scale: 0.97 }}
@@ -159,7 +169,24 @@ function Profile() {
                         Follow
                       </motion.button>
                     ) : (
-                      <Button className="bg-cultureGray text-cultureOrange font-groteskSemiBold p-1 text-xs h-6 w-20 rounded-md ml-2">
+                      <Button
+                        className="bg-cultureGray text-cultureOrange font-groteskSemiBold p-1 text-xs h-6 w-20 rounded-md ml-2"
+                        onClick={async () => {
+                          if (!isLogedIn) {
+                            return (location.href = "/auth/signin");
+                          }
+                          if (authData) {
+                            const res = await profileMethods.unfollowUser(
+                              `${authData._id}`,
+                              `${User._id}`
+                            );
+                            if (res) {
+                              store.setStoreData("isFollowing", false);
+                              followQuery.refetch();
+                            }
+                          }
+                        }}
+                      >
                         Following
                       </Button>
                     )}
