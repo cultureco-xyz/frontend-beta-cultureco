@@ -1,8 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
-import CommentCrusaderBadge from "@/components/common/profile-badges/Comment Crusader";
-import CrossCollectorBadge from "@/components/common/profile-badges/Cross Collector";
-import GoingSteadyBadge from "@/components/common/profile-badges/Going Steady";
-import TribeFounderBadge from "@/components/common/profile-badges/TribeFounder";
+import CommentCrusaderBadge from "@/components/profile/profile-badges/Comment Crusader";
+import CrossCollectorBadge from "@/components/profile/profile-badges/Cross Collector";
+import GoingSteadyBadge from "@/components/profile/profile-badges/Going Steady";
+import TribeFounderBadge from "@/components/profile/profile-badges/TribeFounder";
 import { ShareIcon } from "lucide-react";
 import React from "react";
 import { GrDiamond } from "react-icons/gr";
@@ -12,34 +13,56 @@ import { MdOutlineShield } from "react-icons/md";
 // import { ChevronRight } from "lucide-react";
 import TopNav from "@/components/navigation/topNav";
 import BottomNav from "@/components/navigation/bottomNav";
+import { useAuthenticated } from "@/hooks/useAuthenticated";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 // fetch user details
 // fetch their collection
 // tickets
 // stats
 
-function page() {
+function UserProfile() {
+  const { user } = useAuthenticated();
+
+  //fetch stats
+  const statsQuery = useQuery({
+    queryKey: ["user-stats", user?._id],
+    queryFn: async () => {
+      const res = await axios.get(`/backend/user/get-user-stats/${user?._id}`);
+      return res.data as {
+        followingCount: string;
+        tribesCount: string;
+        productCount: string;
+        badgesCount: string;
+      };
+    },
+    enabled: Boolean(user?._id),
+  });
+
+  //fetch user cards
+
   return (
     <div className="flex flex-col w-full h-svh px-4  max-w-mobile mx-auto overflow-y-auto pt-[70px]">
       <TopNav />
       <div className="flex items-center justify-between ">
         <div className="flex items-start">
-          {true ? (
+          {user?.profilePicture ? (
             <img
-              src={"/grad-bg.png"}
+              src={user.profilePicture}
               alt="Profile Picture"
               className="w-12 h-12 rounded-full object-cover"
             />
           ) : (
-            <div className="w-24 h-24 rounded-full bg-cultureOrange flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-cultureOrange flex items-center justify-center">
               <span className="h-full w-full flex items-center justify-center rounded-full bg-cultureOrange  text-4xl font-bold text-black">
-                J
+                {user?.name.slice()[0]}
               </span>
             </div>
           )}
           <div className="ml-2">
             <p className="text-cultureWhite text-lg font-groteskSemiBold flex items-center gap-1">
-              {"John swaroop"}{" "}
+              {user?.name}
               {false && (
                 <button
                   onClick={() => {
@@ -52,7 +75,7 @@ function page() {
               )}
             </p>
             <p className="text-cultureBeige text-xs font-groteskRegular">
-              @{"sum"}
+              @{user?.username}
             </p>
           </div>
         </div>
@@ -64,26 +87,32 @@ function page() {
       {/* Bio */}
       <div>
         <p className="mb-2 text-sm text-cultureWhite font-groteskRegular overflow-y-auto max-h-14">
-          {"bio"}
+          {user?.bio}
         </p>
       </div>
       {/* Profile Stats */}
       <div className="flex justify-between text-cultureWhite mb-1">
         <div className="flex flex-row items-center space-x-1">
           <TbUsers size={20} />
-          <p className="text-sm font-groteskSemiBold">{2}</p>
+          <p className="text-sm font-groteskSemiBold">
+            {statsQuery.data?.tribesCount || 0}
+          </p>
           <p className="font-groteskRegular text-xs">
-            {2 === 1 ? "Tribe" : "Tribes"}
+            {true ? "Tribe" : "Tribes"}
           </p>
         </div>
         <div className="flex flex-row items-center space-x-1">
           <GrDiamond size={20} />
-          <p className="text-sm font-groteskSemiBold">{3}</p>
+          <p className="text-sm font-groteskSemiBold">
+            {statsQuery.data?.productCount || 0}
+          </p>
           <p className="font-groteskRegular text-xs">Collected</p>
         </div>
         <div className="flex flex-row items-center space-x-1">
           <MdOutlineShield size={20} />
-          <p className="text-sm font-groteskSemiBold">55</p>
+          <p className="text-sm font-groteskSemiBold">
+            {statsQuery.data?.badgesCount || 0}
+          </p>
           <p className="font-groteskRegular text-xs">Badges</p>
         </div>
       </div>
@@ -103,4 +132,4 @@ function page() {
   );
 }
 
-export default page;
+export default UserProfile;
