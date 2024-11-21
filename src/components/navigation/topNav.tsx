@@ -9,10 +9,12 @@ import axios from "axios";
 import { UserData } from "@/types";
 import Link from "next/link";
 import ApplyToBeCreatorIcon from "@/assets/apply-creator-icon";
+import { useRouter } from "next/navigation";
 
 function TopNav({ className }: { className?: string }) {
   const [navOpen, setnavOpen] = useState(false);
   const [isAdmin, setisAdmin] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -39,7 +41,10 @@ function TopNav({ className }: { className?: string }) {
       )}
     >
       <div className="p-4 flex justify-between w-full items-center h-fit">
-        <div className="flex flex-row mt-1 justify-center items-center h-fit">
+        <div
+          className="flex flex-row mt-1 justify-center items-center h-fit"
+          onClick={() => router.push("/")}
+        >
           <CultureCoLogoIcon fillColor="#fff" size={24} />
           <span className="bg-cultureOrange text-black font-groteskSemiBold text-[8px] rounded-md w-[30px] text-center">
             Beta
@@ -99,7 +104,10 @@ function TopNav({ className }: { className?: string }) {
           className="flex flex-col w-full h-full  p-4"
         >
           {isAdmin && (
-            <Link href={"/auth/signin?step=create-demo"} className="flex gap-3 font-groteskSemiBold">
+            <Link
+              href={"/auth/signin?step=create-demo"}
+              className="flex gap-3 font-groteskSemiBold"
+            >
               <UserPlus /> Create Demo Creator Profile
             </Link>
           )}
@@ -124,8 +132,8 @@ function TopNav({ className }: { className?: string }) {
               }}
               className="bg-cultureWhite text-black font-groteskBold text-base h-[52px] mb-8"
             >
-              <ApplyToBeCreatorIcon size={20} fillColor="#000000" />{" "}
-              Apply To Become A Creator
+              <ApplyToBeCreatorIcon size={20} fillColor="#000000" /> Apply To
+              Become A Creator
             </Button>
           </div>
         </motion.div>

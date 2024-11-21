@@ -19,7 +19,7 @@ function BottomNav({ className }: { className?: string }) {
     const path = location.pathname;
     if (path && path == "/account/creator") {
       setcurrentPath("account");
-    } else if (path && path == "/search") {
+    } else if (path && path == "/feed") {
       setcurrentPath("feed");
     } else {
       setcurrentPath("home");
@@ -44,7 +44,7 @@ function BottomNav({ className }: { className?: string }) {
       >
         <div className="absolute blur-sm mt-[2px] inset-0 bg-gradient-to-b from-[rgba(0,0,0,0.8)] to-[rgba(50,50,50,0.7)]"></div>
         <div className="z-[1] flex justify-around items-center w-full">
-          <Link href="/search">
+          <Link href="/feed">
             <CultureCoLogoIcon
               fillColor={currentPath == "feed" ? "#FE621D" : "#FFFFFF"}
             />
