@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Album from "@/assets/svgs/album";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
-import { IComment, IProductData, UserData } from "@/types";
+import { IComment, IProductData, IProductPurchase, UserData } from "@/types";
 
 import React from "react";
 import { LuArrowRightCircle } from "react-icons/lu";
@@ -13,6 +13,7 @@ import axios from "axios";
 
 import { create } from "zustand";
 import { useAuthenticated } from "@/hooks/useAuthenticated";
+import { Button } from "../ui/button";
 
 interface DetailedStore {
   likeCount: number;
@@ -46,11 +47,16 @@ const useStore = create<DetailedState>()((set) => ({
   },
 }));
 
-function DetailedView({ product }: { product: IProductData }) {
+function DetailedView({
+  product,
+  isPurchased,
+}: {
+  product: IProductData;
+  isPurchased?: boolean;
+}) {
   const { setStore, newComment, likeCount, toggleLike, isLiked, comments } =
     useStore();
   const { isLogedIn, user: authData } = useAuthenticated();
-  console.log(comments);
 
   console.log(isLogedIn, authData);
 
@@ -155,8 +161,24 @@ function DetailedView({ product }: { product: IProductData }) {
     },
   });
 
+  const purchaseMutation = useMutation({
+    mutationKey: ["purchase", product._id],
+    mutationFn: async () => {
+      const res = await axios.post(
+        "/backend/product-purchase/create-purchase",
+        {
+          productId: product._id,
+          cost: product.regularPrice,
+          creator: product.creator,
+          currency: "USD",
+        } as Partial<IProductPurchase>
+      );
+      return res.data;
+    },
+  });
+
   return (
-    <div className="flex flex-col w-full h-svh bg-black  mx-auto top-0 left-0 right-0 max-w-mobile fixed overflow-y-auto z-[80]">
+    <div className="flex  flex-col w-full h-svh bg-black  mx-auto top-0 left-0 right-0 max-w-mobile fixed overflow-y-auto z-[80]">
       <img
         className="absolute w-full max-w-mobile mx-auto top-0 left-0 min-h-[80svh] object-cover"
         src={product.imageURL}
@@ -166,7 +188,7 @@ function DetailedView({ product }: { product: IProductData }) {
         style={{
           background: `linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 69%, rgba(0,0,0,0) 100%)`,
         }}
-        className="flex flex-col z-10 pt-[50vh] h-full relative w-full px-4"
+        className="flex flex-col z-10 pt-[50vh] h-full relative w-full px-4 "
       >
         <div className="absolute right-4 top-[45%] transform -translate-y-1/2 flex flex-col items-end gap-4 pb-12">
           <span className="flex gap-1 items-center cursor-pointer text-white">
@@ -262,7 +284,7 @@ function DetailedView({ product }: { product: IProductData }) {
               className="text-2xl text-cultureOrange ml-auto my-2"
             />
           </div>
-          <div className="flex flex-col w-full gap-4 my-2 pb-32">
+          <div className="flex flex-col w-full gap-4 my-2 pb-48">
             {comments &&
               comments.map((cmnt) => {
                 return (
@@ -276,6 +298,26 @@ function DetailedView({ product }: { product: IProductData }) {
               })}
           </div>
         </div>
+      </div>
+      <div className="fixed justify-center gap-4 items-center h-[84px] max-w-mobile mx-auto bg-cultureGray left-0 right-0 bottom-[56px] z-50  flex w-full rounded-t-lg">
+        {!isPurchased && (
+          <Button
+            onClick={() => {
+              purchaseMutation.mutate();
+            }}
+            variant={"outline"}
+            className="text-cultureOrange font-groteskSemiBold h-[54px] w-[110px]"
+          >
+            Buy
+          </Button>
+        )}
+        <Button
+          variant={"outline"}
+          className="text-cultureGray font-groteskSemiBold bg-cultureOrange h-[54px] w-fit"
+        >
+          <CultureCoLogoIcon fillColor="black" />
+          Join the Tribe
+        </Button>
       </div>
     </div>
   );

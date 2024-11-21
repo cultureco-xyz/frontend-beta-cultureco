@@ -16,7 +16,7 @@ export interface UserData {
   email: string;
   bio: string;
   profilePicture: string;
-  role: UserRole;
+  role: UserRole | "creator" | "user";
   creatorType?: CREATOR_TYPES;
   isDemo?: boolean;
   demoCreatorEmail?: string;
@@ -67,4 +67,17 @@ export interface IAlbum {
   name: string;
   cover_url: string;
   userID: string | UserData;
+}
+
+export interface IProductPurchase {
+  _id: string;
+  productId: string | IProductData;
+  cost?: number;
+  user?: string | UserData;
+  creator?: string | UserData;
+  order_id: string;
+  currency: string;
+  status: "PENDING" | "SUCCESS" | "FAILED";
+  createdAt?: Date;
+  updatedAt?: Date;
 }
