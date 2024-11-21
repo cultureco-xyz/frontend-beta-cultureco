@@ -296,7 +296,7 @@ function Landing() {
                       className="flex items-center justify-center h-[480px] w-full"
                       onClick={() => handleDetailedView(product)}
                     >
-                      <ProductCard product={product} />
+                      <ProductCard isPurchased={false} product={product} />
                     </div>
                   </div>
                 ))}
@@ -311,7 +311,10 @@ function Landing() {
                 className="flex flex-row mt-4 items-center justify-center h-[480px] w-full"
                 onClick={() => handleDetailedView(trendingProducts[0])}
               >
-                <ProductCard product={trendingProducts[0]} />
+                <ProductCard
+                  isPurchased={false}
+                  product={trendingProducts[0]}
+                />
               </div>
             </div>
           ) : (
