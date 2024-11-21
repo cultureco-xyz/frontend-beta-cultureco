@@ -26,7 +26,13 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import EditProductForm from "../EditProductForm/EditProductForm";
 
-function ProductCard({ product }: { product: IProductData }) {
+function ProductCard({
+  product,
+  isPurchased = false,
+}: {
+  product: IProductData;
+  isPurchased: boolean;
+}) {
   const params = useParams();
   const queryClient = useQueryClient();
   const { user: authData, isLogedIn } = useAuthenticated();
@@ -272,7 +278,7 @@ function ProductCard({ product }: { product: IProductData }) {
             <div className="flex flex-col justify-center items-end">
               <div className="flex text-cultureWhite w-[60px] h-[60px] flex-col items-center justify-center border-2 rounded-md mb-4 z-50">
                 <GoArrowRight />
-                <span>{!true ? "Buy" : "View"}</span>
+                <span>{!isPurchased ? "Buy" : "View"}</span>
               </div>
               {true && (
                 <>
@@ -292,7 +298,9 @@ function ProductCard({ product }: { product: IProductData }) {
           </div>
         </div>
       </div>
-      {detailedView && <DetailedView product={product} />}
+      {detailedView && (
+        <DetailedView isPurchased={isPurchased} product={product} />
+      )}
     </>
   );
 }

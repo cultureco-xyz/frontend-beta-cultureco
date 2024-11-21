@@ -57,7 +57,7 @@ function BottomNav({ className }: { className?: string }) {
               className="text-white h-6 w-6"
             />
           </Link>
-          <Link href={"/account/creator"}>
+          <Link href={"/account"}>
             <FaRegCircleUser
               style={{
                 color: currentPath == "account" ? "#FE621D" : "#FFFFFF",

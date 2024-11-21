@@ -9,21 +9,16 @@ import React from "react";
 import { GrDiamond } from "react-icons/gr";
 import { TbUsers } from "react-icons/tb";
 import { MdOutlineShield } from "react-icons/md";
-// import { IoMdCloseCircleOutline } from "react-icons/io";
-// import { ChevronRight } from "lucide-react";
 import TopNav from "@/components/navigation/topNav";
 import BottomNav from "@/components/navigation/bottomNav";
 import { useAuthenticated } from "@/hooks/useAuthenticated";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-
-// fetch user details
-// fetch their collection
-// tickets
-// stats
+import { IProductData } from "@/types";
+import DigitalCard from "@/components/profile/cards/DigitalCard";
 
 function UserProfile() {
-  const { user } = useAuthenticated();
+  const { user, isLogedIn } = useAuthenticated();
 
   //fetch stats
   const statsQuery = useQuery({
@@ -41,6 +36,16 @@ function UserProfile() {
   });
 
   //fetch user cards
+  const purchaseListQuery = useQuery({
+    queryKey: ["purchase", user?._id],
+    queryFn: async () => {
+      const res = await axios.get(
+        `/backend/product-purchase/user/${user?._id}`
+      );
+      return res.data;
+    },
+    enabled: Boolean(isLogedIn),
+  });
 
   return (
     <div className="flex flex-col w-full h-svh px-4  max-w-mobile mx-auto overflow-y-auto pt-[70px]">
@@ -104,7 +109,7 @@ function UserProfile() {
         <div className="flex flex-row items-center space-x-1">
           <GrDiamond size={20} />
           <p className="text-sm font-groteskSemiBold">
-            {statsQuery.data?.productCount || 0}
+            {purchaseListQuery.data?.length || 0}
           </p>
           <p className="font-groteskRegular text-xs">Collected</p>
         </div>
@@ -126,6 +131,16 @@ function UserProfile() {
           <CommentCrusaderBadge />
           <CrossCollectorBadge />
         </div>
+      </div>
+      <div className="flex flex-wrap w-full justify-center gap-4 mt-8">
+        {purchaseListQuery.isSuccess &&
+          purchaseListQuery.data.map(
+            (ele: { _id: string; productId: IProductData }) => {
+              return (
+                <DigitalCard imageUrl={ele.productId.imageURL} key={ele._id} />
+              );
+            }
+          )}
       </div>
       <BottomNav className="fixed bottom-0 w-full max-w-mobile " />
     </div>
