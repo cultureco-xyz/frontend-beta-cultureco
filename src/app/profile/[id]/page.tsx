@@ -115,16 +115,6 @@ function Profile() {
     enabled: Boolean(userQuery.isSuccess),
   });
 
-  const purchaseListQuery = useQuery({
-    queryKey: ["purchase", authData?._id],
-    queryFn: async () => {
-      const res = await axios.get(
-        `/backend/product-purchase/user/${authData?._id}`
-      );
-      return res.data;
-    },
-  });
-
   const User = userQuery.isSuccess ? (userQuery.data as UserData) : undefined;
 
   const toggleAboutPopup = () => {
@@ -346,20 +336,7 @@ function Profile() {
               <div className="flex flex-col w-full   items-center my-4 gap-4 pb-24 h-fit">
                 {products.data.map((dc, idx) => {
                   return React.cloneElement(
-                    <DigitalCard
-                      isPurchased={
-                        purchaseListQuery.isSuccess
-                          ? purchaseListQuery.data
-                              .map(
-                                (ele: { productId: { _id: string } }) =>
-                                  ele.productId._id
-                              )
-                              .includes(dc._id)
-                          : false
-                      }
-                      product={dc}
-                      key={"dc" + idx}
-                    />
+                    <DigitalCard product={dc} key={"dc" + idx} />
                   );
                 })}
               </div>

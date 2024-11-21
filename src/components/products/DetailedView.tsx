@@ -54,6 +54,7 @@ function DetailedView({
   product: IProductData;
   isPurchased?: boolean;
 }) {
+  console.log("detailed", { isPurchased });
   const { setStore, newComment, likeCount, toggleLike, isLiked, comments } =
     useStore();
   const { isLogedIn, user: authData } = useAuthenticated();
@@ -173,6 +174,9 @@ function DetailedView({
           currency: "USD",
         } as Partial<IProductPurchase>
       );
+      if (res.status == 201) {
+        location.href = "/account";
+      }
       return res.data;
     },
   });
@@ -299,7 +303,10 @@ function DetailedView({
           </div>
         </div>
       </div>
-      <div className="fixed justify-center gap-4 items-center h-[84px] max-w-mobile mx-auto bg-cultureGray left-0 right-0 bottom-[56px] z-50  flex w-full rounded-t-lg">
+      <div
+        key={"isPurchased" + isPurchased}
+        className="fixed justify-center gap-4 items-center h-[84px] max-w-mobile mx-auto bg-cultureGray left-0 right-0 bottom-[56px] z-50  flex w-full rounded-t-lg"
+      >
         {!isPurchased && (
           <Button
             onClick={() => {

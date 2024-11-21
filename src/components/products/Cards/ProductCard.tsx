@@ -26,13 +26,7 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import EditProductForm from "../EditProductForm/EditProductForm";
 
-function ProductCard({
-  product,
-  isPurchased = false,
-}: {
-  product: IProductData;
-  isPurchased: boolean;
-}) {
+function ProductCard({ product }: { product: IProductData }) {
   const params = useParams();
   const queryClient = useQueryClient();
   const { user: authData, isLogedIn } = useAuthenticated();
@@ -49,6 +43,18 @@ function ProductCard({
         return res.data;
       }
     },
+  });
+
+  useQuery({
+    queryKey: ["is purchased", product._id],
+    queryFn: async () => {
+      const res = await axios.get(
+        `/backend/product-purchase/user/${authData?._id}/${product._id}`
+      );
+      setisPurchased(res.data.isPurchased ? true : false);
+      return res.data;
+    },
+    enabled: isLogedIn,
   });
 
   const deleteProductMutation = useMutation({
@@ -97,6 +103,8 @@ function ProductCard({
   const [detailedView, setdetailedView] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [isPurchased, setisPurchased] = useState(false);
+
   return (
     <>
       <div
@@ -278,7 +286,7 @@ function ProductCard({
             <div className="flex flex-col justify-center items-end">
               <div className="flex text-cultureWhite w-[60px] h-[60px] flex-col items-center justify-center border-2 rounded-md mb-4 z-50">
                 <GoArrowRight />
-                <span>{!isPurchased ? "Buy" : "View"}</span>
+                <span>{isPurchased ? "View" : "Buy"}</span>
               </div>
               {true && (
                 <>

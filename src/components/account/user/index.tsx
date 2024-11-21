@@ -15,7 +15,7 @@ import { useAuthenticated } from "@/hooks/useAuthenticated";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IProductData } from "@/types";
-import DigitalCard from "@/components/profile/cards/DigitalCard";
+import ProductCard from "@/components/profile/cards/DigitalCard";
 
 function UserProfile() {
   const { user, isLogedIn } = useAuthenticated();
@@ -137,7 +137,7 @@ function UserProfile() {
           purchaseListQuery.data.map(
             (ele: { _id: string; productId: IProductData }) => {
               return (
-                <DigitalCard imageUrl={ele.productId.imageURL} key={ele._id} />
+                <ProductCard imageUrl={ele.productId.imageURL} key={ele._id} />
               );
             }
           )}
