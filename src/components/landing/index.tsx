@@ -279,7 +279,7 @@ function Landing() {
           )}
 
           {trendingProducts && trendingProducts.length > 1 ? (
-            <div className="w-screen max-w-[430px] h-full mb-24">
+            <div className="w-screen max-w-[430px] h-full mb-32">
               <div className="text-lg -mt-4 font-groteskSemiBold text-cultureBeige pl-4">
                 Discover
               </div>
