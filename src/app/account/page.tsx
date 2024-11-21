@@ -22,6 +22,7 @@ function Page() {
               axios.get("/backend/auth/logout").then((res) => {
                 if (res.status == 200) {
                   localStorage.removeItem("user");
+                  localStorage.removeItem("splash-complete");
                   location.reload();
                 }
               });

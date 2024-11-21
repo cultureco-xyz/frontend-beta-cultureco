@@ -16,6 +16,7 @@ function SplashScreen({
 }) {
   const [steps, setsteps] = useState(1);
   const [enableSplash, setenableSplash] = useState(false);
+  
   useEffect(() => {
     const check = localStorage.getItem("splash-complete");
 

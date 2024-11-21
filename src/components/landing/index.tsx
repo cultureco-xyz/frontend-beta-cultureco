@@ -15,11 +15,14 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import SplashScreen from "../splashScreen/splashScreen";
-import { UserData } from "@/types";
+import { IProductData, UserData } from "@/types";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import FollowingIconForExplore from "@/assets/svgs/follow-icon-explore-page";
+import ProductCard from "../products/Cards/ProductCard";
+import DetailedView from "../products/DetailedView";
+import CultureCoLoadingIcon from "@/assets/svgs/loading-cc";
 
 //build fix 22 23v24
 
@@ -42,41 +45,59 @@ const fetchFollowStatus = async (creatorId: string, userId: string) => {
   return data;
 };
 
+const fetchProducts = async () => {
+  const { data } = await axios.get<IProductData[]>(
+    "/backend/product/get-all-products"
+  );
+  return data;
+};
+
 function Landing() {
   const { isLogedIn, user: authData } = useAuthenticated();
   const [enableContent, setenableContent] = useState(false);
   const [splashOpen, setsplashOpen] = useState(true);
+  const [detailedView, setdetailedView] = useState(false);
+  const [productDataForDetailedView, setProductDataForDetailedView] =
+    useState<IProductData>();
   const router = useRouter();
+
+  const handleDetailedView = async (product: IProductData) => {
+    setProductDataForDetailedView(product);
+    setdetailedView(true);
+  };
 
   const handleCreatorStoreClick = (creatorId: string) => {
     router.push(`/profile/${creatorId}`);
   };
 
   // Fetch all creators
-  const {
-    data: creators
-  } = useQuery({
+  const { data: creators, isLoading: isCreatorsLoading } = useQuery({
     queryKey: ["creators"],
     queryFn: fetchCreators,
   });
 
   // Fetch follow statuses only after creators are loaded
-  const {
-    data: creatorsWithStatus,
-  } = useQuery({
-    queryKey: ["followStatuses", creators],
-    queryFn: async () => {
-      const promises = creators!.map((creator) =>
-        fetchFollowStatus(creator._id as string, authData?._id as string)
-      );
-      const statuses = await Promise.all(promises);
-      return creators!.map((creator, index) => ({
-        ...creator,
-        isFollowing: statuses[index].isFollowing,
-        isMember: statuses[index].isMember,
-      }));
-    },
-    enabled: !!creators, // Only fetch follow statuses after creators are available
+  const { data: creatorsWithStatus, isLoading: isFollowStatusesLoading } =
+    useQuery({
+      queryKey: ["followStatuses", creators],
+      queryFn: async () => {
+        const promises = creators!.map((creator) =>
+          fetchFollowStatus(creator._id as string, authData?._id as string)
+        );
+        const statuses = await Promise.all(promises);
+        return creators!.map((creator, index) => ({
+          ...creator,
+          isFollowing: statuses[index].isFollowing,
+          isMember: statuses[index].isMember,
+        }));
+      },
+      enabled: !!creators, // Only fetch follow statuses after creators are available
+    });
+
+  // Fetch all products
+  const { data: trendingProducts, isLoading: isProductsLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
   });
 
   useEffect(() => {
@@ -95,18 +116,28 @@ function Landing() {
     autoplaySpeed: 3000, // Speed of the autoplay
   };
 
-  // const productCarouselSettings = {
-  //   dots: false,
-  //   infinite: true,
-  //   speed: 500,
-  //   slidesToShow: 1, // Show 1 product
-  //   slidesToScroll: 1,
-  //   autoplay: true, // Automatically scroll through the carousel
-  //   autoplaySpeed: 3000, // Speed of the autoplay
-  //   arrows: true,
-  //   nextArrow: <button className="slick-arrow slick-next">Next</button>,
-  //   prevArrow: <button className="slick-arrow slick-prev">Prev</button>,
-  // };
+  const productCarouselSettings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1, // Show 1 product
+    slidesToScroll: 1,
+    autoplay: true, // Automatically scroll through the carousel
+    autoplaySpeed: 3000, // Speed of the autoplay
+    arrows: true,
+    nextArrow: <button className="slick-arrow slick-next">Next</button>,
+    prevArrow: <button className="slick-arrow slick-prev">Prev</button>,
+  };
+
+  if (isLogedIn) {
+    if (isCreatorsLoading || isFollowStatusesLoading || isProductsLoading) {
+      return (
+        <div className="h-full my-auto w-full flex justify-center items-center">
+          <CultureCoLoadingIcon />
+        </div>
+      );
+    }
+  }
 
   return (
     <div className="max-w-[430px] mx-auto">
@@ -194,37 +225,34 @@ function Landing() {
                     }
                   >
                     <div className="flex flex-col items-center justify-center">
-                    <div
-                          className={`w-[110px] h-[120px] overflow-hidden border-2 rounded-md relative ${
-                            creator.isMember
-                              ? "border-cultureOrange"
-                              : creator.isFollowing && !creator.isMember
-                              ? "border-cultureBeige"
-                              : "border-cultureWhite"
-                          }`}
-                        >
-                          <img
-                            src={creator.profilePicture}
-                            alt={creator.name}
-                            className="w-full h-full object-cover"
-                          />
-                          {creator.isMember && (
-                            <div className="absolute rounded-md bottom-1 bg-cultureOrange right-1 p-1">
-                              <CultureCoLogoIcon
-                                size={14}
-                                fillColor="#282b28"
-                              />
-                            </div>
-                          )}
-                          {creator.isFollowing && !creator.isMember && (
-                            <div className="absolute rounded-md bottom-1 border-cultureOrange border-2 bg-cultureGray right-1 p-1">
-                              <FollowingIconForExplore
-                                size={14}
-                                fillColor="#f1f5ed"
-                              />
-                            </div>
-                          )}
-                        </div>
+                      <div
+                        className={`w-[110px] h-[120px] overflow-hidden border-2 rounded-md relative ${
+                          creator.isMember
+                            ? "border-cultureOrange"
+                            : creator.isFollowing && !creator.isMember
+                            ? "border-cultureBeige"
+                            : "border-cultureWhite"
+                        }`}
+                      >
+                        <img
+                          src={creator.profilePicture}
+                          alt={creator.name}
+                          className="w-full h-full object-cover"
+                        />
+                        {creator.isMember && (
+                          <div className="absolute rounded-md bottom-1 bg-cultureOrange right-1 p-1">
+                            <CultureCoLogoIcon size={14} fillColor="#282b28" />
+                          </div>
+                        )}
+                        {creator.isFollowing && !creator.isMember && (
+                          <div className="absolute rounded-md bottom-1 border-cultureOrange border-2 bg-cultureGray right-1 p-1">
+                            <FollowingIconForExplore
+                              size={14}
+                              fillColor="#f1f5ed"
+                            />
+                          </div>
+                        )}
+                      </div>
                       <div className="flex flex-col items-center justify-center mt-2 text-sm text-cultureWhite font-groteskSemiBold">
                         {creator.name}
                         <div className="text-xs text-cultureWhite font-groteskRegular">
@@ -248,6 +276,60 @@ function Landing() {
                 Thank you for your invaluable support!
               </div>
             </div>
+          )}
+
+          {trendingProducts && trendingProducts.length > 1 ? (
+            <div className="w-screen max-w-[430px] h-full mb-24">
+              <div className="text-lg -mt-4 font-groteskSemiBold text-cultureBeige pl-4">
+                Discover
+              </div>
+              <Slider
+                {...productCarouselSettings}
+                className="mt-4 w-full h-full"
+              >
+                {trendingProducts.map((product: IProductData) => (
+                  <div
+                    className="flex flex-row items-center justify-center h-[480px] w-full"
+                    key={product._id}
+                  >
+                    <div
+                      className="flex items-center justify-center h-[480px] w-full"
+                      onClick={() => handleDetailedView(product)}
+                    >
+                      <ProductCard product={product} />
+                    </div>
+                  </div>
+                ))}
+              </Slider>
+            </div>
+          ) : trendingProducts && trendingProducts.length === 1 ? (
+            <div className="w-screen max-w-[430px] h-full">
+              <div className="text-lg -mt-4 font-groteskSemiBold text-cultureBeige pl-4">
+                Discover
+              </div>
+              <div
+                className="flex flex-row mt-4 items-center justify-center h-[480px] w-full"
+                onClick={() => handleDetailedView(trendingProducts[0])}
+              >
+                <ProductCard product={trendingProducts[0]} />
+              </div>
+            </div>
+          ) : (
+            <div className="w-screen max-w-[430px] h-full">
+              <div className="text-lg -mt-4 font-groteskSemiBold text-cultureBeige pl-4">
+                Discover
+              </div>
+              <div className="text-lg mt-2 font-groteskSemiBold text-cultureOrange pl-4">
+                You have purchased all available products!
+              </div>
+              <div className="text-xs font-groteskSemiBold text-cultureOrange pl-4 pb-4">
+                Thank you for your invaluable support!
+              </div>
+            </div>
+          )}
+
+          {detailedView && (
+            <DetailedView product={productDataForDetailedView!} />
           )}
           <BottomNav className="fixed bottom-0 w-full max-w-mobile" />
         </div>
