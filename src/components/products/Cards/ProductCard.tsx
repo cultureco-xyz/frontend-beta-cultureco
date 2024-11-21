@@ -4,6 +4,7 @@ import { PiFireLight } from "react-icons/pi";
 import { MessageSquare, Share } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
 import { GoArrowRight } from "react-icons/go";
+
 import { IProductData } from "@/types";
 import DetailedView from "../DetailedView";
 import DigitalFrame from "../SellForm/frames/DigitalFrame";
