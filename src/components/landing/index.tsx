@@ -296,7 +296,7 @@ function Landing() {
                       className="flex items-center justify-center h-[480px] w-full"
                       onClick={() => handleDetailedView(product)}
                     >
-                      <ProductCard isPurchased={false} product={product} />
+                      <ProductCard product={product} />
                     </div>
                   </div>
                 ))}
@@ -311,10 +311,7 @@ function Landing() {
                 className="flex flex-row mt-4 items-center justify-center h-[480px] w-full"
                 onClick={() => handleDetailedView(trendingProducts[0])}
               >
-                <ProductCard
-                  isPurchased={false}
-                  product={trendingProducts[0]}
-                />
+                <ProductCard product={trendingProducts[0]} />
               </div>
             </div>
           ) : (
@@ -334,7 +331,7 @@ function Landing() {
           {detailedView && (
             <DetailedView product={productDataForDetailedView!} />
           )}
-          <BottomNav className="fixed bottom-0 w-full max-w-mobile" />
+          <BottomNav className="fixed bottom-0 w-full max-w-mobile z-[80]" />
         </div>
       ) : (
         <>

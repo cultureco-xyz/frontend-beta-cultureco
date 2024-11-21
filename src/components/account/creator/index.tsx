@@ -106,11 +106,7 @@ function CreatorProfile() {
               <div className="flex flex-col w-full   items-center my-4 gap-4 pb-24 h-fit bg-black">
                 {products.data.map((dc, idx) => {
                   return React.cloneElement(
-                    <ProductCard
-                      isPurchased={true}
-                      product={dc}
-                      key={"dc" + idx}
-                    />
+                    <ProductCard product={dc} key={"dc" + idx} />
                   );
                 })}
               </div>

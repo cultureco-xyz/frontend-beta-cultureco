@@ -119,14 +119,14 @@ export default function UserFeed() {
               // const creatorStatus = creatorStatuses.find(
               //   (status) => String(status.creatorId) === String(post.creatorId)
               // );
-              return <ProductCard isPurchased={false} product={product} />;
+              return <ProductCard product={product} />;
             })
           ) : (
             <EmptyStateUserFeed />
           )}
         </div>
       </div>
-      <BottomNav className="fixed bottom-0 w-full max-w-mobile" />
+      <BottomNav className="fixed bottom-0 w-full max-w-mobile z-[80]" />
     </>
   );
 }
