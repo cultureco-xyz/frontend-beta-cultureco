@@ -103,7 +103,7 @@ function DigitalForm() {
       }
     },
     onSuccess: () => {
-      location.href = "/account/creator";
+      location.href = "/account";
     },
   });
   return (

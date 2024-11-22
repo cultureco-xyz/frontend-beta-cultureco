@@ -65,7 +65,10 @@ const initialState: Store = {
 
 const useStore = create<storeType>()((set, get) => ({
   ...initialState,
-  setStoreValue: (key: keyof Store, value: string | number | boolean | Date) => {
+  setStoreValue: (
+    key: keyof Store,
+    value: string | number | boolean | Date
+  ) => {
     const currentValue = get()[key]; // Get the current value from the store
     // Only set the state if the value is different
     if (currentValue !== value) {
@@ -73,7 +76,6 @@ const useStore = create<storeType>()((set, get) => ({
     }
   },
 }));
-
 
 interface PhysicalFormProps {
   initialData: Store;
@@ -125,7 +127,7 @@ function PhysicalForm({ initialData }: PhysicalFormProps) {
       }
     },
     onSuccess: () => {
-      location.href = "/account/creator";
+      location.href = "/account";
     },
   });
   return (

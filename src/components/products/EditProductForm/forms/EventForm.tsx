@@ -72,7 +72,10 @@ const initialState: Store = {
 
 const useStore = create<storeType>()((set, get) => ({
   ...initialState,
-  setStoreValue: (key: keyof Store, value: string | number | boolean | Date) => {
+  setStoreValue: (
+    key: keyof Store,
+    value: string | number | boolean | Date
+  ) => {
     const currentValue = get()[key]; // Get the current value from the store
     // Only set the state if the value is different
     if (currentValue !== value) {
@@ -94,10 +97,7 @@ function EventForm({ initialData }: EventFormProps) {
     // Reset store state to match initialData values
     Object.keys(initialData).forEach((key) => {
       // Ensure each key is set with the correct initial value
-      store.setStoreValue(
-        key as keyof Store,
-        initialData[key as keyof Store]
-      );
+      store.setStoreValue(key as keyof Store, initialData[key as keyof Store]);
     });
   }, [initialData, store]);
 
@@ -121,7 +121,7 @@ function EventForm({ initialData }: EventFormProps) {
       }
     },
     onSuccess: () => {
-      location.href = "/account/creator";
+      location.href = "/account";
     },
   });
   return (

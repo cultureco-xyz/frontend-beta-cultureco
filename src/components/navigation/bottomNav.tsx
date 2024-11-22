@@ -17,7 +17,7 @@ function BottomNav({ className }: { className?: string }) {
 
   useEffect(() => {
     const path = location.pathname;
-    if (path && path == "/account/creator") {
+    if (path && path == "/account") {
       setcurrentPath("account");
     } else if (path && path == "/feed") {
       setcurrentPath("feed");

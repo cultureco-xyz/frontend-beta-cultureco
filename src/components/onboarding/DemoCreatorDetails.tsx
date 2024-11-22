@@ -65,7 +65,7 @@ const DemoCreatorDetails = () => {
     );
     if (res.status == 200) {
       alert("Demo creator saved");
-      location.href = "/account/creator";
+      location.href = "/account";
     }
     //save local state
     // localStorage.setItem("user", JSON.stringify(res.data));

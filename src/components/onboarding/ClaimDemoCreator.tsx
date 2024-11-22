@@ -119,7 +119,7 @@ const ClaimDemoCreator = () => {
     );
     //save local state
     localStorage.setItem("user", JSON.stringify(res.data));
-    location.href = "/account/creator";
+    location.href = "/account";
   };
 
   return (

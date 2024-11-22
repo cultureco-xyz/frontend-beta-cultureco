@@ -114,7 +114,7 @@ function EventForm() {
       }
     },
     onSuccess: () => {
-      location.href = "/account/creator";
+      location.href = "/account";
     },
   });
   return (

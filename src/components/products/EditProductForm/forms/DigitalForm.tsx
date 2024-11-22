@@ -61,7 +61,10 @@ const initialState: Store = {
 
 const useStore = create<storeType>()((set, get) => ({
   ...initialState,
-  setStoreValue: (key: keyof Store, value: string | number | boolean | Date) => {
+  setStoreValue: (
+    key: keyof Store,
+    value: string | number | boolean | Date
+  ) => {
     const currentValue = get()[key]; // Get the current value from the store
     // Only set the state if the value is different
     if (currentValue !== value) {
@@ -111,7 +114,7 @@ function DigitalForm({ initialData }: DigitalFormProps) {
       }
     },
     onSuccess: () => {
-      location.href = "/account/creator";
+      location.href = "/account";
     },
   });
 
@@ -125,7 +128,10 @@ function DigitalForm({ initialData }: DigitalFormProps) {
           <DigitalFrame image={store.imageURL} className="w-full h-fit" />
         )}
         {store.productFormat == TDigitalProductFormats.MUSIC && (
-          <DigitalAudioFrame imageUrl={store.imageURL} className="w-full h-fit" />
+          <DigitalAudioFrame
+            imageUrl={store.imageURL}
+            className="w-full h-fit"
+          />
         )}
         <ProductTypeSelector
           configType="digital"

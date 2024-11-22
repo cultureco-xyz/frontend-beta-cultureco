@@ -45,7 +45,7 @@ function Signin() {
     } else if (step == "claim-profile") {
       setscreen("CLAIM_DEMO_CREATOR");
     } else if (user) {
-      location.href = "/account/creator";
+      location.href = "/account";
     }
   }, []);
 
