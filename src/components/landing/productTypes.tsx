@@ -169,7 +169,7 @@ const ProductTypes = () => {
         let c = Number(
           src.split("/")[src.split("/").length - 1].split(".")[0].split("c")[1]
         );
-        if (Number(c) == 6) {
+        if (Number(c) == 3) {
           c = 1;
         }
         requestAnimationFrame(() => {
