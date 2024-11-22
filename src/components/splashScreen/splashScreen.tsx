@@ -16,7 +16,7 @@ function SplashScreen({
 }) {
   const [steps, setsteps] = useState(1);
   const [enableSplash, setenableSplash] = useState(false);
-  
+
   useEffect(() => {
     const check = localStorage.getItem("splash-complete");
 
@@ -30,6 +30,7 @@ function SplashScreen({
 
   return (
     <AnimatePresence>
+      {/* TO-DO: Replace with new images for all of the splash screen stuff */}
       {isOpen && enableSplash && (
         <motion.div
           initial={{
@@ -67,7 +68,7 @@ function SplashScreen({
                   CultureCo
                 </motion.h1>
                 <span className="text-black absolute text-[8px] right-[15px] bottom-0 -rotate-[8deg] bg-cultureOrange w-[30px] flex items-center justify-center  font-groteskSemiBold rounded-lg">
-                  Alpha
+                  Beta
                 </span>
               </span>
             </motion.div>
@@ -227,13 +228,10 @@ const Message = () => {
       className="flex my-auto flex-col items-center justify-center text-[14px] font-groteskMedium text-center mx-auto w-[80%]"
     >
       <p className="text-cultureBeige mb-2"> Note:</p>
-      <p className="text-cultureOrange mb-4">
-        We are currently Alpha testing. All payments are mock & will not be
-        charged.
-      </p>
+      <p className="text-cultureOrange mb-4">This is a closed Beta.</p>
       <p> Please test extensively & reach out to us to report bugs.</p>
       <p className="mt-4"> Thank you, </p>
-      <span className="text-cultureOrange ">Happy Alpha testing!</span>
+      <span className="text-cultureOrange ">Happy Beta testing!</span>
     </motion.div>
   );
 };
