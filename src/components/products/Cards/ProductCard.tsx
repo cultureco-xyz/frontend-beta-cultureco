@@ -4,7 +4,10 @@ import { PiFireLight } from "react-icons/pi";
 import { MessageSquare, Share } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
 import { GoArrowRight } from "react-icons/go";
-
+import AudioPlayer from "react-h5-audio-player";
+import "react-h5-audio-player/lib/styles.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay, faPause, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { IProductData } from "@/types";
 import DetailedView from "../DetailedView";
 import DigitalFrame from "../SellForm/frames/DigitalFrame";
@@ -25,12 +28,20 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import EditProductForm from "../EditProductForm/EditProductForm";
+import { Button } from "@/components/ui/button";
 
 function ProductCard({ product }: { product: IProductData }) {
   const params = useParams();
   const queryClient = useQueryClient();
   const { user: authData, isLogedIn } = useAuthenticated();
   const isAdminUser = authData?.email.endsWith("@cultureco.xyz");
+  const { imageURL: image, title, memberPrice, regularPrice } = product;
+  const [detailedView, setdetailedView] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [isPurchased, setisPurchased] = useState(false);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [musicPlayerOpen, setMusicPlayerOpen] = useState(false);
 
   const statsQuery = useQuery({
     queryKey: ["get-stats", product._id],
@@ -99,11 +110,16 @@ function ProductCard({ product }: { product: IProductData }) {
     setShowDeleteConfirm(false);
   };
 
-  const { imageURL: image, title, memberPrice, regularPrice } = product;
-  const [detailedView, setdetailedView] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
-  const [isPurchased, setisPurchased] = useState(false);
+  const handleMusicPlay = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setMusicPlayerOpen(true);
+    setMusicPlaying(!musicPlaying);
+  };
+
+  const handleMusicPlayerClose = () => {
+    setMusicPlaying(false);
+    setMusicPlayerOpen(false);
+  };
 
   return (
     <>
@@ -117,11 +133,27 @@ function ProductCard({ product }: { product: IProductData }) {
           <DigitalFrame image={image + "#" + title} key={image + title} />
         )}
         {product.productFormat == TDigitalProductFormats.MUSIC && (
-          <DigitalAudioFrame
-            imageUrl={image + "#" + title}
-            key={image + title}
-            className=""
-          />
+          <>
+            <DigitalAudioFrame
+              imageUrl={image + "#" + title}
+              key={image + title}
+              className=""
+            />
+            {/* Music play/pause button */}
+            {product.audioUrl && !musicPlayerOpen && (
+              <Button
+                variant="default"
+                className="flex items-center justify-center absolute bottom-[240px] left-[160px] bg-cultureGray text-digitalMusicGreen"
+                onClick={handleMusicPlay}
+              >
+                {musicPlaying ? (
+                  <FontAwesomeIcon icon={faPause} />
+                ) : (
+                  <FontAwesomeIcon icon={faPlay} />
+                )}
+              </Button>
+            )}
+          </>
         )}
         {product.productFormat == TPhysicalProductFormats.PRINT && (
           <PhyiscalFrame
@@ -219,91 +251,122 @@ function ProductCard({ product }: { product: IProductData }) {
         </div>
         {/* Details */}
         <div className="flex justify-between py-4 px-4 flex-col w-full h-fit absolute bottom-0">
-          <div className="flex justify-between w-full">
-            {/* Left side: Profile Picture, Username, Description, and Date */}
-            <div className="flex flex-col">
-              <div className="flex items-center text-xl font-groteskSemiBold pt-10">
-                {title}
-              </div>
-              <div className="flex flex-row items-center justify-center gap-1 bg-cultureGray text-digitalArtYellow w-20 h-6 my-3 rounded-md text-xs text-nowrap font-groteskSemiBold">
-                {0} collected
-              </div>
-              {/* Date */}
-              <p className="text-xs text-cultureBeige">
-                <GetDate date={`${new Date()}`} />
-              </p>
-              {/* Admin edit/delete for products */}
-              {isAdminUser && (
-                <>
-                  <div className="flex flex-row gap-2 mt-2">
-                    <button
-                      className="bg-cultureGray text-cultureOrange rounded-md w-12 h-8 items-center justify-center flex font-groteskSemiBold"
-                      onClick={(e) => handleEditProductPopup(e)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="bg-cultureRed text-black rounded-md w-16 h-8 items-center justify-center flex font-groteskSemiBold"
-                      onClick={(e) => handleConfirmDelete(e)}
-                    >
-                      Delete
-                    </button>
+          {musicPlayerOpen && !detailedView && (
+            <div
+              className="absolute bottom-[14px] left-0 w-full px-4 pb-2"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="flex flex-col my-0 bg-digitalMusicGreen rounded-md">
+                <div className="flex flex-row justify-between w-full px-4 h-8 rounded-t-md">
+                  <div className="font-groteskSemiBold text-cultureGray flex items-center justify-center">
+                    {product.songName}
                   </div>
-                  {showDeleteConfirm && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999]">
-                      <div className="bg-cultureGray p-4 rounded-md w-80 flex flex-col items-center">
-                        <p className="text-cultureWhite text-center mb-4">
-                          Are you sure you want to delete this product?
-                        </p>
-                        <div className="flex gap-4">
-                          <button
-                            className="bg-cultureRed text-black px-4 py-2 rounded-md font-groteskSemiBold"
-                            onClick={(e) => handleDeleteProduct(e)}
-                          >
-                            Delete
-                          </button>
-                          <button
-                            className="bg-cultureWhite text-black px-4 py-2 rounded-md font-groteskSemiBold"
-                            onClick={(e) => handleCancelDelete(e)}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  {/* TO-DO: Edit product functionality and UI for Admin */}
-                  {isEditFormOpen && (
-                    <EditProductForm
-                      close={() => setIsEditFormOpen(false)}
-                      productData={product}
-                    />
-                  )}
-                </>
-              )}
-            </div>
-            {/* Right side: Pricing Info */}
-            <div className="flex flex-col justify-center items-end">
-              <div className="flex text-cultureWhite w-[60px] h-[60px] flex-col items-center justify-center border-2 rounded-md mb-4 z-50">
-                <GoArrowRight />
-                <span>{isPurchased ? "View" : "Buy"}</span>
+                  <button
+                    className="text-cultureGray flex items-center justify-center"
+                    onClick={handleMusicPlayerClose}
+                  >
+                    <FontAwesomeIcon icon={faTimes} className="text-black" />
+                  </button>
+                </div>
+                <AudioPlayer
+                  src={product.audioUrl}
+                  autoPlay
+                  onPlay={() => setMusicPlaying(true)}
+                  onPause={() => setMusicPlaying(false)}
+                  className="audio-player"
+                />
               </div>
-              {true && (
-                <>
-                  <span className="flex items-center gap-1">
-                    <CultureCoLogoIcon fillColor="#fe621d" size={24} />
-                    <h1 className="font-groteskBold text-cultureOrange text-[24px]">
-                      ₹{memberPrice}
-                    </h1>
-                  </span>
-                  <p className="text-xs text-cultureBeige">
-                    <strong className="text-base">₹{regularPrice}</strong>{" "}
-                    Regular
-                  </p>
-                </>
-              )}
             </div>
-          </div>
+          )}
+          {!musicPlayerOpen && (
+            <>
+              <div className="flex justify-between w-full">
+                {/* Left side: Profile Picture, Username, Description, and Date */}
+                <div className="flex flex-col">
+                  <div className="flex items-center text-xl font-groteskSemiBold pt-10">
+                    {title}
+                  </div>
+                  <div className="flex flex-row items-center justify-center gap-1 bg-cultureGray text-digitalArtYellow w-20 h-6 my-3 rounded-md text-xs text-nowrap font-groteskSemiBold">
+                    {0} collected
+                  </div>
+                  {/* Date */}
+                  <p className="text-xs text-cultureBeige">
+                    <GetDate date={`${new Date()}`} />
+                  </p>
+                  {/* Admin edit/delete for products */}
+                  {isAdminUser && (
+                    <>
+                      <div className="flex flex-row gap-2 mt-2">
+                        <button
+                          className="bg-cultureGray text-cultureOrange rounded-md w-12 h-8 items-center justify-center flex font-groteskSemiBold"
+                          onClick={(e) => handleEditProductPopup(e)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="bg-cultureRed text-black rounded-md w-16 h-8 items-center justify-center flex font-groteskSemiBold"
+                          onClick={(e) => handleConfirmDelete(e)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                      {showDeleteConfirm && (
+                        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999]">
+                          <div className="bg-cultureGray p-4 rounded-md w-80 flex flex-col items-center">
+                            <p className="text-cultureWhite text-center mb-4">
+                              Are you sure you want to delete this product?
+                            </p>
+                            <div className="flex gap-4">
+                              <button
+                                className="bg-cultureRed text-black px-4 py-2 rounded-md font-groteskSemiBold"
+                                onClick={(e) => handleDeleteProduct(e)}
+                              >
+                                Delete
+                              </button>
+                              <button
+                                className="bg-cultureWhite text-black px-4 py-2 rounded-md font-groteskSemiBold"
+                                onClick={(e) => handleCancelDelete(e)}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {/* TO-DO: Edit product functionality and UI for Admin */}
+                      {isEditFormOpen && (
+                        <EditProductForm
+                          close={() => setIsEditFormOpen(false)}
+                          productData={product}
+                        />
+                      )}
+                    </>
+                  )}
+                </div>
+                {/* Right side: Pricing Info */}
+                <div className="flex flex-col justify-center items-end">
+                  <div className="flex text-cultureWhite w-[60px] h-[60px] flex-col items-center justify-center border-2 rounded-md mb-4 z-50">
+                    <GoArrowRight />
+                    <span>{isPurchased ? "View" : "Buy"}</span>
+                  </div>
+                  {true && (
+                    <>
+                      <span className="flex items-center gap-1">
+                        <CultureCoLogoIcon fillColor="#fe621d" size={24} />
+                        <h1 className="font-groteskBold text-cultureOrange text-[24px]">
+                          ₹{memberPrice}
+                        </h1>
+                      </span>
+                      <p className="text-xs text-cultureBeige">
+                        <strong className="text-base">₹{regularPrice}</strong>{" "}
+                        Regular
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
       {detailedView && (
