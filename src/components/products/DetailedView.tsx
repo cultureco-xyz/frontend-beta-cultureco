@@ -2,8 +2,9 @@
 import Album from "@/assets/svgs/album";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
 import { IComment, IProductData, IProductPurchase, UserData } from "@/types";
-
-import React from "react";
+import AudioPlayer from "react-h5-audio-player";
+import "react-h5-audio-player/lib/styles.css";
+import React, { useState } from "react";
 import { LuArrowRightCircle } from "react-icons/lu";
 
 import { MessageSquare, Share, VerifiedIcon } from "lucide-react";
@@ -14,6 +15,8 @@ import axios from "axios";
 import { create } from "zustand";
 import { useAuthenticated } from "@/hooks/useAuthenticated";
 import { Button } from "../ui/button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPause, faPlay, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 interface DetailedStore {
   likeCount: number;
@@ -58,7 +61,8 @@ function DetailedView({
   const { setStore, newComment, likeCount, toggleLike, isLiked, comments } =
     useStore();
   const { isLogedIn, user: authData } = useAuthenticated();
-
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [musicPlayerOpen, setMusicPlayerOpen] = useState(false);
   console.log(isLogedIn, authData);
 
   //fetch product
@@ -181,6 +185,17 @@ function DetailedView({
     },
   });
 
+  const handleMusicPlay = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setMusicPlayerOpen(true);
+    setMusicPlaying(!musicPlaying);
+  };
+
+  const handleMusicPlayerClose = () => {
+    setMusicPlaying(false);
+    setMusicPlayerOpen(false);
+  };
+
   return (
     <div className="flex  flex-col w-full h-svh bg-black  mx-auto top-0 left-0 right-0 max-w-mobile fixed overflow-y-auto z-[80]">
       <img
@@ -222,30 +237,73 @@ function DetailedView({
             <Share />
           </span>
         </div>
-        <div className="flex justify-between">
-          <span className="flex flex-col">
-            <h1 className="text-white text-2xl capitalize font-groteskBold">
-              {product.title}
-            </h1>
-            <p className="text-white text-md leading-3 capitalize">
-              {productDetails.isSuccess &&
-                productDetails.data.productData.creator.name}
-            </p>
-            <Album className="mt-3" />
-          </span>
-          <span className="text-white items-end flex flex-col mt-4">
-            <p className="flex items-center gap-1">
-              <CultureCoLogoIcon fillColor={"white"} />
-              <h1 className="text-2xl font-groteskBold">
-                ₹{product.memberPrice}
+        {/* Music play/pause button */}
+        {product.audioUrl && !musicPlayerOpen && (
+          <Button
+            variant="default"
+            className="bg-cultureGray text-digitalMusicGreen w-fit"
+            onClick={handleMusicPlay}
+          >
+            {musicPlaying ? (
+              <FontAwesomeIcon icon={faPause} />
+            ) : (
+              <FontAwesomeIcon icon={faPlay} />
+            )}
+          </Button>
+        )}
+        {product.audioUrl && !musicPlayerOpen && (
+          <div className="flex justify-between">
+            <span className="flex flex-col">
+              <h1 className="text-white text-2xl capitalize font-groteskBold">
+                {product.title}
               </h1>
-            </p>
-            <p className="text-md font-groteskMedium">
-              ₹{product.regularPrice}
-            </p>
-            <p className="text-xs">for non members</p>
-          </span>
-        </div>
+              <p className="text-white text-md leading-3 capitalize">
+                {productDetails.isSuccess &&
+                  productDetails.data.productData.creator.name}
+              </p>
+              <Album className="mt-3" />
+            </span>
+            <span className="text-white items-end flex flex-col mt-4">
+              <p className="flex items-center gap-1">
+                <CultureCoLogoIcon fillColor={"white"} />
+                <h1 className="text-2xl font-groteskBold">
+                  ₹{product.memberPrice}
+                </h1>
+              </p>
+              <p className="text-md font-groteskMedium">
+                ₹{product.regularPrice}
+              </p>
+              <p className="text-xs">for non members</p>
+            </span>
+          </div>
+        )}
+        {musicPlayerOpen && (
+          <div
+            className="w-full px-6"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex flex-col my-0 bg-digitalMusicGreen rounded-md">
+              <div className="flex flex-row justify-between w-full px-4 h-8 rounded-t-md">
+                <div className="font-groteskSemiBold text-cultureGray flex items-center justify-center">
+                  {product.songName}
+                </div>
+                <button
+                  className="text-cultureGray flex items-center justify-center"
+                  onClick={handleMusicPlayerClose}
+                >
+                  <FontAwesomeIcon icon={faTimes} className="text-black" />
+                </button>
+              </div>
+              <AudioPlayer
+                src={product.audioUrl}
+                autoPlay
+                onPlay={() => setMusicPlaying(true)}
+                onPause={() => setMusicPlaying(false)}
+                className="audio-player"
+              />
+            </div>
+          </div>
+        )}
         <p className="text-white text-xs mt-3">{product.description}</p>
         <span className="flex w-full items-center text-white mt-3">
           <span className="flex items-center gap-2">
