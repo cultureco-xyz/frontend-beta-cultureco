@@ -1,13 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import Album from "@/assets/svgs/album";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
-import { IComment, IProductData, IProductPurchase, UserData } from "@/types";
-import AudioPlayer from "react-h5-audio-player";
-import "react-h5-audio-player/lib/styles.css";
+import { IComment, IProductData, UserData } from "@/types";
+
 import React, { useState } from "react";
 import { LuArrowRightCircle } from "react-icons/lu";
 
-import { MessageSquare, Share, VerifiedIcon } from "lucide-react";
+import { ChevronLeft, MessageSquare, Share, VerifiedIcon } from "lucide-react";
 import { PiFire, PiFireBold } from "react-icons/pi";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -15,8 +14,14 @@ import axios from "axios";
 import { create } from "zustand";
 import { useAuthenticated } from "@/hooks/useAuthenticated";
 import { Button } from "../ui/button";
+
+import { RazorpayPurchaseButton } from "../paymentBtns/RazorPayButton";
+import StripePurchase from "../paymentBtns/StripeButton";
+import CopperXButton from "../paymentBtns/CopperXButton";
+// import TicketCheckoutFlow from "./TicketCheckout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPause, faPlay, faTimes } from "@fortawesome/free-solid-svg-icons";
+import AudioPlayer from "react-h5-audio-player";
 
 interface DetailedStore {
   likeCount: number;
@@ -50,14 +55,7 @@ const useStore = create<DetailedState>()((set) => ({
   },
 }));
 
-function DetailedView({
-  product,
-  isPurchased,
-}: {
-  product: IProductData;
-  isPurchased?: boolean;
-}) {
-  console.log("detailed", { isPurchased });
+function DetailedView({ product }: { product: IProductData }) {
   const { setStore, newComment, likeCount, toggleLike, isLiked, comments } =
     useStore();
   const { isLogedIn, user: authData } = useAuthenticated();
@@ -166,24 +164,20 @@ function DetailedView({
     },
   });
 
-  const purchaseMutation = useMutation({
-    mutationKey: ["purchase", product._id],
-    mutationFn: async () => {
-      const res = await axios.post(
-        "/backend/product-purchase/create-purchase",
-        {
-          productId: product._id,
-          cost: product.regularPrice,
-          creator: product.creator,
-          currency: "USD",
-        } as Partial<IProductPurchase>
+  const isPurchasedQuery = useQuery({
+    queryKey: ["is-purchased", product._id],
+    queryFn: async () => {
+      const res = await axios.get(
+        `/backend/product-purchase/user/${authData?._id}/${product._id}`
       );
-      if (res.status == 201) {
-        location.href = "/account";
-      }
-      return res.data;
+      return res.data.isPurchased;
     },
+    enabled: isLogedIn,
   });
+
+  const isPurchased = Boolean(
+    isPurchasedQuery.isSuccess && isPurchasedQuery.data
+  );
 
   const handleMusicPlay = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -361,32 +355,143 @@ function DetailedView({
           </div>
         </div>
       </div>
-      <div
-        key={"isPurchased" + isPurchased}
-        className="fixed justify-center gap-4 items-center h-[84px] max-w-mobile mx-auto bg-cultureGray left-0 right-0 bottom-[56px] z-50  flex w-full rounded-t-lg"
-      >
-        {!isPurchased && (
-          <Button
-            onClick={() => {
-              purchaseMutation.mutate();
-            }}
-            variant={"outline"}
-            className="text-cultureOrange font-groteskSemiBold h-[54px] w-[110px]"
-          >
-            Buy
-          </Button>
-        )}
-        <Button
-          variant={"outline"}
-          className="text-cultureGray font-groteskSemiBold bg-cultureOrange h-[54px] w-fit"
-        >
-          <CultureCoLogoIcon fillColor="black" />
-          Join the Tribe
-        </Button>
-      </div>
+      {productDetails.isSuccess && (
+        <CheckoutFlow
+          isPurchased={Boolean(isPurchased)}
+          product={productDetails.data.productData}
+        />
+      )}
+      {/* <TicketCheckoutFlow
+        actualPrice={`${product.regularPrice}`}
+        memberPrice={product.memberPrice}
+        isMember={true}
+        openPurchase={() => {}}
+        productID={product._id}
+        setCost={() => {}}
+        setShowCheckout={() => {}}
+        showCheckout={true}
+      /> */}
     </div>
   );
 }
+
+const CheckoutFlow = ({
+  isPurchased,
+  product,
+}: {
+  isPurchased: boolean;
+  product: IProductData;
+}) => {
+  const [steps, setsteps] = useState<"BUY" | "PRICE" | "METHODS">("BUY");
+  console.log("ch", isPurchased);
+  return (
+    <div
+      key={"isPurchased" + isPurchased}
+      className="fixed justify-center gap-4 items-center min-h-[84px] h-fit max-w-mobile mx-auto bg-cultureGray left-0 right-0 bottom-[56px] z-50  flex w-full rounded-t-lg"
+    >
+      {steps == "BUY" && (
+        <div className="flex gap-4">
+          {!isPurchased && (
+            <Button
+              onClick={() => {
+                setsteps("PRICE");
+              }}
+              variant={"outline"}
+              className="text-cultureOrange font-groteskSemiBold h-[54px] w-[110px]"
+            >
+              Buy
+            </Button>
+          )}
+          <Button
+            variant={"outline"}
+            className="text-cultureGray font-groteskSemiBold bg-cultureOrange h-[54px] w-fit"
+          >
+            <CultureCoLogoIcon fillColor="black" />
+            Join the Tribe
+          </Button>
+        </div>
+      )}
+      {steps == "PRICE" && (
+        <div className="flex w-full h-full flex-col">
+          <span
+            onClick={() => {
+              setsteps("BUY");
+            }}
+            className="flex h-12 w-full text-white items-center border-b-[1px] border-b-cultureWhite"
+          >
+            <ChevronLeft className="h-6 w-6 text-cultureWhite" />
+            <p className="text-sm">Cancel</p>
+          </span>
+          <div className="flex text-sm justify-between items-center  my-3 w-auto mx-4 px-2  bg-cultureOrange py-2  rounded-lg  font-groteskBold">
+            <p className="text-xs">Tribe members get this for ₹750</p>
+            <Button className="bg-cultureGray text-cultureOrange rounded-sm text-xs h-[31px]">
+              Join Tribe Now
+            </Button>
+          </div>
+          <div className="flex w-full flex-col px-4 ">
+            <span className="flex w-full justify-between items-center">
+              <span className="text-white">
+                <h1 className="text-base font-groteskBold">{product.title}</h1>
+                <p className="text-xs">{product.creator.name}</p>
+              </span>
+              <h1 className="text-white font-groteskBold">
+                ₹ {product.regularPrice}
+              </h1>
+            </span>
+            <span className="flex w-full justify-between items-center mt-16">
+              <span className="text-white">
+                <h1 className="text-base font-groteskBold">Total Amount</h1>
+                <p className="text-xs">Inclusive of all Taxes</p>
+              </span>
+              <h1 className="text-white font-groteskBold">
+                ₹ {product.regularPrice}
+              </h1>
+            </span>
+            <Button
+              onClick={() => {
+                setsteps("METHODS");
+              }}
+              variant={"outline"}
+              className="text-cultureOrange h-[54px] my-4 cursor-pointer text-[17px]"
+            >
+              Buy at Regular Price
+            </Button>
+          </div>
+        </div>
+      )}
+      {steps == "METHODS" && (
+        <div className="flex w-full h-full flex-col">
+          <span
+            onClick={() => {
+              setsteps("BUY");
+            }}
+            className="flex cursor-pointer h-12 w-full text-white items-center border-b-[1px] border-b-cultureWhite"
+          >
+            <ChevronLeft className="h-6 w-6 text-cultureWhite" />
+            <p className="text-sm">Cancel</p>
+          </span>
+          <div className="flex w-full flex-col px-4 my-4 gap-4">
+            <RazorpayPurchaseButton
+              creator={`${product.creator._id}`}
+              cost={product.regularPrice}
+              productId={`${product._id}`}
+            />
+            <StripePurchase
+              creator={`${product.creator._id}`}
+              cost={product.regularPrice}
+              productId={`${product._id}`}
+            />
+            <CopperXButton
+              creator={`${product.creator._id}`}
+              cost={product.regularPrice}
+              productId={`${product._id}`}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const PrevComment = ({
   user,
