@@ -387,7 +387,7 @@ const CheckoutFlow = ({
   return (
     <div
       key={"isPurchased" + isPurchased}
-      className="fixed justify-center gap-4 items-center min-h-[84px] h-fit max-w-mobile mx-auto bg-cultureGray left-0 right-0 bottom-[56px] z-50  flex w-full rounded-t-lg"
+      className="fixed justify-center gap-4 items-center min-h-[84px] h-max  max-w-mobile mx-auto bg-cultureGray left-0 right-0 bottom-[56px] z-50  flex w-full rounded-t-lg"
     >
       {steps == "BUY" && (
         <div className="flex gap-4">
