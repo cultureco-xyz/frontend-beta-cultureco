@@ -4,8 +4,8 @@ import CommentCrusaderBadge from "@/components/profile/profile-badges/Comment Cr
 import CrossCollectorBadge from "@/components/profile/profile-badges/Cross Collector";
 import GoingSteadyBadge from "@/components/profile/profile-badges/Going Steady";
 import TribeFounderBadge from "@/components/profile/profile-badges/TribeFounder";
-import { ShareIcon } from "lucide-react";
-import React from "react";
+import { ShareIcon, EditIcon, ChevronLeft } from "lucide-react";
+import React, { useState } from "react";
 import { GrDiamond } from "react-icons/gr";
 import { TbUsers } from "react-icons/tb";
 import { MdOutlineShield } from "react-icons/md";
@@ -16,9 +16,11 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IProductData } from "@/types";
 import ProductCard from "@/components/profile/cards/DigitalCard";
+import EditProfile from "@/components/profile/edit-profile/editProfile";
 
 function UserProfile() {
   const { user, isLogedIn } = useAuthenticated();
+  const [openEditForm, setOpenEditForm] = useState(false);
 
   //fetch stats
   const statsQuery = useQuery({
@@ -85,8 +87,14 @@ function UserProfile() {
           </div>
         </div>
         <div className="flex flex-col items-center justify-end gap-2">
-          <button>{/* <CreatorEdit fillColor="#f1f5ed" /> */}</button>
-          <ShareIcon />
+          <button
+            onClick={() => {
+              setOpenEditForm(!openEditForm);
+            }}
+          >
+            <EditIcon className="text-cultureWhite" />
+          </button>
+          <ShareIcon className="text-cultureWhite" />
         </div>
       </div>
       {/* Bio */}
@@ -143,6 +151,23 @@ function UserProfile() {
           )}
       </div>
       <BottomNav className="fixed bottom-0 w-full max-w-mobile " />
+      {openEditForm && (
+        <div className="fixed top-0 left-0 bg-black/80 h-[100vh] w-full z-[1001] flex items-center justify-center overflow-y-auto">
+          <div className="h-fit p-4 w-[90vw] bg-cultureGray rounded-md relative">
+            <span className="flex w-full text-cultureWhite -mb-6 mt-4">
+              <span
+                className="flex items-center h-fit text-base"
+                onClick={() => {
+                  setOpenEditForm(!openEditForm);
+                }}
+              >
+                <ChevronLeft className="h-4 w-4" /> Back
+              </span>
+            </span>
+            <EditProfile profile={user!} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
