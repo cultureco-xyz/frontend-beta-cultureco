@@ -387,10 +387,10 @@ const CheckoutFlow = ({
   return (
     <div
       key={"isPurchased" + isPurchased}
-      className="fixed justify-center gap-4 items-center min-h-[84px] h-max  max-w-mobile mx-auto bg-cultureGray left-0 right-0 bottom-[56px] z-50  flex w-full rounded-t-lg"
+      className="fixed justify-center gap-4 items-center min-h-[84px] h-auto max-w-mobile mx-auto bg-cultureGray left-0 right-0 bottom-[56px] z-50  flex w-full rounded-t-lg"
     >
       {steps == "BUY" && (
-        <div className="flex gap-4">
+        <div className="flex gap-4 min-h-max">
           {!isPurchased && (
             <Button
               onClick={() => {
@@ -412,7 +412,7 @@ const CheckoutFlow = ({
         </div>
       )}
       {steps == "PRICE" && (
-        <div className="flex w-full h-full flex-col">
+        <div className="flex w-full h-full flex-col min-h-max">
           <span
             onClick={() => {
               setsteps("BUY");
@@ -460,7 +460,7 @@ const CheckoutFlow = ({
         </div>
       )}
       {steps == "METHODS" && (
-        <div className="flex w-full h-full flex-col">
+        <div className="flex w-full h-full flex-col min-h-max">
           <span
             onClick={() => {
               setsteps("BUY");
