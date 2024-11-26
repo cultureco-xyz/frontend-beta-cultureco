@@ -5,7 +5,7 @@ import CrossCollectorBadge from "@/components/profile/profile-badges/Cross Colle
 import GoingSteadyBadge from "@/components/profile/profile-badges/Going Steady";
 import TribeFounderBadge from "@/components/profile/profile-badges/TribeFounder";
 import { ShareIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { GrDiamond } from "react-icons/gr";
 import { TbUsers } from "react-icons/tb";
 import { MdOutlineShield } from "react-icons/md";
@@ -16,9 +16,13 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IProductData } from "@/types";
 import ProductCard from "@/components/profile/cards/DigitalCard";
+import MiniTicket from "./MiniTicket";
 
 function UserProfile() {
   const { user, isLogedIn } = useAuthenticated();
+  const [selectedPane, setselectedPane] = useState<"COLLECTION" | "TICKETS">(
+    "COLLECTION"
+  );
 
   //fetch stats
   const statsQuery = useQuery({
@@ -132,8 +136,39 @@ function UserProfile() {
           <CrossCollectorBadge />
         </div>
       </div>
-      <div className="flex flex-wrap w-full justify-center gap-4 mt-8">
-        {purchaseListQuery.isSuccess &&
+      <div className="flex flex-wrap w-full justify-center gap-4 mt-8 mb-36">
+        <div className="flex justify-between w-full font-groteskRegular text-md h-8 my-4 mt-0 text-white">
+          <span
+            onClick={() => {
+              setselectedPane("COLLECTION");
+            }}
+            style={{
+              borderBottom:
+                selectedPane == "COLLECTION"
+                  ? "1px solid #FE621D"
+                  : "1px solid white",
+            }}
+            className="flex w-full items-center justify-center "
+          >
+            <p>My Collection</p>
+          </span>
+          <span
+            onClick={() => {
+              setselectedPane("TICKETS");
+            }}
+            style={{
+              borderBottom:
+                selectedPane == "TICKETS"
+                  ? "1px solid #FE621D"
+                  : "1px solid white",
+            }}
+            className="flex w-full items-center justify-center"
+          >
+            <p>My Tickets</p>
+          </span>
+        </div>
+        {selectedPane == "COLLECTION" &&
+          purchaseListQuery.isSuccess &&
           purchaseListQuery.data.map(
             (ele: { _id: string; productId: IProductData }) => {
               return (
@@ -141,6 +176,22 @@ function UserProfile() {
               );
             }
           )}
+        {selectedPane == "TICKETS" &&
+          purchaseListQuery.isSuccess &&
+          purchaseListQuery.data
+            .filter(
+              (f: { _id: string; productId: IProductData }) =>
+                f.productId.productType == "event"
+            )
+            .map((ele: { _id: string; productId: IProductData }) => {
+              return (
+                <MiniTicket
+                  creatorName={ele.productId.creator.name}
+                  post={ele.productId}
+                  key={ele._id}
+                />
+              );
+            })}
       </div>
       <BottomNav className="fixed bottom-0 w-full max-w-mobile " />
     </div>

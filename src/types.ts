@@ -52,6 +52,8 @@ export interface IProductData {
   enabled: boolean;
   collaborator: string;
   album: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IComment {

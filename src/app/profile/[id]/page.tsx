@@ -21,6 +21,8 @@ import { useAuthenticated } from "@/hooks/useAuthenticated";
 import VerifiedIcon from "@/assets/svgs/verified_icon";
 import { motion } from "framer-motion";
 import CloseIcon from "@/assets/svgs/close.icon";
+import TipModal from "@/components/profile/TippingModal";
+import TribeModal from "@/components/profile/TribeModal";
 
 interface IProfileData {
   isFollowing: boolean;
@@ -77,6 +79,8 @@ function Profile() {
   const { isLogedIn, user: authData } = useAuthenticated();
   const store = useStore();
   const [isAboutPopupOpen, setIsAboutPopupOpen] = useState(false);
+  const [isTippingOpen, setisTippingOpen] = useState(false);
+  const [isTribeModalOpen, setisTribeModalOpen] = useState(false);
 
   const userQuery = useQuery({
     queryKey: ["get-user", params.id],
@@ -126,6 +130,24 @@ function Profile() {
       {User ? (
         <div className="flex flex-col w-full h-svh bg-black max-w-mobile mx-auto overflow-y-auto">
           <TopNav />
+          <TipModal
+            isOpen={isTippingOpen}
+            close={() => {
+              setisTippingOpen(false);
+            }}
+            creator={authData?._id as string}
+            user="132"
+          />
+          <TribeModal
+            isOpen={isTribeModalOpen}
+            close={() => {
+              setisTribeModalOpen(false);
+            }}
+            member_of={params.id as string}
+            creatorName={User.name}
+            creatorProfilePic={User.profilePicture}
+            user={authData?._id as string}
+          />
           <img
             className="absolute w-full max-w-mobile mx-auto"
             src={User.profilePicture}
@@ -287,16 +309,17 @@ function Profile() {
                     if (!isLogedIn) {
                       return (location.href = "/auth/signin");
                     }
-                    if (authData) {
-                      const res = await profileMethods.joinTribe(
-                        `${authData._id}`,
-                        `${User._id}`
-                      );
-                      if (res) {
-                        store.setStoreData("isMember", true);
-                        followQuery.refetch();
-                      }
-                    }
+                    setisTribeModalOpen(true);
+                    // if (authData) {
+                    //   const res = await profileMethods.joinTribe(
+                    //     `${authData._id}`,
+                    //     `${User._id}`
+                    //   );
+                    //   if (res) {
+                    //     store.setStoreData("isMember", true);
+                    //     followQuery.refetch();
+                    //   }
+                    // }
                   }}
                   className="bg-cultureOrange h-[52px] rounded-xl w-2/3 text-base text-cultureGray font-groteskBold"
                 >
@@ -304,13 +327,23 @@ function Profile() {
                   tribe
                 </Button>
               ) : (
-                <Button className="bg-cultureGray rounded-xl text-cultureOrange h-[52px] w-2/3 text-base font-groteskBold">
+                <Button
+                  onClick={() => {
+                    setisTippingOpen(true);
+                  }}
+                  className="bg-cultureGray rounded-xl text-cultureOrange h-[52px] w-2/3 text-base font-groteskBold"
+                >
                   <TipJar />
                   Tip
                 </Button>
               )}
               {!store.isMember ? (
-                <Button className="bg-cultureGray h-[52px] w-1/3 rounded-xl text-cultureOrange font-groteskBold text-base">
+                <Button
+                  onClick={() => {
+                    setisTippingOpen(true);
+                  }}
+                  className="bg-cultureGray h-[52px] w-1/3 rounded-xl text-cultureOrange font-groteskBold text-base"
+                >
                   <TipJar />
                   Tip
                 </Button>

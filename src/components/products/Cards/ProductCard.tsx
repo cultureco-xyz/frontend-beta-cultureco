@@ -45,14 +45,13 @@ function ProductCard({ product }: { product: IProductData }) {
     },
   });
 
-  useQuery({
-    queryKey: ["is purchased", product._id],
+  const isPurchasedQuery = useQuery({
+    queryKey: ["is-purchased", product._id],
     queryFn: async () => {
       const res = await axios.get(
         `/backend/product-purchase/user/${authData?._id}/${product._id}`
       );
-      setisPurchased(res.data.isPurchased ? true : false);
-      return res.data;
+      return res.data.isPurchased;
     },
     enabled: isLogedIn,
   });
@@ -103,7 +102,10 @@ function ProductCard({ product }: { product: IProductData }) {
   const [detailedView, setdetailedView] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
-  const [isPurchased, setisPurchased] = useState(false);
+
+  const isPurchased = Boolean(
+    isPurchasedQuery.isSuccess && isPurchasedQuery.data
+  );
 
   return (
     <>
@@ -306,9 +308,7 @@ function ProductCard({ product }: { product: IProductData }) {
           </div>
         </div>
       </div>
-      {detailedView && (
-        <DetailedView isPurchased={isPurchased} product={product} />
-      )}
+      {detailedView && <DetailedView product={product} />}
     </>
   );
 }
