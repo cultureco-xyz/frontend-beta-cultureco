@@ -18,13 +18,13 @@ export function VinylPhysicalFrame({
       xmlnsXlink="http://www.w3.org/1999/xlink"
       className={twMerge("flex w-full", className)}
     >
-      <g clipPath="url(#clip0_2746_84726)">
-        <g clipPath="url(#clip1_2746_84726)">
-          <g filter="url(#filter0_d_2746_84726)">
+      <g clipPath={`url(#clip0_${img0})`}>
+        <g clipPath={`url(#clip1_${img0})`}>
+          <g filter={`url(#filter0_d_${img0})`}>
             <rect
               width={361}
               height={310}
-              fill="url(#pattern0_2746_84726)"
+              fill={`url(#pattern0_${img0})`}
               shapeRendering="crispEdges"
             />
           </g>
@@ -38,7 +38,7 @@ export function VinylPhysicalFrame({
             width={360}
             height={170}
             transform="translate(0 310)"
-            fill="url(#pattern1_2746_84726)"
+            fill={`url(#pattern1_${img0})`}
             style={{
               mixBlendMode: "luminosity",
             }}
@@ -52,7 +52,7 @@ export function VinylPhysicalFrame({
       />
       <defs>
         <filter
-          id="filter0_d_2746_84726"
+          id={`filter0_d_${img0}`}
           x={-15}
           y={-7}
           width={391}
@@ -77,17 +77,17 @@ export function VinylPhysicalFrame({
           <feBlend
             mode="normal"
             in2="BackgroundImageFix"
-            result="effect1_dropShadow_2746_84726"
+            result={`effect1_dropShadow_${img0}`}
           />
           <feBlend
             mode="normal"
             in="SourceGraphic"
-            in2="effect1_dropShadow_2746_84726"
+            in2={`effect1_dropShadow_${img0}`}
             result="shape"
           />
         </filter>
         <pattern
-          id="pattern0_2746_84726"
+          id={`pattern0_${img0}`}
           patternContentUnits="objectBoundingBox"
           width={1}
           height={1}
@@ -98,23 +98,23 @@ export function VinylPhysicalFrame({
           />
         </pattern>
         <pattern
-          id="pattern1_2746_84726"
+          id={`pattern1_${img0}`}
           patternContentUnits="objectBoundingBox"
           width={1}
           height={1}
         >
           <use
-            xlinkHref="#image1_2746_84726"
+            xlinkHref={`#image1_${img0}`}
             transform="matrix(0.00025 0 0 0.000529412 0 -1.20588)"
           />
         </pattern>
-        <clipPath id="clip0_2746_84726">
+        <clipPath id={`clip0_${img0}`}>
           <path
             d="M0 16C0 7.16346 7.16344 0 16 0H345C353.837 0 361 7.16344 361 16V464C361 472.837 353.837 480 345 480H16C7.16345 480 0 472.837 0 464V16Z"
             fill="white"
           />
         </clipPath>
-        <clipPath id="clip1_2746_84726">
+        <clipPath id={`clip1_${img0}`}>
           <rect width={361} height={480} rx={16} fill="white" />
         </clipPath>
         <image
@@ -127,7 +127,7 @@ export function VinylPhysicalFrame({
         {/* compress the base image */}
         <image
           xlinkHref={"/vinyl-physical-bg.png"}
-          id="image1_2746_84726"
+          id={`image1_${img0}`}
           width={4000}
           height={4000}
         />
