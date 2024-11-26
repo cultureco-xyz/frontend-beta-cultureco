@@ -390,7 +390,7 @@ const CheckoutFlow = ({
       className="fixed justify-center gap-4 items-center min-h-[84px] h-auto max-w-mobile mx-auto bg-cultureGray left-0 right-0 bottom-[56px] z-50  flex w-full rounded-t-lg"
     >
       {steps == "BUY" && (
-        <div className="flex gap-4 min-h-max">
+        <div className="flex gap-4 ">
           {!isPurchased && (
             <Button
               onClick={() => {
@@ -412,7 +412,7 @@ const CheckoutFlow = ({
         </div>
       )}
       {steps == "PRICE" && (
-        <div className="flex w-full h-full flex-col min-h-max">
+        <div className="flex w-full  flex-col h-[400px]">
           <span
             onClick={() => {
               setsteps("BUY");
@@ -428,7 +428,7 @@ const CheckoutFlow = ({
               Join Tribe Now
             </Button>
           </div>
-          <div className="flex w-full flex-col px-4 ">
+          <div className="flex w-full h-auto mt-auto flex-col px-4 ">
             <span className="flex w-full justify-between items-center">
               <span className="text-white">
                 <h1 className="text-base font-groteskBold">{product.title}</h1>
@@ -452,7 +452,7 @@ const CheckoutFlow = ({
                 setsteps("METHODS");
               }}
               variant={"outline"}
-              className="text-cultureOrange h-[54px] my-4 cursor-pointer text-[17px]"
+              className="text-cultureOrange mt-auto h-[54px] my-4 cursor-pointer text-[17px]"
             >
               Buy at Regular Price
             </Button>
@@ -460,7 +460,7 @@ const CheckoutFlow = ({
         </div>
       )}
       {steps == "METHODS" && (
-        <div className="flex w-full h-full flex-col min-h-max">
+        <div className="flex w-full  flex-col h-[250px]">
           <span
             onClick={() => {
               setsteps("BUY");
