@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import TopNav from "@/components/navigation/topNav";
 import React, { useState } from "react";
-import { Plus, Users } from "lucide-react";
+import { ChevronLeft, EditIcon, Plus, ShareIcon, Users } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
 import { useAuthContext } from "@/app/providers/AuthContextProvider";
 import CultureLoader from "@/components/common/cultureLoader";
@@ -13,10 +13,12 @@ import axios from "axios";
 import { IProductData } from "@/types";
 
 import ProductCard from "@/components/products/Cards/ProductCard";
+import EditProfile from "@/components/profile/edit-profile/editProfile";
 
 function CreatorProfile() {
   const User = useAuthContext();
   const [openForm, setopenForm] = useState(false);
+  const [openEditForm, setOpenEditForm] = useState(false);
 
   const products = useQuery({
     queryKey: ["get-user-products", User?._id],
@@ -61,13 +63,25 @@ function CreatorProfile() {
             }}
             className="flex flex-col z-10 pt-[270px] h-full relative"
           >
-            <div className="flex w-full  text-white px-4 flex-col mb-1 ">
-              <span>
-                <div className="flex">{User.name}</div>
-              </span>
-              <span className="text-xs text-cultureBeige">
-                <p>{User.username}</p>
-              </span>
+            <div className="flex items-center justify-between">
+              <div className="flex w-full text-white px-4 flex-col mb-1 ">
+                <span>
+                  <div className="flex">{User.name}</div>
+                </span>
+                <span className="text-xs text-cultureBeige">
+                  <p>{User.username}</p>
+                </span>
+              </div>
+              <div className="flex flex-col items-center pr-4 justify-end gap-2">
+                <button
+                  onClick={() => {
+                    setOpenEditForm(!openEditForm);
+                  }}
+                >
+                  <EditIcon className="text-cultureWhite" size={18} />
+                </button>
+                <ShareIcon className="text-cultureWhite" size={18} />
+              </div>
             </div>
             <div className="flex justify-between text-white px-4 text-[14px] mb-4">
               <span className="flex gap-1 items-center">
@@ -132,6 +146,23 @@ function CreatorProfile() {
             />
           )}
           <BottomNav className="fixed bottom-0 w-full max-w-mobile " />
+          {openEditForm && (
+            <div className="fixed top-0 left-0 bg-black/80 h-[100vh] w-full z-[1001] flex items-center justify-center overflow-y-auto">
+              <div className="h-fit p-4 w-[90vw] bg-cultureGray rounded-md relative">
+                <span className="flex w-full text-cultureWhite -mb-6 mt-4">
+                  <span
+                    className="flex items-center h-fit text-base"
+                    onClick={() => {
+                      setOpenEditForm(!openEditForm);
+                    }}
+                  >
+                    <ChevronLeft className="h-4 w-4" /> Back
+                  </span>
+                </span>
+                <EditProfile profile={User!} />
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div className="flex flex-col w-full h-svh items-center justify-center">

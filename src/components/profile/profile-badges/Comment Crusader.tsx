@@ -15,20 +15,20 @@ function CommentCrusaderBadge() {
         height="92"
         rx="16"
         fill="url(#paint0_linear_3099_50335)"
-        fill-opacity="0.1"
+        fillOpacity="0.1"
       />
-      <g clip-path="url(#clip0_3099_50335)">
+      <g clipPath="url(#clip0_3099_50335)">
         <path
           d="M60.3975 19.5275C61.0752 17.8701 63.4223 17.8701 64.0999 19.5275L71.4077 37.4002C71.4762 37.5676 71.567 37.725 71.6778 37.868L83.5021 53.133C84.5986 54.5486 83.4251 56.5813 81.6508 56.3394L62.5188 53.7319C62.3396 53.7074 62.1579 53.7074 61.9786 53.7319L42.8466 56.3394C41.0724 56.5813 39.8988 54.5486 40.9954 53.133L52.8196 37.868C52.9304 37.725 53.0212 37.5676 53.0897 37.4002L60.3975 19.5275Z"
           fill="#2E2F32"
           stroke="white"
-          stroke-miterlimit="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeMiterlimit="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M62.0008 43H55.4108L56.3408 42.07C56.5271 41.8826 56.6316 41.6292 56.6316 41.365C56.6316 41.1008 56.5271 40.8474 56.3408 40.66C55.0314 39.352 54.216 37.6305 54.0335 35.7888C53.8511 33.947 54.3128 32.099 55.3401 30.5595C56.3674 29.02 57.8966 27.8844 59.6674 27.346C61.4381 26.8076 63.3407 26.8998 65.0511 27.6069C66.7614 28.314 68.1737 29.5923 69.0473 31.2239C69.9209 32.8555 70.2017 34.7395 69.842 36.555C69.4822 38.3705 68.5042 40.005 67.0744 41.1802C65.6446 42.3554 63.8516 42.9985 62.0008 43ZM60.1456 31.0457C60.7806 30.9506 61.4295 31.057 62.0008 31.35C62.5772 31.0633 63.2291 30.9651 63.8644 31.0692C64.4996 31.1733 65.0861 31.4744 65.5408 31.93C66.1026 32.4925 66.4182 33.255 66.4182 34.05C66.4182 34.845 66.1026 35.6075 65.5408 36.17L62.7108 39C62.6179 39.0937 62.5073 39.1681 62.3854 39.2189C62.2636 39.2697 62.1329 39.2958 62.0008 39.2958C61.8688 39.2958 61.7381 39.2697 61.6163 39.2189C61.4944 39.1681 61.3838 39.0937 61.2908 39L58.4608 36.12C57.899 35.5575 57.5835 34.795 57.5835 34C57.5835 33.205 57.899 32.4425 58.4608 31.88C58.9214 31.4326 59.5106 31.1408 60.1456 31.0457Z"
           fill="#ECECEC"
         />
@@ -37,14 +37,14 @@ function CommentCrusaderBadge() {
           fill="#CAC5BF"
         />
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M58.174 25.7612C59.3873 25.2587 60.6876 25 62.0008 25C64.653 25 67.1965 26.0536 69.0719 27.9289C70.9473 29.8043 72.0008 32.3478 72.0008 35C72.0008 37.6522 70.9473 40.1957 69.0719 42.0711C67.1965 43.9464 64.653 45 62.0008 45H53.0008C52.8028 45.0083 52.6068 44.9577 52.4377 44.8544C52.2685 44.7511 52.1339 44.5999 52.0508 44.42C51.9743 44.2379 51.9533 44.0372 51.9907 43.8432C52.0281 43.6492 52.1221 43.4706 52.2608 43.33L54.2608 41.33C52.7924 39.5481 51.9929 37.309 52.0008 35C52.0008 32.3478 53.0544 29.8043 54.9298 27.9289C55.8584 27.0003 56.9608 26.2638 58.174 25.7612ZM55.4108 43H62.0008C63.8516 42.9985 65.6446 42.3554 67.0744 41.1802C68.5042 40.005 69.4822 38.3705 69.842 36.555C70.2017 34.7395 69.9209 32.8555 69.0473 31.2239C68.1737 29.5923 66.7614 28.314 65.0511 27.6069C63.3407 26.8998 61.4381 26.8076 59.6674 27.346C57.8966 27.8844 56.3674 29.02 55.3401 30.5595C54.3128 32.099 53.8511 33.947 54.0335 35.7888C54.216 37.6305 55.0314 39.352 56.3408 40.66C56.5271 40.8474 56.6316 41.1008 56.6316 41.365C56.6316 41.6292 56.5271 41.8826 56.3408 42.07L55.4108 43Z"
           fill="#ECECEC"
         />
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M62.0008 31.35C61.4295 31.057 60.7806 30.9506 60.1456 31.0457C59.5106 31.1408 58.9214 31.4326 58.4608 31.88C57.899 32.4425 57.5835 33.205 57.5835 34C57.5835 34.795 57.899 35.5575 58.4608 36.12L61.2908 39C61.3838 39.0937 61.4944 39.1681 61.6163 39.2189C61.7381 39.2697 61.8688 39.2958 62.0008 39.2958C62.1329 39.2958 62.2636 39.2697 62.3854 39.2189C62.5073 39.1681 62.6179 39.0937 62.7108 39L65.5408 36.17C66.1026 35.6075 66.4182 34.845 66.4182 34.05C66.4182 33.255 66.1026 32.4925 65.5408 31.93C65.0861 31.4744 64.4996 31.1733 63.8644 31.0692C63.2291 30.9651 62.5772 31.0633 62.0008 31.35ZM62.0008 36.83L64.1208 34.71C64.2146 34.617 64.289 34.5064 64.3397 34.3846C64.3905 34.2627 64.4166 34.132 64.4166 34C64.4166 33.868 64.3905 33.7373 64.3397 33.6154C64.289 33.4936 64.2146 33.383 64.1208 33.29C63.9335 33.1037 63.68 32.9992 63.4158 32.9992C63.1517 32.9992 62.8982 33.1037 62.7108 33.29C62.6179 33.3837 62.5073 33.4581 62.3854 33.5089C62.2636 33.5597 62.1329 33.5858 62.0008 33.5858C61.8688 33.5858 61.7381 33.5597 61.6163 33.5089C61.4944 33.4581 61.3838 33.3837 61.2908 33.29C61.1035 33.1037 60.85 32.9992 60.5858 32.9992C60.3217 32.9992 60.0682 33.1037 59.8808 33.29C59.7871 33.383 59.7127 33.4936 59.662 33.6154C59.6112 33.7373 59.585 33.868 59.585 34C59.585 34.132 59.6112 34.2627 59.662 34.3846C59.7127 34.5064 59.7871 34.617 59.8808 34.71L62.0008 36.83Z"
           fill="#CAC5BF"
         />
@@ -97,9 +97,9 @@ function CommentCrusaderBadge() {
           width="123.2"
           height="56.044"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -168,9 +168,9 @@ function CommentCrusaderBadge() {
           width="43.75"
           height="7"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
             mode="normal"
             in="SourceGraphic"
@@ -203,9 +203,9 @@ function CommentCrusaderBadge() {
           width="40"
           height="28"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
             mode="normal"
             in="SourceGraphic"
@@ -225,8 +225,8 @@ function CommentCrusaderBadge() {
           y2="54.1368"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="white" />
-          <stop offset="1" stop-color="white" stop-opacity="0" />
+          <stop stopColor="white" />
+          <stop offset="1" stopColor="white" stopOpacity="0" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_3099_50335"
@@ -236,8 +236,8 @@ function CommentCrusaderBadge() {
           y2="86"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FF6417" />
-          <stop offset="1" stop-color="#FFB800" />
+          <stop stopColor="#FF6417" />
+          <stop offset="1" stopColor="#FFB800" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_3099_50335"
@@ -247,8 +247,8 @@ function CommentCrusaderBadge() {
           y2="86"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FF6417" />
-          <stop offset="1" stop-color="#FFB800" />
+          <stop stopColor="#FF6417" />
+          <stop offset="1" stopColor="#FFB800" />
         </linearGradient>
         <clipPath id="clip0_3099_50335">
           <rect

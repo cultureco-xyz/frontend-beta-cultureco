@@ -32,16 +32,16 @@
 			<stop offset="1.000000" stopColor="#999999"/>
 		</linearGradient>
 		<linearGradient x1="95.499969" y1="20.815918" x2="95.499969" y2="272.815918" id="paint_linear_16_10361_1" gradientUnits="userSpaceOnUse">
-			<stop stopColor="#FFFFFF" stop-opacity="0.478431"/>
-			<stop offset="1.000000" stopColor="#999999" stop-opacity="0.000000"/>
+			<stop stopColor="#FFFFFF" stopOpacity="0.478431"/>
+			<stop offset="1.000000" stopColor="#999999" stopOpacity="0.000000"/>
 		</linearGradient>
 		<linearGradient x1="136.349945" y1="7.894531" x2="136.349945" y2="259.894531" id="paint_linear_16_10363_0" gradientUnits="userSpaceOnUse">
 			<stop stopColor="#FFFFFF"/>
 			<stop offset="1.000000" stopColor="#999999"/>
 		</linearGradient>
 		<linearGradient x1="136.349945" y1="7.894531" x2="136.349945" y2="259.894531" id="paint_linear_16_10363_1" gradientUnits="userSpaceOnUse">
-			<stop stopColor="#FFFFFF" stop-opacity="0.478431"/>
-			<stop offset="1.000000" stopColor="#999999" stop-opacity="0.000000"/>
+			<stop stopColor="#FFFFFF" stopOpacity="0.478431"/>
+			<stop offset="1.000000" stopColor="#999999" stopOpacity="0.000000"/>
 		</linearGradient>
 		<pattern id="pattern_16_103620" patternContentUnits="objectBoundingBox" width="1.000000" height="1.000000">
 			<use xlink:href="#image16_10362_0" transform="matrix(0.000329,0,0,0.000244,-0.170664,0)"/>
@@ -52,8 +52,8 @@
 			<stop offset="1.000000" stopColor="#999999"/>
 		</linearGradient>
 		<linearGradient x1="178.889618" y1="5.531738" x2="178.889618" y2="257.531738" id="paint_linear_16_10365_1" gradientUnits="userSpaceOnUse">
-			<stop stopColor="#FFFFFF" stop-opacity="0.478431"/>
-			<stop offset="1.000000" stopColor="#999999" stop-opacity="0.000000"/>
+			<stop stopColor="#FFFFFF" stopOpacity="0.478431"/>
+			<stop offset="1.000000" stopColor="#999999" stopOpacity="0.000000"/>
 		</linearGradient>
 		<pattern id="pattern_16_103640" patternContentUnits="objectBoundingBox" width="1.000000" height="1.000000">
 			<use xlink:href="#image16_10364_0" transform="matrix(0.000329,0,0,0.000244,-0.170664,0)"/>
