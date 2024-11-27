@@ -56,7 +56,7 @@ function UserProfile() {
   return (
     <div className="flex flex-col w-full h-svh px-4  max-w-mobile mx-auto overflow-y-auto pt-[70px]">
       <TopNav />
-      <div className="flex items-center justify-between ">
+      <div className="flex items-center justify-between">
         <div className="flex items-start">
           {user?.profilePicture ? (
             <img

@@ -7,8 +7,6 @@ import { handleProfilePicUpload } from "@/lib/utils";
 import Spinner from "@/components/common/spinner";
 import { Button } from "@/components/ui/button";
 import { UserData } from "@/types";
-import { useAuthenticated } from "@/hooks/useAuthenticated";
-import { useQueryClient } from "@tanstack/react-query";
 
 type Store = {
   name: string;
@@ -39,7 +37,6 @@ const useStore = create<Store>()((set) => ({
 }));
 
 function EditProfile({ profile }: EditProfileProps) {
-  const queryClient = useQueryClient();
   const { name, username, bio, profilePicture, setValue } = useStore();
   const [profilePicUploadProgress, setProfilePicUploadProgress] =
     useState<number>();
