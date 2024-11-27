@@ -7,6 +7,8 @@ import { handleProfilePicUpload } from "@/lib/utils";
 import Spinner from "@/components/common/spinner";
 import { Button } from "@/components/ui/button";
 import { UserData } from "@/types";
+import { useAuthenticated } from "@/hooks/useAuthenticated";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Store = {
   name: string;
@@ -37,6 +39,7 @@ const useStore = create<Store>()((set) => ({
 }));
 
 function EditProfile({ profile }: EditProfileProps) {
+  const queryClient = useQueryClient();
   const { name, username, bio, profilePicture, setValue } = useStore();
   const [profilePicUploadProgress, setProfilePicUploadProgress] =
     useState<number>();
@@ -51,24 +54,27 @@ function EditProfile({ profile }: EditProfileProps) {
     }
   }, [profile, setValue]);
 
-  // To be updated to editing an existing profile
+  // Edit profile functionality
   const saveDetails = async () => {
-    const res = await axios.put(
-      "/backend/user/update-profile",
-      {
-        username,
-        name,
-        bio,
-        profilePicture,
-      },
-      {
-        withCredentials: true,
+    try {
+      const res = await axios.post(
+        "/backend/user/update-profile",
+        {
+          username,
+          name,
+          bio,
+          profilePicture,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (res.status === 200) {
+        location.href = "/account";
       }
-    );
-    if (res.status == 200) {
-      //save local state
-      localStorage.setItem("user", JSON.stringify(res.data));
-      location.href = "/account";
+    } catch (error) {
+      console.error("Error updating profile:", error);
     }
   };
 

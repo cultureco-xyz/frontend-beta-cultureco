@@ -15,27 +15,27 @@ function TribeFounderBadge() {
         height="84"
         rx="16"
         fill="url(#paint0_linear_3099_50146)"
-        fill-opacity="0.1"
+        fillOpacity="0.1"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M27.1955 44.8583C27.1054 42.6706 27.0498 40.4745 27.029 38.2765C26.984 33.5459 27.0996 28.8062 27.3756 24.1219C27.4483 22.8882 28.0992 21.7618 29.1319 21.0828C35.8854 16.6422 43.019 12.5303 50.2477 8.9113C51.3504 8.35923 52.6483 8.35923 53.751 8.9113C60.9797 12.5303 68.1132 16.6422 74.8668 21.0829C75.8994 21.7618 76.5504 22.8881 76.6231 24.1218C77.0979 32.1786 77.0979 40.3994 76.6231 48.4562C76.5504 49.6899 75.8994 50.8163 74.8668 51.4952C72.2755 53.1991 69.6283 54.8545 66.9413 56.4523C62.6252 59.0187 58.2062 61.4363 53.7511 63.6668C52.6484 64.2189 51.3504 64.219 50.2476 63.6668C43.0189 60.0478 35.8854 55.9359 29.1319 51.4952C28.0992 50.8162 27.4483 49.6898 27.3756 48.4561C27.3051 47.2601 27.2451 46.0604 27.1955 44.8583Z"
         stroke="white"
-        stroke-width="4"
-        stroke-miterlimit="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="4"
+        strokeMiterlimit="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M27.1955 44.8585C27.1054 42.6709 27.0498 40.4748 27.029 38.2768C26.9777 32.8869 27.1349 27.4852 27.5004 22.1672C35.2717 16.9484 43.5868 12.1553 51.9994 8.04517C60.4118 12.1553 68.727 16.9484 76.4983 22.1672C77.1395 31.4962 77.1395 41.0824 76.4983 50.4113C73.3901 52.4986 70.1949 54.5179 66.9413 56.4525C62.06 59.355 57.0472 62.0671 51.9994 64.5335C43.5868 60.4233 35.2717 55.6301 27.5004 50.4113C27.3738 48.5691 27.2722 46.7168 27.1955 44.8585Z"
         fill="#2E2F32"
       />
       <mask
         id="mask0_3099_50146"
-        style={{ maskType: 'luminance' }}
+        style={{ maskType: "luminance" }}
         maskUnits="userSpaceOnUse"
         x="27"
         y="8"
@@ -49,114 +49,114 @@ function TribeFounderBadge() {
       </mask>
       <g mask="url(#mask0_3099_50146)">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M76.7349 46.3316C76.6688 47.6959 76.5893 49.0564 76.4961 50.4114C73.3879 52.4987 70.1927 54.518 66.9391 56.4526C62.0578 59.3551 57.045 62.0673 51.9972 64.5335C43.5848 60.4234 35.2697 55.6303 27.4983 50.4114C27.4461 49.6516 27.3982 48.8899 27.3544 48.1269C27.3051 47.2657 27.2611 46.4026 27.2227 45.538C28.8415 44.5027 30.7256 43.5739 32.8245 42.7769C33.5469 42.5026 34.2948 42.2439 35.0659 42.0018C36.1369 41.6656 37.2528 41.3615 38.4084 41.0921C39.1432 40.9209 39.8941 40.7636 40.6595 40.6212C41.3068 40.5008 41.9645 40.3909 42.6318 40.292C43.2897 40.1945 43.9569 40.1077 44.6326 40.0319C45.4832 39.9366 46.3472 39.8589 47.2229 39.7995C48.5883 39.707 49.9824 39.6592 51.3988 39.6592C52.1396 39.6592 52.8743 39.6722 53.6019 39.698C54.1837 39.7186 54.7611 39.7472 55.3334 39.7836C56.4208 39.853 57.4903 39.9507 58.5388 40.075C59.4718 40.1858 60.3882 40.3177 61.2858 40.4698C61.9876 40.5887 62.6781 40.7199 63.3559 40.8628C64.0578 41.0109 64.7463 41.1715 65.4202 41.3443C66.1355 41.5277 66.8344 41.7247 67.5155 41.9346C68.196 42.1442 68.8586 42.3668 69.502 42.6016C72.3216 43.6303 74.7717 44.893 76.7349 46.3316Z"
           fill="white"
           stroke="white"
-          stroke-miterlimit="2"
-          stroke-linejoin="round"
+          strokeMiterlimit="2"
+          strokeLinejoin="round"
         />
       </g>
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M27.1955 44.8583C27.1054 42.6706 27.0498 40.4745 27.029 38.2765C26.984 33.5459 27.0996 28.8062 27.3756 24.1219C27.4483 22.8882 28.0992 21.7618 29.1319 21.0828C35.8854 16.6422 43.019 12.5303 50.2477 8.9113C51.3504 8.35923 52.6483 8.35923 53.751 8.9113C60.9797 12.5303 68.1132 16.6422 74.8668 21.0829C75.8994 21.7618 76.5504 22.8881 76.6231 24.1218C77.0979 32.1786 77.0979 40.3994 76.6231 48.4562C76.5504 49.6899 75.8994 50.8163 74.8668 51.4952C72.2755 53.1991 69.6283 54.8545 66.9413 56.4523C62.6252 59.0187 58.2062 61.4363 53.7511 63.6668C52.6484 64.2189 51.3504 64.219 50.2476 63.6668C43.0189 60.0478 35.8854 55.9359 29.1319 51.4952C28.0992 50.8162 27.4483 49.6898 27.3756 48.4561C27.3051 47.2601 27.2451 46.0604 27.1955 44.8583Z"
         stroke="#2E2F32"
-        stroke-miterlimit="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeMiterlimit="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M42.6096 42.443C41.6901 43.7271 40.203 44.5619 38.5263 44.5619C35.7371 44.5619 33.4727 42.2518 33.4727 39.4064C33.4727 36.561 35.7371 34.251 38.5263 34.251C40.4822 34.251 42.18 35.3869 43.02 37.0468"
         stroke="white"
-        stroke-miterlimit="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeMiterlimit="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M41.0941 41.2412C40.5229 42.039 39.5991 42.5576 38.5574 42.5576C36.8247 42.5576 35.418 41.1225 35.418 39.3548C35.418 37.5872 36.8247 36.1521 38.5574 36.1521C39.7725 36.1521 40.8273 36.8578 41.3491 37.889"
         stroke="white"
-        stroke-miterlimit="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeMiterlimit="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M38.646 40.6462C39.3458 40.6462 39.9132 40.0538 39.9132 39.3231C39.9132 38.5924 39.3458 38 38.646 38C37.9462 38 37.3789 38.5924 37.3789 39.3231C37.3789 40.0538 37.9462 40.6462 38.646 40.6462Z"
         stroke="white"
-        stroke-miterlimit="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeMiterlimit="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M27.4922 46.1299C27.4922 46.1299 38.3059 39.9938 51.6846 40.344C60.4124 40.5726 68.2223 41.6354 76.3337 46.7311"
         stroke="#2E2F32"
-        stroke-miterlimit="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeMiterlimit="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M45.664 28.1499C45.664 29.1142 46.4458 29.8959 47.4101 29.8959C46.4458 29.8959 45.664 30.6777 45.664 31.642C45.664 30.6777 44.8823 29.8959 43.918 29.8959C44.8823 29.8959 45.664 29.1142 45.664 28.1499Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M36.5624 25.3701C36.5624 26.3345 37.3442 27.1162 38.3085 27.1162C37.3442 27.1162 36.5624 27.8979 36.5624 28.8622C36.5624 27.8979 35.7807 27.1162 34.8164 27.1162C35.7807 27.1162 36.5624 26.3345 36.5624 25.3701Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M70.457 30.498C70.457 31.4624 71.2387 32.2441 72.2031 32.2441C71.2387 32.2441 70.457 33.0258 70.457 33.9901C70.457 33.0258 69.6753 32.2441 68.7109 32.2441C69.6753 32.2441 70.457 31.4624 70.457 30.498Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M54.957 12.9612C54.957 13.9255 55.7387 14.7072 56.7031 14.7072C55.7387 14.7072 54.957 15.489 54.957 16.4532C54.957 15.489 54.1753 14.7072 53.2109 14.7072C54.1753 14.7072 54.957 13.9255 54.957 12.9612Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M42.621 15.6143C42.621 16.5786 43.4028 17.3603 44.3671 17.3603C43.4028 17.3603 42.621 18.1421 42.621 19.1063C42.621 18.1421 41.8393 17.3603 40.875 17.3603C41.8393 17.3603 42.621 16.5786 42.621 15.6143Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M61.9804 35.4055C61.9804 36.3699 62.7622 37.1516 63.7265 37.1516C62.7622 37.1516 61.9804 37.9333 61.9804 38.8976C61.9804 37.9333 61.1987 37.1516 60.2344 37.1516C61.1987 37.1516 61.9804 36.3699 61.9804 35.4055Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M69.0234 20.1255C69.0234 21.0898 69.8051 21.8715 70.7695 21.8715C69.8051 21.8715 69.0234 22.6533 69.0234 23.6176C69.0234 22.6533 68.2417 21.8715 67.2773 21.8715C68.2417 21.8715 69.0234 21.0898 69.0234 20.1255Z"
         fill="white"
       />
       <path
         d="M67.1992 45.03C67.3913 44.897 69.7959 45.5205 70.7935 46.1855"
         stroke="#2E2F32"
-        stroke-miterlimit="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeMiterlimit="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M29.9219 46.8725C29.9219 46.8725 33.2062 44.4278 40.0399 43.1155"
         stroke="#2E2F32"
-        stroke-miterlimit="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeMiterlimit="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M49.6094 48.366C50.1844 48.7289 52.1995 49.4387 54.1014 48.0962"
         stroke="#2E2F32"
-        stroke-miterlimit="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeMiterlimit="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M57.4082 28.2412C57.3802 28.1009 57.2571 28 57.1141 28H52.3C52.1343 28 52 28.1343 52 28.3V33.7C52 33.8657 52.1343 34 52.3 34H58.9941C59.1371 34 59.2602 34.1009 59.2882 34.2412L59.5918 35.7588C59.6198 35.8991 59.7429 36 59.8859 36H62.7C62.8657 36 63 35.8657 63 35.7V30.3C63 30.1343 62.8657 30 62.7 30H58.0059C57.8629 30 57.7398 29.8991 57.7118 29.7588L57.4082 28.2412Z"
@@ -169,7 +169,7 @@ function TribeFounderBadge() {
       <path
         d="M51 49V35M51 35V27.3C51 27.1343 51.1343 27 51.3 27H57.7658C57.9034 27 58.0234 27.0937 58.0568 27.2272L58.4432 28.7728C58.4766 28.9063 58.5966 29 58.7342 29H63.7C63.8657 29 64 29.1343 64 29.3V36.7C64 36.8657 63.8657 37 63.7 37H59.2342C59.0966 37 58.9766 36.9063 58.9432 36.7728L58.5568 35.2272C58.5234 35.0937 58.4034 35 58.2658 35H51Z"
         stroke="#2E2F32"
-        stroke-width="0.8"
+        strokeWidth="0.8"
       />
       <g filter="url(#filter0_ddi_3099_50146)">
         <path
@@ -185,9 +185,9 @@ function TribeFounderBadge() {
           width="102.661"
           height="55.9322"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -257,8 +257,8 @@ function TribeFounderBadge() {
           y2="49.4293"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="white" />
-          <stop offset="1" stop-color="white" stop-opacity="0" />
+          <stop stopColor="white" />
+          <stop offset="1" stopColor="white" stopOpacity="0" />
         </linearGradient>
       </defs>
     </svg>
