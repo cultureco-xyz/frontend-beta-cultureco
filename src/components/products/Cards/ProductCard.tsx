@@ -35,11 +35,7 @@ function ProductCard({ product }: { product: IProductData }) {
   const queryClient = useQueryClient();
   const { user: authData, isLogedIn } = useAuthenticated();
   const isAdminUser = authData?.email.endsWith("@cultureco.xyz");
-  const { imageURL: image, title, memberPrice, regularPrice } = product;
-  const [detailedView, setdetailedView] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
-  const [isPurchased, setisPurchased] = useState(false);
+
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [musicPlayerOpen, setMusicPlayerOpen] = useState(false);
 
@@ -56,14 +52,13 @@ function ProductCard({ product }: { product: IProductData }) {
     },
   });
 
-  useQuery({
-    queryKey: ["is purchased", product._id],
+  const isPurchasedQuery = useQuery({
+    queryKey: ["is-purchased", product._id],
     queryFn: async () => {
       const res = await axios.get(
         `/backend/product-purchase/user/${authData?._id}/${product._id}`
       );
-      setisPurchased(res.data.isPurchased ? true : false);
-      return res.data;
+      return res.data.isPurchased;
     },
     enabled: isLogedIn,
   });
@@ -110,6 +105,14 @@ function ProductCard({ product }: { product: IProductData }) {
     setShowDeleteConfirm(false);
   };
 
+  const { imageURL: image, title, memberPrice, regularPrice } = product;
+  const [detailedView, setdetailedView] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+
+  const isPurchased = Boolean(
+    isPurchasedQuery.isSuccess && isPurchasedQuery.data
+  );
   const handleMusicPlay = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setMusicPlayerOpen(true);
@@ -369,9 +372,7 @@ function ProductCard({ product }: { product: IProductData }) {
           )}
         </div>
       </div>
-      {detailedView && (
-        <DetailedView isPurchased={isPurchased} product={product} />
-      )}
+      {detailedView && <DetailedView product={product} />}
     </>
   );
 }
