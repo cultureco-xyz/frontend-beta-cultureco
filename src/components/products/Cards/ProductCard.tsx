@@ -22,13 +22,13 @@ import {
 import { DigitalAudioFrame } from "../SellForm/frames/DigitalAudioFrame";
 import PhyiscalFrame from "../SellForm/frames/PhyiscalFrame";
 import { VinylPhysicalFrame } from "../SellForm/frames/VinylPhysicalFrame";
-import { TicketFrame } from "../SellForm/frames/TicketFrame";
 import { useAuthenticated } from "@/hooks/useAuthenticated";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import EditProductForm from "../EditProductForm/EditProductForm";
 import { Button } from "@/components/ui/button";
+import { LatestTicketFrame } from "../SellForm/frames/LatestTicketFrame";
 
 function ProductCard({ product }: { product: IProductData }) {
   const params = useParams();
@@ -180,14 +180,14 @@ function ProductCard({ product }: { product: IProductData }) {
           />
         )}
         {product.productFormat == TEventProductFormats.IRL_EVENT && (
-          <TicketFrame
+          <LatestTicketFrame
             imageUrl={image + "#" + title}
             key={image + title}
-            className=""
+            className="overflow-hidden rounded-t-[16.5px]"
           />
         )}
         {product.productFormat == TEventProductFormats.VIRTUAL_EVENT && (
-          <TicketFrame
+          <LatestTicketFrame
             imageUrl={image + "#" + title}
             key={image + title}
             className=""
@@ -219,7 +219,7 @@ function ProductCard({ product }: { product: IProductData }) {
                         color: prd.color,
                       }}
                     >
-                      {prd.title}
+                      {prd.title === "irl event" ? <p>IRL Event</p> : prd.title}
                     </p>
                   </span>
                 );
@@ -289,7 +289,30 @@ function ProductCard({ product }: { product: IProductData }) {
                   <div className="flex items-center text-xl font-groteskSemiBold pt-10">
                     {title}
                   </div>
-                  <div className="flex flex-row items-center justify-center gap-1 bg-cultureGray text-digitalArtYellow w-20 h-6 my-3 rounded-md text-xs text-nowrap font-groteskSemiBold">
+                  <div
+                    className={`flex flex-row items-center justify-center gap-1 bg-cultureGray w-20 h-6 my-3 rounded-md text-xs text-nowrap font-groteskSemiBold
+                  ${
+                    product.productFormat === "digital art"
+                      ? "text-digitalArtYellow"
+                      : ""
+                  }${
+                      product.productFormat === "print"
+                        ? "text-cultureOrange"
+                        : ""
+                    }${
+                      product.productFormat === "music"
+                        ? "text-digitalMusicGreen"
+                        : ""
+                    }${
+                      product.productFormat === "apparel"
+                        ? "text-apparelBlue"
+                        : ""
+                    }${
+                      product.productFormat === "irl event"
+                        ? "text-irlEventBlue bg-cultureGrayVariant"
+                        : ""
+                    }`}
+                  >
                     {0} collected
                   </div>
                   {/* Date */}
