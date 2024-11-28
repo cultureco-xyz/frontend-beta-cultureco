@@ -55,13 +55,38 @@ const useStore = create<DetailedState>()((set) => ({
   },
 }));
 
-function DetailedView({ product }: { product: IProductData }) {
+const fetchFollowStatus = async (creatorId: string, userId: string) => {
+  const { data } = await axios.post("/backend/follow/follow-status", {
+    creatorId,
+    userId,
+  });
+  return data;
+};
+
+function DetailedView({
+  product,
+  onClose,
+}: {
+  product: IProductData;
+  onClose: () => void;
+}) {
   const { setStore, newComment, likeCount, toggleLike, isLiked, comments } =
     useStore();
   const { isLogedIn, user: authData } = useAuthenticated();
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [musicPlayerOpen, setMusicPlayerOpen] = useState(false);
   console.log(isLogedIn, authData);
+
+  const { data: followStatusData } = useQuery({
+    queryKey: ["follow-status", product.creator, authData?._id],
+    queryFn: async () => {
+      return fetchFollowStatus(
+        product.creator! as unknown as string,
+        authData!._id!
+      );
+    },
+    enabled: !!product.creator && !!authData?._id,
+  });
 
   //fetch product
   const productDetails = useQuery({
@@ -192,6 +217,12 @@ function DetailedView({ product }: { product: IProductData }) {
 
   return (
     <div className="flex  flex-col w-full h-svh bg-black  mx-auto top-0 left-0 right-0 max-w-mobile fixed overflow-y-auto z-[80]">
+      <div
+        className="flex items-center mt-14 p-4 z-[999] font-groteskSemiBold justify-start h-fit text-base text-cultureOrange"
+        onClick={onClose}
+      >
+        <ChevronLeft className="h-4 w-4" /> Back
+      </div>
       <img
         className="absolute w-full max-w-mobile mx-auto top-0 left-0 min-h-[80svh] object-cover"
         src={product.imageURL}
@@ -355,12 +386,16 @@ function DetailedView({ product }: { product: IProductData }) {
           </div>
         </div>
       </div>
-      {productDetails.isSuccess && (
-        <CheckoutFlow
-          isPurchased={Boolean(isPurchased)}
-          product={productDetails.data.productData}
-        />
-      )}
+      {productDetails.isSuccess &&
+        ((!followStatusData.isMember && !isPurchased) ||
+          (followStatusData.isMember && !isPurchased) ||
+          (!followStatusData.isMember && isPurchased)) && (
+          <CheckoutFlow
+            isPurchased={Boolean(isPurchased)}
+            product={productDetails.data.productData}
+            followData={followStatusData}
+          />
+        )}
       {/* <TicketCheckoutFlow
         actualPrice={`${product.regularPrice}`}
         memberPrice={product.memberPrice}
@@ -375,12 +410,19 @@ function DetailedView({ product }: { product: IProductData }) {
   );
 }
 
+interface FollowStatus {
+  isFollowing: boolean;
+  isMember: boolean;
+}
+
 const CheckoutFlow = ({
   isPurchased,
   product,
+  followData,
 }: {
   isPurchased: boolean;
   product: IProductData;
+  followData: FollowStatus;
 }) => {
   const [steps, setsteps] = useState<"BUY" | "PRICE" | "METHODS">("BUY");
   console.log("ch", isPurchased);
@@ -402,13 +444,15 @@ const CheckoutFlow = ({
               Buy
             </Button>
           )}
-          <Button
-            variant={"outline"}
-            className="text-cultureGray font-groteskSemiBold bg-cultureOrange h-[54px] w-fit"
-          >
-            <CultureCoLogoIcon fillColor="black" />
-            Join the Tribe
-          </Button>
+          {!followData.isMember && (
+            <Button
+              variant={"outline"}
+              className="text-cultureGray font-groteskSemiBold bg-cultureOrange h-[54px] w-fit"
+            >
+              <CultureCoLogoIcon fillColor="black" />
+              Join the Tribe
+            </Button>
+          )}
         </div>
       )}
       {steps == "PRICE" && (
@@ -422,12 +466,18 @@ const CheckoutFlow = ({
             <ChevronLeft className="h-6 w-6 text-cultureWhite" />
             <p className="text-sm">Cancel</p>
           </span>
-          <div className="flex text-sm justify-between items-center  my-3 w-auto mx-4 px-2  bg-cultureOrange py-2  rounded-lg  font-groteskBold">
-            <p className="text-xs">Tribe members get this for ₹750</p>
-            <Button className="bg-cultureGray text-cultureOrange rounded-sm text-xs h-[31px]">
-              Join Tribe Now
-            </Button>
-          </div>
+          {!followData.isMember ? (
+            <div className="flex text-sm justify-between items-center  my-3 w-auto mx-4 px-2  bg-cultureOrange py-2  rounded-lg  font-groteskBold">
+              <p className="text-xs">{`Tribe members get this for ₹${product.memberPrice}`}</p>
+              <Button className="bg-cultureGray text-cultureOrange rounded-sm text-xs h-[31px]">
+                Join Tribe Now
+              </Button>
+            </div>
+          ) : (
+            <div className="flex text-sm justify-center items-center my-3 w-auto mx-4 px-2  bg-cultureOrange py-2  rounded-lg  font-groteskBold">
+              <p className="text-xs">{`Woo-hoo, you're getting this at the discounted rate of ₹${product.memberPrice}!`}</p>
+            </div>
+          )}
           <div className="flex w-full h-auto mt-auto flex-col px-4 ">
             <span className="flex w-full justify-between items-center">
               <span className="text-white">
@@ -435,7 +485,7 @@ const CheckoutFlow = ({
                 <p className="text-xs">{product.creator.name}</p>
               </span>
               <h1 className="text-white font-groteskBold">
-                ₹ {product.regularPrice}
+                ₹ {followData.isMember? product.memberPrice : product.regularPrice}
               </h1>
             </span>
             <span className="flex w-full justify-between items-center mt-16">
@@ -444,7 +494,7 @@ const CheckoutFlow = ({
                 <p className="text-xs">Inclusive of all Taxes</p>
               </span>
               <h1 className="text-white font-groteskBold">
-                ₹ {product.regularPrice}
+                ₹ {followData.isMember? product.memberPrice : product.regularPrice}
               </h1>
             </span>
             <Button
@@ -454,7 +504,7 @@ const CheckoutFlow = ({
               variant={"outline"}
               className="text-cultureOrange mt-auto h-[54px] my-4 cursor-pointer text-[17px]"
             >
-              Buy at Regular Price
+              {followData.isMember? "Buy Now!" : "Buy at Regular Price"}
             </Button>
           </div>
         </div>
@@ -473,17 +523,17 @@ const CheckoutFlow = ({
           <div className="flex w-full flex-col px-4 my-4 gap-4">
             <RazorpayPurchaseButton
               creator={`${product.creator._id}`}
-              cost={product.regularPrice}
+              cost={followData.isMember? product.memberPrice: product.regularPrice}
               productId={`${product._id}`}
             />
             <StripePurchase
               creator={`${product.creator._id}`}
-              cost={product.regularPrice}
+              cost={followData.isMember? product.memberPrice: product.regularPrice}
               productId={`${product._id}`}
             />
             <CopperXButton
               creator={`${product.creator._id}`}
-              cost={product.regularPrice}
+              cost={followData.isMember? product.memberPrice: product.regularPrice}
               productId={`${product._id}`}
             />
           </div>

@@ -119,7 +119,7 @@ export default function UserFeed() {
               // const creatorStatus = creatorStatuses.find(
               //   (status) => String(status.creatorId) === String(post.creatorId)
               // );
-              return <ProductCard product={product} />;
+              return <ProductCard key={product._id} product={product} />;
             })
           ) : (
             <EmptyStateUserFeed />

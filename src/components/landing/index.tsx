@@ -329,7 +329,7 @@ function Landing() {
           )}
 
           {detailedView && (
-            <DetailedView product={productDataForDetailedView!} />
+            <DetailedView product={productDataForDetailedView!} onClose={() => setdetailedView(false)} />
           )}
           <BottomNav className="fixed bottom-0 w-full max-w-mobile z-[80]" />
         </div>
