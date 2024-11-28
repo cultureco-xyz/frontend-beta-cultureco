@@ -46,6 +46,7 @@ function ProductCard({ product }: { product: IProductData }) {
         productId: product._id,
         userId: isLogedIn ? authData?._id : undefined,
       });
+      console.log("Stats HERE", res.data);
       if (res.status == 200) {
         return res.data;
       }
@@ -219,7 +220,11 @@ function ProductCard({ product }: { product: IProductData }) {
                         color: prd.color,
                       }}
                     >
-                      {prd.title === "irl event" ? <p>IRL Event</p> : prd.title}
+                      {prd.title === "irl event" ? (
+                        <span>IRL Event</span>
+                      ) : (
+                        prd.title
+                      )}
                     </p>
                   </span>
                 );
@@ -239,7 +244,9 @@ function ProductCard({ product }: { product: IProductData }) {
             <PiFireLight
               key={statsQuery.isSuccess + product._id}
               style={
-                statsQuery.isSuccess ? { color: "#FE621D" } : { color: "white" }
+                statsQuery.isSuccess && statsQuery.data.isLikedByUser
+                  ? { color: "#FE621D" }
+                  : { color: "white" }
               }
               className="text-2xl"
             />
@@ -395,7 +402,12 @@ function ProductCard({ product }: { product: IProductData }) {
           )}
         </div>
       </div>
-      {detailedView && <DetailedView product={product} />}
+      {detailedView && (
+        <DetailedView
+          product={product}
+          onClose={() => setdetailedView(false)}
+        />
+      )}
     </>
   );
 }
