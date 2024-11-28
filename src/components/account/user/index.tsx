@@ -15,16 +15,25 @@ import { useAuthenticated } from "@/hooks/useAuthenticated";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IProductData } from "@/types";
-import ProductCard from "@/components/profile/cards/DigitalCard";
 import EditProfile from "@/components/profile/edit-profile/editProfile";
 import MiniTicket from "./MiniTicket";
+import DigitalCard from "@/components/profile/cards/DigitalCard";
+import DetailedView from "@/components/products/DetailedView";
 
 function UserProfile() {
   const { user, isLogedIn } = useAuthenticated();
   const [openEditForm, setOpenEditForm] = useState(false);
+  const [detailedView, setdetailedView] = useState(false);
+  const [productDataForDetailedView, setProductDataForDetailedView] =
+    useState<IProductData>();
   const [selectedPane, setselectedPane] = useState<"COLLECTION" | "TICKETS">(
     "COLLECTION"
   );
+
+  const handleDetailedView = async (product: IProductData) => {
+    setProductDataForDetailedView(product);
+    setdetailedView(true);
+  };
 
   //fetch stats
   const statsQuery = useQuery({
@@ -180,7 +189,12 @@ function UserProfile() {
           purchaseListQuery.data.map(
             (ele: { _id: string; productId: IProductData }) => {
               return (
-                <ProductCard imageUrl={ele.productId.imageURL} key={ele._id} />
+                <div onClick={() => handleDetailedView(ele.productId)} key={ele._id}>
+                  <DigitalCard
+                    imageUrl={ele.productId.imageURL}
+                    key={ele._id}
+                  />
+                </div>
               );
             }
           )}
@@ -201,6 +215,12 @@ function UserProfile() {
               );
             })}
       </div>
+      {detailedView && (
+        <DetailedView
+          product={productDataForDetailedView!}
+          onClose={() => setdetailedView(false)}
+        />
+      )}
       <BottomNav className="fixed bottom-0 w-full max-w-mobile " />
       {openEditForm && (
         <div className="fixed top-0 left-0 bg-black/80 h-[100vh] w-full z-[1001] flex items-center justify-center overflow-y-auto">
