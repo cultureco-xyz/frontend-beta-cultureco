@@ -25,7 +25,7 @@ import { VinylPhysicalFrame } from "../SellForm/frames/VinylPhysicalFrame";
 import { useAuthenticated } from "@/hooks/useAuthenticated";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import EditProductForm from "../EditProductForm/EditProductForm";
 import { Button } from "@/components/ui/button";
 import { LatestTicketFrame } from "../SellForm/frames/LatestTicketFrame";
@@ -33,9 +33,10 @@ import { LatestTicketFrame } from "../SellForm/frames/LatestTicketFrame";
 function ProductCard({ product }: { product: IProductData }) {
   const params = useParams();
   const queryClient = useQueryClient();
+  const pathname = usePathname();
+  const notExplorePage = pathname !== "/";
   const { user: authData, isLogedIn } = useAuthenticated();
   const isAdminUser = authData?.email.endsWith("@cultureco.xyz");
-
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [musicPlayerOpen, setMusicPlayerOpen] = useState(false);
 
@@ -402,7 +403,7 @@ function ProductCard({ product }: { product: IProductData }) {
           )}
         </div>
       </div>
-      {detailedView && (
+      {detailedView && notExplorePage && (
         <DetailedView
           product={product}
           onClose={() => setdetailedView(false)}
