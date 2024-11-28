@@ -77,7 +77,7 @@ function DetailedView({
   const [musicPlayerOpen, setMusicPlayerOpen] = useState(false);
   console.log(isLogedIn, authData);
 
-  const { data: followStatusData } = useQuery({
+  const { data: followStatusData, isSuccess: followStatusDataQueryIsSuccess } = useQuery({
     queryKey: ["follow-status", product.creator, authData?._id],
     queryFn: async () => {
       return fetchFollowStatus(
@@ -386,7 +386,7 @@ function DetailedView({
           </div>
         </div>
       </div>
-      {productDetails.isSuccess &&
+      {productDetails.isSuccess && followStatusDataQueryIsSuccess &&
         ((!followStatusData.isMember && !isPurchased) ||
           (followStatusData.isMember && !isPurchased) ||
           (!followStatusData.isMember && isPurchased)) && (
