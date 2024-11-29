@@ -359,7 +359,7 @@ function Landing() {
                 </h1>
                 <img
                   className="w-auto mx-auto mt-auto h-[25svh]"
-                  src="/landingv3/collage.svg"
+                  src="/landingv3/collage.png"
                   alt=""
                 />
                 <div
@@ -419,7 +419,7 @@ function Landing() {
                   Build Tribes with Exclusive Perks
                 </p>
                 <img
-                  src="/landingv3/membershipModal.svg"
+                  src="/landingv3/membershipModal.png"
                   className="w-full"
                   alt=""
                 />
@@ -430,7 +430,7 @@ function Landing() {
                   Showcase and Share Your Passion.
                 </p>
                 <img
-                  src="/landingv3/profileAchievement.svg"
+                  src="/landingv3/profileAchievement.png"
                   className="mt-4"
                   alt=""
                 />
@@ -448,7 +448,7 @@ function Landing() {
                   The next generation of art collecting, with blockchain-backed
                   authenticity
                 </p>
-                <img src="/landingv3/authentic.svg" className="mt-8" alt="" />
+                <img src="/landingv3/authentic.png" className="mt-8" alt="" />
               </div>
               <div className="flex flex-col w-full items-center gap-2 mt-6 max-w-[361px] mx-auto ">
                 <Button
