@@ -475,13 +475,13 @@ function Landing() {
                     text: `Wow, I can put out my daily art drops and build a paying community out of it. Can we also make a virtual exhibtion some day where I can launch artists using my platform?`,
                     name: "Studio Tenkai",
                     artType: "Artist",
-                    url: "https://dkrwjr7mnvu4o.cloudfront.net/user/66f15fd69e0b47ad4bca74b2/profilePic/5f159057-6d0d-4a7f-b762-6197b23f6073",
+                    url: "/landingv3/ST-pfp.svg",
                   },
                   {
                     text: `I used to make music for others thinking it had to be good, but now I can just drop anything I like for my community. And I don’t even have to just drop music, I can drop art too!`,
                     name: "Brute",
                     artType: "Musician",
-                    url: "https://dkrwjr7mnvu4o.cloudfront.net/user/66f15b5305b166b17844f4bf/profilePic/596ca7d1-3c70-42d0-94b8-505000c56f20",
+                    url: "/landingv3/Brute-pfp.svg",
                   },
                 ].map((ele) => {
                   return (
