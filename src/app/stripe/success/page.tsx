@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import CultureCoLoadingIcon from "@/components/common/cultureLoader";
+import CultureLoader from "@/components/common/cultureLoader";
 import axios from "axios";
 
 function Success() {
@@ -28,7 +28,7 @@ function Success() {
         Processing request..
       </h1>
       <div className="text-white mt-8">
-        <CultureCoLoadingIcon />
+        <CultureLoader />
       </div>
     </div>
   );

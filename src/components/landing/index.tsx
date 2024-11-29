@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 import FollowingIconForExplore from "@/assets/svgs/follow-icon-explore-page";
 import ProductCard from "../products/Cards/ProductCard";
 import DetailedView from "../products/DetailedView";
-import CultureCoLoadingIcon from "@/assets/svgs/loading-cc";
+import CultureLoader from "@/components/common/cultureLoader";
 
 //build fix 22 23v24
 
@@ -132,7 +132,7 @@ function Landing() {
     if (isCreatorsLoading || isFollowStatusesLoading || isProductsLoading) {
       return (
         <div className="h-full my-auto w-full flex justify-center items-center">
-          <CultureCoLoadingIcon />
+          <CultureLoader />
         </div>
       );
     }

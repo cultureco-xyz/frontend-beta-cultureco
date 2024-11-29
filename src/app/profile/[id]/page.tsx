@@ -4,7 +4,6 @@ import TopNav from "@/components/navigation/topNav";
 import React, { useState } from "react";
 import { Users } from "lucide-react";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
-
 import CultureLoader from "@/components/common/cultureLoader";
 import BottomNav from "@/components/navigation/bottomNav";
 // import SellForm from "@/components/products/SellForm/SellForm";
@@ -23,6 +22,7 @@ import { motion } from "framer-motion";
 import CloseIcon from "@/assets/svgs/close.icon";
 import TipModal from "@/components/profile/TippingModal";
 import TribeModal from "@/components/profile/TribeModal";
+import EmptyStateCreatorStore from "./emptyState";
 
 interface IProfileData {
   isFollowing: boolean;
@@ -81,6 +81,12 @@ function Profile() {
   const [isAboutPopupOpen, setIsAboutPopupOpen] = useState(false);
   const [isTippingOpen, setisTippingOpen] = useState(false);
   const [isTribeModalOpen, setisTribeModalOpen] = useState(false);
+  const [selectedPane, setselectedPane] = useState<"FEED" | "SHOP" | "EVENTS">(
+    "FEED"
+  );
+  const [selectedSubPane, setSelectedSubPane] = useState<
+    "POSTS" | "ACTIVITY" | "DIGITAL" | "PHYSICAL"
+  >("POSTS");
 
   const userQuery = useQuery({
     queryKey: ["get-user", params.id],
@@ -345,7 +351,7 @@ function Profile() {
                   className="bg-cultureOrange h-[52px] rounded-xl w-2/3 text-base text-cultureGray font-groteskBold"
                 >
                   <CultureCoLogoIcon fillColor="#282B28" size={17} /> Join the
-                  tribe
+                  Tribe
                 </Button>
               ) : (
                 <Button
@@ -376,36 +382,179 @@ function Profile() {
               )}
             </div>
             <div className="flex w-full px-4">
-              <span className="flex flex-auto border-b-2 border-current text-cultureOrange text-center justify-center">
+              <button
+                className={`flex flex-auto border-b-2 border-current text-center justify-center ${
+                  selectedPane == "FEED"
+                    ? "text-cultureOrange border-cultureOrange"
+                    : "text-cultureWhite"
+                }`}
+                onClick={() => {
+                  setselectedPane("FEED");
+                  setSelectedSubPane("POSTS");
+                }}
+              >
                 Feed
-              </span>
-              <span className="flex flex-auto border-b-2 border-current text-cultureBeige text-center justify-center">
+              </button>
+              <button
+                className={`flex flex-auto border-b-2 border-current text-center justify-center ${
+                  selectedPane == "SHOP"
+                    ? "text-cultureOrange border-cultureOrange"
+                    : "text-cultureWhite"
+                }`}
+                onClick={() => {
+                  setselectedPane("SHOP");
+                  setSelectedSubPane("DIGITAL");
+                }}
+              >
                 Shop
-              </span>
-              <span className="flex flex-auto border-b-2 border-current text-cultureBeige text-center justify-center">
+              </button>
+              <button
+                className={`flex flex-auto border-b-2 border-current text-center justify-center ${
+                  selectedPane == "EVENTS"
+                    ? "text-cultureOrange border-cultureOrange"
+                    : "text-cultureWhite"
+                }`}
+                onClick={() => {
+                  setselectedPane("EVENTS");
+                }}
+              >
                 Events
-              </span>
+              </button>
             </div>
-            {products.isSuccess && (
-              <div className="flex flex-col w-full   items-center my-4 gap-4 pb-24 h-fit">
-                {products.data.map((dc, idx) => {
-                  return React.cloneElement(
-                    <DigitalCard product={dc} key={"dc" + idx} />
-                  );
-                })}
+            {selectedPane === "FEED" && products.isSuccess && (
+              <div className="flex flex-col items-center mt-4">
+                {/* Sub-pane buttons */}
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setSelectedSubPane("POSTS")}
+                    className={`${
+                      selectedSubPane === "POSTS"
+                        ? "text-cultureOrange bg-cultureGray"
+                        : "text-[#cac4bf] bg-[#2E2F32]"
+                    } px-4 py-2 font-groteskRegular h-fit rounded-l-lg text-sm`}
+                  >
+                    Posts
+                  </button>
+                  <button
+                    onClick={() => setSelectedSubPane("ACTIVITY")}
+                    className={`${
+                      selectedSubPane === "ACTIVITY"
+                        ? "text-cultureOrange bg-cultureGray"
+                        : "text-[#cac4bf] bg-[#2E2F32]"
+                    } px-4 py-2 font-groteskRegular h-fit rounded-r-lg text-sm`}
+                  >
+                    Activity
+                  </button>
+                </div>
+
+                {/* Sub-pane content */}
+                <div className="flex items-center gap-4 flex-col w-full py-4 mb-16">
+                  {/* Render posts */}
+                  {selectedSubPane === "POSTS" &&
+                    (products.data && products.data.length > 0 ? (
+                      products.data.map((dc, idx) => (
+                        <DigitalCard product={dc} key={`dc-${idx}`} />
+                      ))
+                    ) : (
+                      <EmptyStateCreatorStore
+                        message="No posts available yet."
+                        subMessage={`Follow ${User.name} to see their posts in your feed!`}
+                      />
+                    ))}
+                  {/* Render activity */}
+                  {selectedSubPane === "ACTIVITY" && (
+                    <EmptyStateCreatorStore
+                      message="Activity coming soon!"
+                      subMessage={`Follow ${User.name} to see their posts in your feed!`}
+                    />
+                  )}
+                </div>
               </div>
             )}
-            {/* Sell form button */}
-            {/* <div className="right-0 left-0 fixed bottom-40  shadow-2xl z-50  w-full h-0 max-w-mobile mx-auto bg-red-200">
-              <span
-                onClick={() => {
-                  setopenForm(true);
-                }}
-                className="cursor-pointer flex w-16 h-16 rounded-full bg-cultureOrange items-center justify-center shadow-2xl ml-auto mr-4"
-              >
-                <Plus className="w-10 h-10" />
-              </span>
-            </div> */}
+            {selectedPane === "SHOP" && products.isSuccess && (
+              <div className="flex flex-col items-center mt-4">
+                {/* Sub-pane buttons */}
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setSelectedSubPane("DIGITAL")}
+                    className={`${
+                      selectedSubPane === "DIGITAL"
+                        ? "text-cultureOrange bg-cultureGray"
+                        : "text-[#cac4bf] bg-[#2E2F32]"
+                    } px-4 py-2 font-groteskRegular h-fit rounded-l-lg text-sm`}
+                  >
+                    Digital
+                  </button>
+                  <button
+                    onClick={() => setSelectedSubPane("PHYSICAL")}
+                    className={`${
+                      selectedSubPane === "PHYSICAL"
+                        ? "text-cultureOrange bg-cultureGray"
+                        : "text-[#cac4bf] bg-[#2E2F32]"
+                    } px-4 py-2 font-groteskRegular h-fit rounded-r-lg text-sm`}
+                  >
+                    Physical
+                  </button>
+                </div>
+
+                {/* Sub-pane content */}
+                <div className="flex items-center gap-4 flex-col w-full py-4 mb-16">
+                  {/* Render digital products */}
+                  {selectedSubPane === "DIGITAL" &&
+                    (products.data &&
+                    products.data.filter((dc) => dc.productType === "digital")
+                      .length > 0 ? (
+                      products.data
+                        .filter((dc) => dc.productType === "digital")
+                        .map((dc, idx) => (
+                          <DigitalCard product={dc} key={`dc-${idx}`} />
+                        ))
+                    ) : (
+                      <EmptyStateCreatorStore
+                        message={`${User.name} hasn't posted any digital products yet.`}
+                        subMessage={`Follow ${User.name} to see their posts in your feed!`}
+                      />
+                    ))}
+
+                  {/* Render physical products */}
+                  {selectedSubPane === "PHYSICAL" &&
+                    (products.data &&
+                    products.data.filter((dc) => dc.productType === "physical")
+                      .length > 0 ? (
+                      products.data
+                        .filter((dc) => dc.productType === "physical")
+                        .map((dc, idx) => (
+                          <DigitalCard product={dc} key={`dc-${idx}`} />
+                        ))
+                    ) : (
+                      <EmptyStateCreatorStore
+                        message={`${User.name} hasn't posted any physical products yet.`}
+                        subMessage={`Follow ${User.name} to see their posts in your feed!`}
+                      />
+                    ))}
+                </div>
+              </div>
+            )}
+            {selectedPane === "EVENTS" && products.isSuccess && (
+              <div className="flex flex-col items-center mt-4">
+                <div className="flex items-center gap-4 flex-col w-full py-4 mb-16">
+                  {products.data &&
+                  products.data.filter((dc) => dc.productType === "event")
+                    .length > 0 ? (
+                    products.data
+                      .filter((dc) => dc.productType === "event")
+                      .map((dc, idx) => (
+                        <DigitalCard product={dc} key={`dc-${idx}`} />
+                      ))
+                  ) : (
+                    <EmptyStateCreatorStore
+                      message={`${User.name} hasn't posted any events yet.`}
+                      subMessage={`Follow ${User.name} to see their posts in your feed!`}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           <BottomNav className="fixed bottom-0 w-full max-w-mobile " />
         </div>
