@@ -20,7 +20,7 @@ const GoogleAuth = ({ children }: { children: ReactNode }) => {
         <CultureCoLogoIcon fillColor="#ECECEC" size={42} />
         <span className="relative">
           <h1 className="text-cultureWhite">CultureCo</h1>
-          <span className="text-black absolute right-[15px] bottom-0 -rotate-[8deg] bg-cultureOrange w-[30px] flex items-center justify-center text-[10px] font-groteskSemiBold rounded-lg">
+          <span className="text-black absolute right-[15px] bottom-0 -rotate-[8deg] bg-digitalMusicGreen w-[30px] flex items-center justify-center text-[10px] font-groteskSemiBold rounded-lg">
             Beta
           </span>
         </span>
