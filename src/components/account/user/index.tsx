@@ -19,6 +19,7 @@ import EditProfile from "@/components/profile/edit-profile/editProfile";
 import MiniTicket from "./MiniTicket";
 import DigitalCard from "@/components/profile/cards/DigitalCard";
 import DetailedView from "@/components/products/DetailedView";
+import EmptyStateCreatorStore from "@/app/profile/[id]/emptyState";
 
 function UserProfile() {
   const { user, isLogedIn } = useAuthenticated();
@@ -186,34 +187,54 @@ function UserProfile() {
         </div>
         {selectedPane == "COLLECTION" &&
           purchaseListQuery.isSuccess &&
-          purchaseListQuery.data.map(
-            (ele: { _id: string; productId: IProductData }) => {
-              return (
-                <div onClick={() => handleDetailedView(ele.productId)} key={ele._id}>
-                  <DigitalCard
-                    imageUrl={ele.productId.imageURL}
+          (purchaseListQuery.data.length > 0 ? (
+            purchaseListQuery.data.map(
+              (ele: { _id: string; productId: IProductData }) => {
+                return (
+                  <div
+                    onClick={() => handleDetailedView(ele.productId)}
                     key={ele._id}
-                  />
-                </div>
-              );
-            }
-          )}
+                  >
+                    <DigitalCard
+                      imageUrl={ele.productId.imageURL}
+                      key={ele._id}
+                    />
+                  </div>
+                );
+              }
+            )
+          ) : (
+            <EmptyStateCreatorStore
+              message="Start building your collection!"
+              subMessage="Items you collect will show up here."
+            />
+          ))}
         {selectedPane == "TICKETS" &&
           purchaseListQuery.isSuccess &&
-          purchaseListQuery.data
-            .filter(
-              (f: { _id: string; productId: IProductData }) =>
-                f.productId.productType == "event"
-            )
-            .map((ele: { _id: string; productId: IProductData }) => {
-              return (
-                <MiniTicket
-                  creatorName={ele.productId.creator.name}
-                  post={ele.productId}
-                  key={ele._id}
-                />
-              );
-            })}
+          (purchaseListQuery.data.filter(
+            (f: { _id: string; productId: IProductData }) =>
+              f.productId.productType == "event"
+          ).length > 0 ? (
+            purchaseListQuery.data
+              .filter(
+                (f: { _id: string; productId: IProductData }) =>
+                  f.productId.productType == "event"
+              )
+              .map((ele: { _id: string; productId: IProductData }) => {
+                return (
+                  <MiniTicket
+                    creatorName={ele.productId.creator.name}
+                    post={ele.productId}
+                    key={ele._id}
+                  />
+                );
+              })
+          ) : (
+            <EmptyStateCreatorStore
+              message="Start attending events!"
+              subMessage="Tickets you collect will show up here."
+            />
+          ))}
       </div>
       {detailedView && (
         <DetailedView

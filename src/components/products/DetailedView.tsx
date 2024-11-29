@@ -77,16 +77,31 @@ function DetailedView({
   const [musicPlayerOpen, setMusicPlayerOpen] = useState(false);
   console.log(isLogedIn, authData);
 
-  const { data: followStatusData, isSuccess: followStatusDataQueryIsSuccess } = useQuery({
-    queryKey: ["follow-status", product.creator, authData?._id],
+  const statsQuery = useQuery({
+    queryKey: ["get-stats", product._id],
     queryFn: async () => {
-      return fetchFollowStatus(
-        product.creator! as unknown as string,
-        authData!._id!
-      );
+      const res = await axios.post("/backend/product/get-product-stats", {
+        productId: product._id,
+        userId: isLogedIn ? authData?._id : undefined,
+      });
+      console.log("Stats HERE", res.data);
+      if (res.status == 200) {
+        return res.data;
+      }
     },
-    enabled: !!product.creator && !!authData?._id,
   });
+
+  const { data: followStatusData, isSuccess: followStatusDataQueryIsSuccess } =
+    useQuery({
+      queryKey: ["follow-status", product.creator, authData?._id],
+      queryFn: async () => {
+        return fetchFollowStatus(
+          product.creator! as unknown as string,
+          authData!._id!
+        );
+      },
+      enabled: !!product.creator && !!authData?._id,
+    });
 
   //fetch product
   const productDetails = useQuery({
@@ -339,10 +354,14 @@ function DetailedView({
             <h1 className="font-fredokaSemiBold text-2xl">32</h1>
             <p className="text-xs text-cultureOrange">S</p>
           </span>
-          <span className="flex items-center gap-1 ml-auto">
-            <h1 className="text-xl font-groteskBold text-cultureOrange">56</h1>
-            <p className="text-cultureOrange mb-[0.6px]">collected</p>
-          </span>
+          {statsQuery.isSuccess && (
+            <span className="flex items-center gap-1 ml-auto">
+              <h1 className="text-xl font-groteskBold text-cultureOrange">
+                {statsQuery.data.totalCollected}
+              </h1>
+              <p className="text-cultureOrange mb-[0.6px]">collected</p>
+            </span>
+          )}
         </span>
         <div className="flex flex-col mt-2">
           <div className="flex flex-col pr-2 items-center w-full h-fit rounded-md border-[0.5px] border-stone-600 bg-cultureGray font-groteskRegular">
@@ -386,7 +405,8 @@ function DetailedView({
           </div>
         </div>
       </div>
-      {productDetails.isSuccess && followStatusDataQueryIsSuccess &&
+      {productDetails.isSuccess &&
+        followStatusDataQueryIsSuccess &&
         ((!followStatusData.isMember && !isPurchased) ||
           (followStatusData.isMember && !isPurchased) ||
           (!followStatusData.isMember && isPurchased)) && (
@@ -485,7 +505,10 @@ const CheckoutFlow = ({
                 <p className="text-xs">{product.creator.name}</p>
               </span>
               <h1 className="text-white font-groteskBold">
-                ₹ {followData.isMember? product.memberPrice : product.regularPrice}
+                ₹{" "}
+                {followData.isMember
+                  ? product.memberPrice
+                  : product.regularPrice}
               </h1>
             </span>
             <span className="flex w-full justify-between items-center mt-16">
@@ -494,7 +517,10 @@ const CheckoutFlow = ({
                 <p className="text-xs">Inclusive of all Taxes</p>
               </span>
               <h1 className="text-white font-groteskBold">
-                ₹ {followData.isMember? product.memberPrice : product.regularPrice}
+                ₹{" "}
+                {followData.isMember
+                  ? product.memberPrice
+                  : product.regularPrice}
               </h1>
             </span>
             <Button
@@ -504,7 +530,7 @@ const CheckoutFlow = ({
               variant={"outline"}
               className="text-cultureOrange mt-auto h-[54px] my-4 cursor-pointer text-[17px]"
             >
-              {followData.isMember? "Buy Now!" : "Buy at Regular Price"}
+              {followData.isMember ? "Buy Now!" : "Buy at Regular Price"}
             </Button>
           </div>
         </div>
@@ -523,17 +549,23 @@ const CheckoutFlow = ({
           <div className="flex w-full flex-col px-4 my-4 gap-4">
             <RazorpayPurchaseButton
               creator={`${product.creator._id}`}
-              cost={followData.isMember? product.memberPrice: product.regularPrice}
+              cost={
+                followData.isMember ? product.memberPrice : product.regularPrice
+              }
               productId={`${product._id}`}
             />
             <StripePurchase
               creator={`${product.creator._id}`}
-              cost={followData.isMember? product.memberPrice: product.regularPrice}
+              cost={
+                followData.isMember ? product.memberPrice : product.regularPrice
+              }
               productId={`${product._id}`}
             />
             <CopperXButton
               creator={`${product.creator._id}`}
-              cost={followData.isMember? product.memberPrice: product.regularPrice}
+              cost={
+                followData.isMember ? product.memberPrice : product.regularPrice
+              }
               productId={`${product._id}`}
             />
           </div>

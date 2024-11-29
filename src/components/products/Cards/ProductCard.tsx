@@ -297,32 +297,34 @@ function ProductCard({ product }: { product: IProductData }) {
                   <div className="flex items-center text-xl font-groteskSemiBold pt-10">
                     {title}
                   </div>
-                  <div
-                    className={`flex flex-row items-center justify-center gap-1 bg-cultureGray w-20 h-6 my-3 rounded-md text-xs text-nowrap font-groteskSemiBold
+                  {statsQuery.isSuccess && (
+                    <div
+                      className={`flex flex-row items-center justify-center gap-1 bg-cultureGray w-20 h-6 my-3 rounded-md text-xs text-nowrap font-groteskSemiBold
                   ${
                     product.productFormat === "digital art"
                       ? "text-digitalArtYellow"
                       : ""
                   }${
-                      product.productFormat === "print"
-                        ? "text-cultureOrange"
-                        : ""
-                    }${
-                      product.productFormat === "music"
-                        ? "text-digitalMusicGreen"
-                        : ""
-                    }${
-                      product.productFormat === "apparel"
-                        ? "text-apparelBlue"
-                        : ""
-                    }${
-                      product.productFormat === "irl event"
-                        ? "text-irlEventBlue bg-cultureGrayVariant"
-                        : ""
-                    }`}
-                  >
-                    {0} collected
-                  </div>
+                        product.productFormat === "print"
+                          ? "text-cultureOrange"
+                          : ""
+                      }${
+                        product.productFormat === "music"
+                          ? "text-digitalMusicGreen"
+                          : ""
+                      }${
+                        product.productFormat === "apparel"
+                          ? "text-apparelBlue"
+                          : ""
+                      }${
+                        product.productFormat === "irl event"
+                          ? "text-irlEventBlue bg-cultureGrayVariant"
+                          : ""
+                      }`}
+                    >
+                      {statsQuery.data.totalCollected} collected
+                    </div>
+                  )}
                   {/* Date */}
                   <p className="text-xs text-cultureBeige">
                     <GetDate date={`${new Date()}`} />

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import CultureCoLoadingIcon from "@/components/common/cultureLoader";
+import CultureLoader from "@/components/common/cultureLoader";
 
 function Success() {
   const [failed, setfailed] = useState(false);
@@ -27,7 +27,7 @@ function Success() {
         </h1>
       )}
       <div className="text-white">
-        <CultureCoLoadingIcon />
+        <CultureLoader />
       </div>
     </div>
   );
