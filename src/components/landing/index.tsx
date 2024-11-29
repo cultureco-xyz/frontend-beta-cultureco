@@ -357,17 +357,16 @@ function Landing() {
                 <h1 className="text-cultureOrange text-center text-xl font-groteskBold w-[75%] mx-auto mt-6">
                   The all-in-one platform for Creators and Fans
                 </h1>
-                {/* TO-DO: Replace with new images & remove mt-24 */}
-                {/* <img
-                  className="w-auto mx-auto mt-auto h-[25svh] "
-                  src="/landingv3/collage.png"
+                <img
+                  className="w-auto mx-auto mt-auto h-[25svh]"
+                  src="/landingv3/collage.svg"
                   alt=""
-                /> */}
+                />
                 <div
                   style={{
                     background: "rgba(255, 255, 255, 0.15)",
                   }}
-                  className="flex  flex-col w-full max-w-[361px] p-5 py-8 h-[304px] rounded-2xl mx-auto backdrop-blur-[30px] relative -top-5 mt-24"
+                  className="flex  flex-col w-full max-w-[361px] p-5 py-8 h-[304px] rounded-2xl mx-auto backdrop-blur-[30px] relative -top-5"
                 >
                   <h1 className="text-center text-cultureWhite font-groteskBold  leading-5 min-w-full w-full">
                     Welcome to CultureCo - where independent artists thrive, &
@@ -419,24 +418,22 @@ function Landing() {
                 <p className="text-[#FFF] text-base mx-auto ">
                   Build Tribes with Exclusive Perks
                 </p>
-                {/* TO-DO: Replace with new images */}
-                {/* <img
-                  src="/landingv3/membershipModal.png"
-                  className="w-full "
+                <img
+                  src="/landingv3/membershipModal.svg"
+                  className="w-full"
                   alt=""
-                /> */}
+                />
                 <h1 className="text-cultureOrange font-groteskBold mx-auto text-xl">
                   Collector Profiles & Achievements
                 </h1>
                 <p className="text-[#FFF] text-base mx-auto ">
                   Showcase and Share Your Passion.
                 </p>
-                {/* TO-DO: Replace with new images */}
-                {/* <img
-                  src="/landingv3/profileAchivement.png"
+                <img
+                  src="/landingv3/profileAchievement.svg"
                   className="mt-4"
                   alt=""
-                /> */}
+                />
                 <h1 className="text-cultureOrange font-groteskBold mx-auto text-xl mt-12">
                   Support Creators Your Way
                 </h1>
@@ -451,8 +448,7 @@ function Landing() {
                   The next generation of art collecting, with blockchain-backed
                   authenticity
                 </p>
-                {/* TO-DO: Replace with new images */}
-                {/* <img src="/landingv3/base.png" className="mt-8" alt="" /> */}
+                <img src="/landingv3/authentic.svg" className="mt-8" alt="" />
               </div>
               <div className="flex flex-col w-full items-center gap-2 mt-6 max-w-[361px] mx-auto ">
                 <Button
@@ -473,18 +469,19 @@ function Landing() {
                 </Button>
               </div>
               <div className="flex flex-col font-groteskRegular">
+                {/* TO-DO: Update Studio Tenkai's profile pic URL with the correct one */}
                 {[
+                  {
+                    text: `Wow, I can put out my daily art drops and build a paying community out of it. Can we also make a virtual exhibtion some day where I can launch artists using my platform?`,
+                    name: "Studio Tenkai",
+                    artType: "Artist",
+                    url: "https://dkrwjr7mnvu4o.cloudfront.net/user/66f15fd69e0b47ad4bca74b2/profilePic/5f159057-6d0d-4a7f-b762-6197b23f6073",
+                  },
                   {
                     text: `I used to make music for others thinking it had to be good, but now I can just drop anything I like for my community. And I don’t even have to just drop music, I can drop art too!`,
                     name: "Brute",
                     artType: "Musician",
                     url: "https://dkrwjr7mnvu4o.cloudfront.net/user/66f15b5305b166b17844f4bf/profilePic/596ca7d1-3c70-42d0-94b8-505000c56f20",
-                  },
-                  {
-                    text: `I think it’s awesome that this is being built for Indian creators. We normally have to use a western platform and our fans keep asking if we can pay in Rupees. This is really needed, full power to you.`,
-                    name: "Deepakshi",
-                    artType: "Artist",
-                    url: "https://dkrwjr7mnvu4o.cloudfront.net/user/66f15fd69e0b47ad4bca74b2/profilePic/5f159057-6d0d-4a7f-b762-6197b23f6073",
                   },
                 ].map((ele) => {
                   return (
