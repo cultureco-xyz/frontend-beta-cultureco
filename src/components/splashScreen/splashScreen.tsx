@@ -86,7 +86,7 @@ function SplashScreen({
                       transition={{
                         duration: 0.7,
                       }}
-                      src="/splash/splash-home.svg"
+                      src="/splash/splash-home.png"
                       className="w-full"
                       alt=""
                     />
@@ -102,7 +102,7 @@ function SplashScreen({
                       transition={{
                         duration: 0.7,
                       }}
-                      src="/splash/splash-feed.svg"
+                      src="/splash/splash-feed.png"
                       className=" h-[280px] mx-auto"
                       alt=""
                     />
@@ -118,7 +118,7 @@ function SplashScreen({
                       transition={{
                         duration: 0.7,
                       }}
-                      src="/splash/splash-profile.svg"
+                      src="/splash/splash-profile.png"
                       className=" h-[280px] mx-auto"
                       alt=""
                     />
