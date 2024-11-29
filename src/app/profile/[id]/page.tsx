@@ -143,7 +143,7 @@ function Profile() {
   return (
     <>
       {User ? (
-        <div className="flex flex-col w-full h-svh bg-black max-w-mobile mx-auto overflow-y-auto">
+        <div className="flex flex-col w-full h-svh bg-black max-w-mobile mx-auto">
           <TopNav />
           <TipModal
             isOpen={isTippingOpen}
@@ -173,7 +173,7 @@ function Profile() {
               background:
                 "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 54%, rgba(0,0,0,0) 69%, rgba(0,0,0,0) 100%)",
             }}
-            className="flex flex-col z-10 pt-[270px] h-full relative"
+            className="flex flex-col z-10 pt-[270px] h-full relative overflow-y-auto"
           >
             <div className="flex w-full text-white px-4 flex-col mb-1">
               <span>
