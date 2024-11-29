@@ -11,7 +11,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IProductData, UserData } from "@/types";
 import { useParams } from "next/navigation";
-import DigitalCard from "@/components/products/Cards/ProductCard";
 import { Button } from "@/components/ui/button";
 import TipJar from "@/assets/svgs/tip-jar";
 
@@ -23,6 +22,7 @@ import CloseIcon from "@/assets/svgs/close.icon";
 import TipModal from "@/components/profile/TippingModal";
 import TribeModal from "@/components/profile/TribeModal";
 import EmptyStateCreatorStore from "./emptyState";
+import ProductCard from "@/components/products/Cards/ProductCard";
 
 interface IProfileData {
   isFollowing: boolean;
@@ -453,7 +453,7 @@ function Profile() {
                   {selectedSubPane === "POSTS" &&
                     (products.data && products.data.length > 0 ? (
                       products.data.map((dc, idx) => (
-                        <DigitalCard product={dc} key={`dc-${idx}`} />
+                        <ProductCard product={dc} key={`dc-${idx}`} />
                       ))
                     ) : (
                       <EmptyStateCreatorStore
@@ -507,7 +507,7 @@ function Profile() {
                       products.data
                         .filter((dc) => dc.productType === "digital")
                         .map((dc, idx) => (
-                          <DigitalCard product={dc} key={`dc-${idx}`} />
+                          <ProductCard product={dc} key={`dc-${idx}`} />
                         ))
                     ) : (
                       <EmptyStateCreatorStore
@@ -524,7 +524,7 @@ function Profile() {
                       products.data
                         .filter((dc) => dc.productType === "physical")
                         .map((dc, idx) => (
-                          <DigitalCard product={dc} key={`dc-${idx}`} />
+                          <ProductCard product={dc} key={`dc-${idx}`} />
                         ))
                     ) : (
                       <EmptyStateCreatorStore
@@ -544,7 +544,7 @@ function Profile() {
                     products.data
                       .filter((dc) => dc.productType === "event")
                       .map((dc, idx) => (
-                        <DigitalCard product={dc} key={`dc-${idx}`} />
+                        <ProductCard product={dc} key={`dc-${idx}`} />
                       ))
                   ) : (
                     <EmptyStateCreatorStore
