@@ -45,7 +45,7 @@ function SplashScreen({
           exit={{
             opacity: 0,
           }}
-          className=" flex justify-center items-center fixed left-0 right-0 top-0  max-w-[430px] h-[100dvh] mx-auto  z-50 bg-[#0002] backdrop-blur-[1px]"
+          className=" flex justify-center items-center fixed left-0 right-0 top-0  max-w-[430px] h-[100dvh] mx-auto z-[999] bg-[#0002] backdrop-blur-[1px]"
         >
           <div
             style={{
@@ -67,7 +67,7 @@ function SplashScreen({
                 <motion.h1 className="text-cultureWhite text-[24px]">
                   CultureCo
                 </motion.h1>
-                <span className="text-black absolute text-[8px] right-[15px] bottom-0 -rotate-[8deg] bg-cultureOrange w-[30px] flex items-center justify-center  font-groteskSemiBold rounded-lg">
+                <span className="text-black absolute text-[8px] right-[15px] bottom-0 -rotate-[8deg] bg-digitalMusicGreen w-[30px] flex items-center justify-center font-groteskSemiBold rounded-lg">
                   Beta
                 </span>
               </span>
@@ -86,7 +86,7 @@ function SplashScreen({
                       transition={{
                         duration: 0.7,
                       }}
-                      src="/splash/splash-home.png"
+                      src="/splash/splash-home.svg"
                       className="w-full"
                       alt=""
                     />
@@ -102,7 +102,7 @@ function SplashScreen({
                       transition={{
                         duration: 0.7,
                       }}
-                      src="/splash/splash-feed.png"
+                      src="/splash/splash-feed.svg"
                       className=" h-[280px] mx-auto"
                       alt=""
                     />
@@ -118,7 +118,7 @@ function SplashScreen({
                       transition={{
                         duration: 0.7,
                       }}
-                      src="/splash/splash-profile.png"
+                      src="/splash/splash-profile.svg"
                       className=" h-[280px] mx-auto"
                       alt=""
                     />
@@ -135,7 +135,7 @@ function SplashScreen({
                     transition={{
                       duration: 0.7,
                     }}
-                    className="text-cultureWhite mx-auto w-[290px] text-center font-groteskBold    mt-10  "
+                    className="text-cultureWhite mx-auto w-[290px] text-center font-groteskBold mt-10"
                   >
                     Discover artists, collect art & join tribes from your{" "}
                     <span className="text-cultureOrange">Home Page.</span>
@@ -201,7 +201,7 @@ function SplashScreen({
               {steps == 1 && "Next"}
               {steps == 2 && "Next"}
               {steps == 3 && "Start Collecting"}
-              {steps == 4 && "Ok"}
+              {steps == 4 && "Okay!"}
             </Button>
             <Pagination step={steps} />
           </div>
@@ -229,8 +229,11 @@ const Message = () => {
     >
       <p className="text-cultureBeige mb-2"> Note:</p>
       <p className="text-cultureOrange mb-4">This is a closed Beta.</p>
-      <p> Please test extensively & reach out to us to report bugs.</p>
-      <p className="mt-4"> Thank you, </p>
+      <p className="text-cultureWhite">
+        {" "}
+        Please test extensively & reach out to us to report bugs.
+      </p>
+      <p className="text-cultureWhite mt-4"> Thank you, </p>
       <span className="text-cultureOrange ">Happy Beta testing!</span>
     </motion.div>
   );

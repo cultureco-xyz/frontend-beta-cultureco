@@ -157,39 +157,43 @@ const ProductTypes = () => {
   const TIME = 3000;
 
   const imageControls = useAnimationControls();
-  const imageRef = useRef(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
+    // Set initial image to c1.png
+    if (imageRef.current) {
+      imageRef.current.src = "/landing/creators/c1.png";
+    }
+
     const changeImage = () => {
-      imageControls.set({
-        opacity: 0,
-      });
+      // Start animation with opacity 0
+      imageControls.set({ opacity: 0 });
+
       if (imageRef.current) {
-        const src = (imageRef.current as { src: string }).src;
+        // Get current image src and extract the c<number>
+        const src = imageRef.current.src;
         let c = Number(
           src.split("/")[src.split("/").length - 1].split(".")[0].split("c")[1]
         );
-        if (Number(c) == 3) {
-          c = 1;
-        }
-        requestAnimationFrame(() => {
-          (
-            imageRef.current as unknown as { src: string }
-          ).src = `/landing/creators/c${c + 1}.png`;
-        });
-      }
-      imageControls.start({
-        opacity: 1,
-      });
 
-      // Recursively call setTimeout to schedule the next image change
+        // Increment c and cycle back to 1 if c == 3
+        c = c === 3 ? 1 : c + 1;
+
+        // Update image src to the next image
+        imageRef.current.src = `/landing/creators/c${c}.png`;
+      }
+
+      // Start animation with opacity 1
+      imageControls.start({ opacity: 1 });
+
+      // Schedule the next image change
       setTimeout(changeImage, TIME);
     };
 
-    // Start the timeout loop
+    // Start the loop
     const timeoutId = setTimeout(changeImage, TIME);
 
-    // Cleanup function to clear the timeout on component unmount
+    // Cleanup timeout on unmount
     return () => clearTimeout(timeoutId);
   }, []);
   return (

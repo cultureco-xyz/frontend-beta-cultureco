@@ -46,7 +46,7 @@ function TopNav({ className }: { className?: string }) {
           onClick={() => router.push("/")}
         >
           <CultureCoLogoIcon fillColor="#fff" size={24} />
-          <span className="bg-cultureOrange text-black font-groteskSemiBold text-[8px] rounded-md w-[30px] text-center">
+          <span className="bg-digitalMusicGreen text-black font-groteskSemiBold text-[8px] rounded-md w-[30px] text-center">
             Beta
           </span>
         </div>
