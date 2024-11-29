@@ -11,14 +11,31 @@ import SellForm from "@/components/products/SellForm/SellForm";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IProductData } from "@/types";
-
 import ProductCard from "@/components/products/Cards/ProductCard";
 import EditProfile from "@/components/profile/edit-profile/editProfile";
+import EmptyStateCreatorStore from "@/app/profile/[id]/emptyState";
+import DigitalCard from "@/components/profile/cards/DigitalCard";
+import MiniTicket from "../user/MiniTicket";
+import DetailedView from "@/components/products/DetailedView";
 
 function CreatorProfile() {
   const User = useAuthContext();
   const [openForm, setopenForm] = useState(false);
   const [openEditForm, setOpenEditForm] = useState(false);
+  const [selectedPane, setselectedPane] = useState<
+    "FEED" | "SHOP" | "EVENTS" | "VAULT"
+  >("FEED");
+  const [selectedSubPane, setSelectedSubPane] = useState<
+    "POSTS" | "ACTIVITY" | "DIGITAL" | "PHYSICAL" | "COLLECTION" | "TICKETS"
+  >("POSTS");
+  const [detailedView, setdetailedView] = useState(false);
+  const [productDataForDetailedView, setProductDataForDetailedView] =
+    useState<IProductData>();
+
+  const handleDetailedView = async (product: IProductData) => {
+    setProductDataForDetailedView(product);
+    setdetailedView(true);
+  };
 
   const products = useQuery({
     queryKey: ["get-user-products", User?._id],
@@ -42,6 +59,18 @@ function CreatorProfile() {
         memberCount: number;
         productCount: number;
       };
+    },
+    enabled: Boolean(User?._id),
+  });
+
+  //fetch user-owned products
+  const purchaseListQuery = useQuery({
+    queryKey: ["purchase", User?._id],
+    queryFn: async () => {
+      const res = await axios.get(
+        `/backend/product-purchase/user/${User?._id}`
+      );
+      return res.data;
     },
     enabled: Boolean(User?._id),
   });
@@ -106,23 +135,265 @@ function CreatorProfile() {
               </span>
             </div>
             <div className="flex w-full px-4">
-              <span className="flex flex-auto border-b-2 border-current text-cultureOrange text-center justify-center">
+              <button
+                className={`flex flex-auto border-b-2 border-current text-center justify-center ${
+                  selectedPane == "FEED"
+                    ? "text-cultureOrange border-cultureOrange"
+                    : "text-cultureWhite"
+                }`}
+                onClick={() => {
+                  setselectedPane("FEED");
+                  setSelectedSubPane("POSTS");
+                }}
+              >
                 Feed
-              </span>
-              <span className="flex flex-auto border-b-2 border-current text-cultureBeige text-center justify-center">
+              </button>
+              <button
+                className={`flex flex-auto border-b-2 border-current text-center justify-center ${
+                  selectedPane == "SHOP"
+                    ? "text-cultureOrange border-cultureOrange"
+                    : "text-cultureWhite"
+                }`}
+                onClick={() => {
+                  setselectedPane("SHOP");
+                  setSelectedSubPane("DIGITAL");
+                }}
+              >
                 Shop
-              </span>
-              <span className="flex flex-auto border-b-2 border-current text-cultureBeige text-center justify-center">
+              </button>
+              <button
+                className={`flex flex-auto border-b-2 border-current text-center justify-center ${
+                  selectedPane == "EVENTS"
+                    ? "text-cultureOrange border-cultureOrange"
+                    : "text-cultureWhite"
+                }`}
+                onClick={() => {
+                  setselectedPane("EVENTS");
+                }}
+              >
                 Events
-              </span>
+              </button>
+              <button
+                className={`flex flex-auto border-b-2 border-current text-center justify-center ${
+                  selectedPane == "VAULT"
+                    ? "text-cultureOrange border-cultureOrange"
+                    : "text-cultureWhite"
+                }`}
+                onClick={() => {
+                  setselectedPane("VAULT");
+                  setSelectedSubPane("COLLECTION");
+                }}
+              >
+                My Vault
+              </button>
             </div>
-            {products.isSuccess && (
-              <div className="flex flex-col w-full   items-center my-4 gap-4 pb-24 h-fit bg-black">
-                {products.data.map((dc, idx) => {
-                  return React.cloneElement(
-                    <ProductCard product={dc} key={"dc" + idx} />
-                  );
-                })}
+            {selectedPane === "FEED" && products.isSuccess && (
+              <div className="flex flex-col items-center mt-4">
+                {/* Sub-pane buttons */}
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setSelectedSubPane("POSTS")}
+                    className={`${
+                      selectedSubPane === "POSTS"
+                        ? "text-cultureOrange bg-cultureGray"
+                        : "text-[#cac4bf] bg-[#2E2F32]"
+                    } px-4 py-2 font-groteskRegular h-fit rounded-l-lg text-sm`}
+                  >
+                    Posts
+                  </button>
+                  <button
+                    onClick={() => setSelectedSubPane("ACTIVITY")}
+                    className={`${
+                      selectedSubPane === "ACTIVITY"
+                        ? "text-cultureOrange bg-cultureGray"
+                        : "text-[#cac4bf] bg-[#2E2F32]"
+                    } px-4 py-2 font-groteskRegular h-fit rounded-r-lg text-sm`}
+                  >
+                    Activity
+                  </button>
+                </div>
+
+                {/* Sub-pane content */}
+                <div className="flex items-center gap-4 flex-col w-full py-4 mb-16">
+                  {/* Render posts */}
+                  {selectedSubPane === "POSTS" &&
+                    (products.data && products.data.length > 0 ? (
+                      products.data.map((dc, idx) => (
+                        <ProductCard product={dc} key={`dc-${idx}`} />
+                      ))
+                    ) : (
+                      <EmptyStateCreatorStore
+                        message="Start posting your work!"
+                        subMessage="Your product posts will show up here."
+                      />
+                    ))}
+                  {/* Render activity */}
+                  {selectedSubPane === "ACTIVITY" && (
+                    <EmptyStateCreatorStore message="Activity coming soon!" />
+                  )}
+                </div>
+              </div>
+            )}
+            {selectedPane === "SHOP" && products.isSuccess && (
+              <div className="flex flex-col items-center mt-4">
+                {/* Sub-pane buttons */}
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setSelectedSubPane("DIGITAL")}
+                    className={`${
+                      selectedSubPane === "DIGITAL"
+                        ? "text-cultureOrange bg-cultureGray"
+                        : "text-[#cac4bf] bg-[#2E2F32]"
+                    } px-4 py-2 font-groteskRegular h-fit rounded-l-lg text-sm`}
+                  >
+                    Digital
+                  </button>
+                  <button
+                    onClick={() => setSelectedSubPane("PHYSICAL")}
+                    className={`${
+                      selectedSubPane === "PHYSICAL"
+                        ? "text-cultureOrange bg-cultureGray"
+                        : "text-[#cac4bf] bg-[#2E2F32]"
+                    } px-4 py-2 font-groteskRegular h-fit rounded-r-lg text-sm`}
+                  >
+                    Physical
+                  </button>
+                </div>
+
+                {/* Sub-pane content */}
+                <div className="flex items-center gap-4 flex-col w-full py-4 mb-16">
+                  {/* Render digital products */}
+                  {selectedSubPane === "DIGITAL" &&
+                    (products.data &&
+                    products.data.filter((dc) => dc.productType === "digital")
+                      .length > 0 ? (
+                      products.data
+                        .filter((dc) => dc.productType === "digital")
+                        .map((dc, idx) => (
+                          <ProductCard product={dc} key={`dc-${idx}`} />
+                        ))
+                    ) : (
+                      <EmptyStateCreatorStore message="Your digital products will show up here." />
+                    ))}
+
+                  {/* Render physical products */}
+                  {selectedSubPane === "PHYSICAL" &&
+                    (products.data &&
+                    products.data.filter((dc) => dc.productType === "physical")
+                      .length > 0 ? (
+                      products.data
+                        .filter((dc) => dc.productType === "physical")
+                        .map((dc, idx) => (
+                          <ProductCard product={dc} key={`dc-${idx}`} />
+                        ))
+                    ) : (
+                      <EmptyStateCreatorStore message="Your physical products will show up here." />
+                    ))}
+                </div>
+              </div>
+            )}
+            {selectedPane === "EVENTS" && products.isSuccess && (
+              <div className="flex flex-col items-center mt-4">
+                <div className="flex items-center gap-4 flex-col w-full py-4 mb-16">
+                  {products.data &&
+                  products.data.filter((dc) => dc.productType === "event")
+                    .length > 0 ? (
+                    products.data
+                      .filter((dc) => dc.productType === "event")
+                      .map((dc, idx) => (
+                        <ProductCard product={dc} key={`dc-${idx}`} />
+                      ))
+                  ) : (
+                    <EmptyStateCreatorStore message="Your events will show up here." />
+                  )}
+                </div>
+              </div>
+            )}
+            {selectedPane === "VAULT" && purchaseListQuery.isSuccess && (
+              <div className="flex flex-col items-center mt-4">
+                {/* Sub-pane buttons */}
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setSelectedSubPane("COLLECTION")}
+                    className={`${
+                      selectedSubPane === "COLLECTION"
+                        ? "text-cultureOrange bg-cultureGray"
+                        : "text-[#cac4bf] bg-[#2E2F32]"
+                    } px-4 py-2 font-groteskRegular h-fit rounded-l-lg text-sm`}
+                  >
+                    My Collection
+                  </button>
+                  <button
+                    onClick={() => setSelectedSubPane("TICKETS")}
+                    className={`${
+                      selectedSubPane === "TICKETS"
+                        ? "text-cultureOrange bg-cultureGray"
+                        : "text-[#cac4bf] bg-[#2E2F32]"
+                    } px-4 py-2 font-groteskRegular h-fit rounded-r-lg text-sm`}
+                  >
+                    My Tickets
+                  </button>
+                </div>
+
+                {/* Sub-pane content */}
+                <div className="flex flex-wrap w-full justify-center p-4 gap-4 mb-36">
+                  {selectedSubPane == "COLLECTION" &&
+                    (purchaseListQuery.data.length > 0 ? (
+                      purchaseListQuery.data.map(
+                        (ele: { _id: string; productId: IProductData }) => {
+                          return (
+                            <div
+                              onClick={() => handleDetailedView(ele.productId)}
+                              key={ele._id}
+                            >
+                              <DigitalCard
+                                imageUrl={ele.productId.imageURL}
+                                key={ele._id}
+                              />
+                            </div>
+                          );
+                        }
+                      )
+                    ) : (
+                      <EmptyStateCreatorStore
+                        message="Start building your collection!"
+                        subMessage="Items you collect will show up here."
+                      />
+                    ))}
+                  {detailedView && (
+                    <DetailedView
+                      product={productDataForDetailedView!}
+                      onClose={() => setdetailedView(false)}
+                    />
+                  )}
+                  {selectedSubPane == "TICKETS" &&
+                    (purchaseListQuery.data.filter(
+                      (f: { _id: string; productId: IProductData }) =>
+                        f.productId.productType == "event"
+                    ).length > 0 ? (
+                      purchaseListQuery.data
+                        .filter(
+                          (f: { _id: string; productId: IProductData }) =>
+                            f.productId.productType == "event"
+                        )
+                        .map(
+                          (ele: { _id: string; productId: IProductData }) => {
+                            return (
+                              <MiniTicket
+                                creatorName={ele.productId.creator.name}
+                                post={ele.productId}
+                                key={ele._id}
+                              />
+                            );
+                          }
+                        )
+                    ) : (
+                      <EmptyStateCreatorStore
+                        message="Start attending events!"
+                        subMessage="Tickets you collect will show up here."
+                      />
+                    ))}
+                </div>
               </div>
             )}
             {/* Sell form button */}
