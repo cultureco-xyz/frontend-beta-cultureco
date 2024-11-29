@@ -189,7 +189,10 @@ function UserProfile() {
           purchaseListQuery.data.map(
             (ele: { _id: string; productId: IProductData }) => {
               return (
-                <div onClick={() => handleDetailedView(ele.productId)} key={ele._id}>
+                <div
+                  onClick={() => handleDetailedView(ele.productId)}
+                  key={ele._id}
+                >
                   <DigitalCard
                     imageUrl={ele.productId.imageURL}
                     key={ele._id}
