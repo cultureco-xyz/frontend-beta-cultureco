@@ -38,7 +38,7 @@ function BottomNav({ className }: { className?: string }) {
           duration: 1.5,
         }}
         className={twMerge(
-          "h-[56px] px-4 flex justify-around items-center relative max-w-[430px] mx-auto w-full z-50 bg-black",
+          "h-[56px] px-4 flex justify-around items-center relative max-w-[430px] mx-auto w-full z-[200] bg-black",
           className
         )}
       >

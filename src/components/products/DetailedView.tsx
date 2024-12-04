@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import Album from "@/assets/svgs/album";
+// import Album from "@/assets/svgs/album";
 import CultureCoLogoIcon from "@/assets/svgs/culture-logo.icon";
 import { IComment, IProductData, UserData } from "@/types";
 
 import React, { useState } from "react";
 import { LuArrowRightCircle } from "react-icons/lu";
 
-import { ChevronLeft, MessageSquare, Share, VerifiedIcon } from "lucide-react";
+import { ChevronDown, ChevronLeft, MessageSquare, Share, VerifiedIcon } from "lucide-react";
 import { PiFire, PiFireBold } from "react-icons/pi";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -291,32 +291,34 @@ function DetailedView({
             )}
           </Button>
         )}
-        {product.audioUrl && !musicPlayerOpen && (
-          <div className="flex justify-between">
-            <span className="flex flex-col">
-              <h1 className="text-white text-2xl capitalize font-groteskBold">
-                {product.title}
-              </h1>
-              <p className="text-white text-md leading-3 capitalize">
-                {productDetails.isSuccess &&
-                  productDetails.data.productData.creator.name}
-              </p>
-              <Album className="mt-3" />
-            </span>
-            <span className="text-white items-end flex flex-col mt-4">
-              <p className="flex items-center gap-1">
-                <CultureCoLogoIcon fillColor={"white"} />
-                <h1 className="text-2xl font-groteskBold">
-                  ₹{product.memberPrice}
+        {(product.audioUrl && !musicPlayerOpen) ||
+          (!product.audioUrl && (
+            <div className="flex justify-between">
+              <span className="flex flex-col">
+                <h1 className="text-white text-2xl capitalize font-groteskBold">
+                  {product.title}
                 </h1>
-              </p>
-              <p className="text-md font-groteskMedium">
-                ₹{product.regularPrice}
-              </p>
-              <p className="text-xs">for non members</p>
-            </span>
-          </div>
-        )}
+                <p className="text-white text-md leading-3 capitalize">
+                  {productDetails.isSuccess &&
+                    productDetails.data.productData.creator.name}
+                </p>
+                {/* TO-DO: Implement real album functionality */}
+                {/* <Album className="mt-3" /> */}
+              </span>
+              <span className="text-white items-end flex flex-col mt-4">
+                <p className="flex items-center gap-1">
+                  <CultureCoLogoIcon fillColor={"#fe621d"} />
+                  <h1 className="text-2xl font-groteskBold text-cultureOrange">
+                    ₹{product.memberPrice}
+                  </h1>
+                </p>
+                <p className="text-md font-groteskMedium">
+                  ₹{product.regularPrice}
+                </p>
+                <p className="text-xs">for non-members</p>
+              </span>
+            </div>
+          ))}
         {musicPlayerOpen && (
           <div
             className="w-full px-6"
@@ -346,14 +348,15 @@ function DetailedView({
         )}
         <p className="text-white text-xs mt-3">{product.description}</p>
         <span className="flex w-full items-center text-white mt-3">
-          <span className="flex items-center gap-2">
+          {/* TO-DO: Implement real countdown */}
+          {/* <span className="flex items-center gap-2">
             <h1 className="font-fredokaSemiBold text-2xl">23</h1>
             <p className="text-xs text-cultureOrange">H</p>
             <h1 className="font-fredokaSemiBold text-2xl">56</h1>
             <p className="text-xs text-cultureOrange">M</p>
             <h1 className="font-fredokaSemiBold text-2xl">32</h1>
             <p className="text-xs text-cultureOrange">S</p>
-          </span>
+          </span> */}
           {statsQuery.isSuccess && (
             <span className="flex items-center gap-1 ml-auto">
               <h1 className="text-xl font-groteskBold text-cultureOrange">
@@ -364,6 +367,12 @@ function DetailedView({
           )}
         </span>
         <div className="flex flex-col mt-2">
+          <div className="pb-4 pt-1 flex w-full justify-between items-center px-3 mb-1">
+            <p className="text-cultureBeige text-base">Comments</p>
+            <p className="text-cultureBeige text-base">
+              <ChevronDown />
+            </p>
+          </div>
           <div className="flex flex-col pr-2 items-center w-full h-fit rounded-md border-[0.5px] border-stone-600 bg-cultureGray font-groteskRegular">
             <textarea
               value={newComment}

@@ -65,7 +65,7 @@ const NamePrice = ({
               />
             </label>
             <p className="font-groteskRegular text-xs text-white">
-              for non members
+              for non-members
             </p>
           </>
         )}
