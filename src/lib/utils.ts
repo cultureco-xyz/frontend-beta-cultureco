@@ -108,7 +108,9 @@ export function formatDateAndTime(dateString: string) {
   return { monthName, day, year, hours, minutes, ampm };
 }
 
-export const checkUsernameAvailability = async (username: string): Promise<{ valid: boolean; message: string }> => {
+export const checkUsernameAvailability = async (
+  username: string
+): Promise<{ valid: boolean; message: string }> => {
   try {
     const response = await axios.post(
       "/backend/user/check-username",
@@ -116,10 +118,14 @@ export const checkUsernameAvailability = async (username: string): Promise<{ val
       { withCredentials: true } // Ensure cookies are sent if needed
     );
     return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      // Handle server-side errors
-      return error.response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      // Check if it's an AxiosError
+      if (error.response) {
+        // Handle server-side errors
+        return error.response.data;
+      }
+      throw new Error("Error in request: " + error.message); // Error message from AxiosError
     }
     throw new Error("Unable to connect to the server. Please try again.");
   }
