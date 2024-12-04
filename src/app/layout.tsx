@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import GoogleAuthProvider from "./providers/GoogleAuthProvider";
 import ReactQueryProvider from "./providers/ReactQueryProvider";
+import Web3Provider from "./providers/Web3Provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://cultureco.xyz"),
@@ -49,7 +50,9 @@ export default function RootLayout({
       <body className={`antialiased font-groteskRegular `}>
         <div className="min-h-svh w-full max-w-mobile mx-auto">
           <ReactQueryProvider>
-            <GoogleAuthProvider>{children}</GoogleAuthProvider>
+            <Web3Provider>
+              <GoogleAuthProvider>{children}</GoogleAuthProvider>
+            </Web3Provider>
           </ReactQueryProvider>
         </div>
       </body>
