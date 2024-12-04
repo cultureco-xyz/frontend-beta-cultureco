@@ -12,6 +12,7 @@ function CopperXButton({
 }) {
   const [loading, setLoading] = useState(false);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleCheckout = async () => {
     setLoading(true);
 
