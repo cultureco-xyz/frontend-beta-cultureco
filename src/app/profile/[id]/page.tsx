@@ -181,6 +181,11 @@ function Profile() {
             }}
             className="flex flex-col z-10 pt-[270px] h-full relative overflow-y-auto"
           >
+            {User.isDemo && !User.isClaimed && (
+              <div className="flex items-center justify-center bg-cultureGrayVariant w-full max-w-mobile text-cultureOrange text-sm font-groteskSemiBold fixed top-14">
+                This is a demo profile for demonstration purposes only!
+              </div>
+            )}
             <div className="flex w-full text-white px-4 flex-col mb-1">
               <span>
                 <div className="flex flex-row justify-between">
@@ -231,6 +236,17 @@ function Profile() {
                         }}
                       >
                         Following
+                      </Button>
+                    )}
+                    {User.isDemo && !User.isClaimed && (
+                      <Button
+                        onClick={() => {
+                          location.href = `/auth/signin?step=claim-profile&did=${User._id}`;
+                        }}
+                        className="text-cultureOrange font-groteskSemiBold p-1 text-xs h-6 w-20 rounded-md ml-2"
+                        variant={"outline"}
+                      >
+                        Claim Profile
                       </Button>
                     )}
                   </div>
