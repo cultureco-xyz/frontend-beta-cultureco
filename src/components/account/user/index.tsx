@@ -125,7 +125,9 @@ function UserProfile() {
             {statsQuery.data?.tribesCount || 0}
           </p>
           <p className="font-groteskRegular text-xs">
-            {true ? "Tribe" : "Tribes"}
+            {(statsQuery.data?.tribesCount as unknown as number) === 1
+              ? "Tribe"
+              : "Tribes"}
           </p>
         </div>
         <div className="flex flex-row items-center space-x-1">
@@ -188,12 +190,17 @@ function UserProfile() {
         {selectedPane == "COLLECTION" &&
           purchaseListQuery.isSuccess &&
           (purchaseListQuery.data.length > 0 ? (
-            purchaseListQuery.data.map(
-              (ele: { _id: string; productId: IProductData }) => {
+            purchaseListQuery.data
+              .filter(
+                (f: { _id: string; productId: IProductData }) =>
+                  f.productId.productType !== "event"
+              )
+              .map((ele: { _id: string; productId: IProductData }) => {
                 return (
                   <div
                     onClick={() => handleDetailedView(ele.productId)}
                     key={ele._id}
+                    className="flex justify-between items-center"
                   >
                     <DigitalCard
                       imageUrl={ele.productId.imageURL}
@@ -201,8 +208,7 @@ function UserProfile() {
                     />
                   </div>
                 );
-              }
-            )
+              })
           ) : (
             <EmptyStateCreatorStore
               message="Start building your collection!"
@@ -242,7 +248,7 @@ function UserProfile() {
           onClose={() => setdetailedView(false)}
         />
       )}
-      <BottomNav className="fixed bottom-0 w-full max-w-mobile " />
+      <BottomNav className="fixed bottom-0 left-0 w-full max-w-mobile " />
       {openEditForm && (
         <div className="fixed top-0 left-0 bg-black/80 h-[100vh] w-full z-[1001] flex items-center justify-center overflow-y-auto">
           <div className="h-fit p-4 w-[90vw] bg-cultureGray rounded-md relative">

@@ -100,7 +100,7 @@ function MiniTicket({
             <span className="text-[10px] px-2 mt-6">{post.title}</span>
             <span className="text-[6px] flex w-full justify-between px-2 mt-3">
               <p>Zo House</p>
-              <p>08:00</p>
+              <p>{hour}:{min}</p>
               <p>Tribe M</p>
             </span>
           </div>
@@ -123,7 +123,7 @@ function MiniTicket({
         {openView && (
           <div
             key={openView + post._id}
-            className="z-50 fixed top-0 left-0 right-0 bottom-0 justify-center items-center flex w-full h-svh bg-[#00000040]"
+            className="z-[300] fixed top-0 left-0 right-0 bottom-0 justify-center items-center flex w-full h-svh bg-[#00000040] overflow-y-auto"
           >
             <div className="relative z-50">
               <svg
