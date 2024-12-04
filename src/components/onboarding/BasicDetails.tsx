@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import axios from "axios";
 import { create } from "zustand";
@@ -6,6 +6,7 @@ import { ChevronLeft, User2 } from "lucide-react";
 import UploadCircle from "@/assets/svgs/upload-circle";
 import { handleProfilePicUpload } from "@/lib/utils";
 import Spinner from "../common/spinner";
+import { useDebounce } from "@/hooks/useDebounce";
 
 type Store = {
   name: string;
@@ -36,20 +37,100 @@ function BasicDetails() {
   const [profilePicUploadProgress, setProfilePicUploadProgress] =
     useState<number>();
   console.log({ name, username, bio, profilePicture });
+  const [isUsernameTaken, setIsUsernameTaken] = useState(false);
+  const [usernameError, setUsernameError] = useState("");
+  const [usernameAvailabilityMessage, setUsernameAvailabilityMessage] =
+    useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Debounced username for efficient checking
+  const debouncedUsername = useDebounce(username, 500); // 500ms debounce delay
 
   const saveDetails = async () => {
     const SIGNUPTOKEN = localStorage.getItem("SIGNUPTOKEN") as string;
     if (SIGNUPTOKEN) {
       localStorage.removeItem("SIGNUPTOKEN");
+      if (isUsernameTaken || usernameError) {
+        return; // Don't allow saving if there are errors
+      }
+
+      setIsSaving(true);
+
+      const lowerUsername = username.toLowerCase();
       const res = await axios.post("/backend/user/create-user", {
         SIGNUPTOKEN,
-        username,
+        username: lowerUsername,
         name,
         bio,
         profilePicture,
       });
       if (res.status == 200) {
         location.href = "/account";
+      }
+    }
+  };
+
+  // Check if the username is available (debounced check)
+  useEffect(() => {
+    const checkUsername = async () => {
+      try {
+        const response = await axios.post(
+          "/backend/user/check-username",
+          { username: debouncedUsername },
+          { withCredentials: true }
+        );
+        setIsUsernameTaken(response.data.isTaken);
+        setUsernameError(""); // Clear previous error if the username is available
+        if (response.data.isTaken) {
+          setUsernameAvailabilityMessage("Username is already taken");
+        } else {
+          setUsernameAvailabilityMessage("Username is available");
+        }
+      } catch (error) {
+        // Handle the error response
+        if (axios.isAxiosError(error) && error.response) {
+          if (error.response.status === 409) {
+            setIsUsernameTaken(true); // Username is taken
+            setUsernameAvailabilityMessage("Username is already taken");
+          } else {
+            console.error("Unexpected error: ", error.response);
+          }
+        } else {
+          console.error("Error checking username:", error);
+        }
+      }
+    };
+
+    // Only check if the username is long enough
+    if (debouncedUsername.length >= 5) {
+      checkUsername();
+    } else {
+      setIsUsernameTaken(false); // Reset if username is too short
+      setUsernameError("Username must be at least 5 characters.");
+      setUsernameAvailabilityMessage(""); // Clear availability message
+    }
+
+    if (debouncedUsername.length < 5) {
+      setUsernameError("Username must be at least 5 characters.");
+    }
+  }, [debouncedUsername]);
+
+  // Handle disallowed characters in username
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newUsername = e.target.value;
+
+    // Disallow special characters and check max length
+    const disallowedChars = /[^a-zA-Z0-9_.]/;
+    if (newUsername.length <= 20 && !disallowedChars.test(newUsername)) {
+      setValue("username", newUsername);
+      setUsernameError(""); // Clear error when username is valid
+    } else {
+      if (newUsername.length > 20) {
+        setUsernameError("Username cannot be longer than 20 characters.");
+      } else {
+        setUsernameError(
+          "Username can only contain letters, numbers, periods and underscores."
+        );
       }
     }
   };
@@ -114,14 +195,26 @@ function BasicDetails() {
             <User2 className="h-4" />
             <input
               required
+              autoCapitalize="off"
+              placeholder="Username"
               type="text"
               value={username}
-              onChange={(e) => {
-                setValue("username", e.target.value);
-              }}
+              onChange={handleUsernameChange}
               className="bg-transparent w-full h-full hover:outline-none active:outline-none"
             />
           </span>
+          {usernameError && (
+            <p className="text-red-500 text-sm mt-2">{usernameError}</p>
+          )}
+          {usernameAvailabilityMessage && !usernameError && (
+            <p
+              className={`text-sm mt-2 ${
+                isUsernameTaken ? "text-red-500" : "text-green-500"
+              }`}
+            >
+              {usernameAvailabilityMessage}
+            </p>
+          )}
         </label>
         {/* name */}
         <label className="mt-4" htmlFor="">
@@ -129,6 +222,7 @@ function BasicDetails() {
           <span className="mt-1 flex items-center px-2 w-full h-[41px] bg-cultureGray border-white border-[1px] rounded-lg">
             <input
               required
+              placeholder="Name"
               type="text"
               value={name}
               onChange={(e) => {
@@ -146,6 +240,7 @@ function BasicDetails() {
             {/* <User2 className="h-4" /> */}
             <textarea
               value={bio}
+              placeholder="Tell us about yourself!"
               onChange={(e) => {
                 setValue("bio", e.target.value);
               }}
@@ -159,8 +254,9 @@ function BasicDetails() {
           type="submit"
           className="mt-6 h-[52px] text-cultureOrange bg-cultureGray font-groteskBold"
           variant={"outline"}
+          disabled={isUsernameTaken || Boolean(usernameError) || isSaving}
         >
-          Save And Proceed
+          {isSaving ? "Saving..." : "Save And Proceed"}
         </Button>
       </form>
     </div>

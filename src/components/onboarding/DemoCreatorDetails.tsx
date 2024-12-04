@@ -12,9 +12,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { handleProfilePicUpload } from "@/lib/utils";
+import { useDebounce } from "@/hooks/useDebounce";
 
 enum CREATOR_TYPES {
   ARTIST = "Artist",
@@ -48,13 +49,28 @@ const DemoCreatorDetails = () => {
     useDemoCreatorStore();
   const [profilePicUploadProgress, setProfilePicUploadProgress] =
     useState<number>();
+  const [isUsernameTaken, setIsUsernameTaken] = useState(false);
+  const [usernameError, setUsernameError] = useState("");
+  const [usernameAvailabilityMessage, setUsernameAvailabilityMessage] =
+    useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Debounced username for efficient checking
+  const debouncedUsername = useDebounce(username, 500); // 500ms debounce delay
 
   const updateDetails = async () => {
+    if (isUsernameTaken || usernameError) {
+      return; // Don't allow saving if there are errors
+    }
+
+    setIsSaving(true);
+
+    const lowerUsername = username.toLowerCase();
     const res = await axios.post(
       "/backend/user/create-demo-profile",
       {
         name,
-        username,
+        username: lowerUsername,
         bio,
         creatorType,
         profilePicture,
@@ -69,6 +85,71 @@ const DemoCreatorDetails = () => {
     }
     //save local state
     // localStorage.setItem("user", JSON.stringify(res.data));
+  };
+
+  // Check if the username is available (debounced check)
+  useEffect(() => {
+    const checkUsername = async () => {
+      try {
+        const response = await axios.post(
+          "/backend/user/check-username",
+          { username: debouncedUsername },
+          { withCredentials: true }
+        );
+        setIsUsernameTaken(response.data.isTaken);
+        setUsernameError(""); // Clear previous error if the username is available
+        if (response.data.isTaken) {
+          setUsernameAvailabilityMessage("Username is already taken");
+        } else {
+          setUsernameAvailabilityMessage("Username is available");
+        }
+      } catch (error) {
+        // Handle the error response
+        if (axios.isAxiosError(error) && error.response) {
+          if (error.response.status === 409) {
+            setIsUsernameTaken(true); // Username is taken
+            setUsernameAvailabilityMessage("Username is already taken");
+          } else {
+            console.error("Unexpected error: ", error.response);
+          }
+        } else {
+          console.error("Error checking username:", error);
+        }
+      }
+    };
+
+    // Only check if the username is long enough
+    if (debouncedUsername.length >= 5) {
+      checkUsername();
+    } else {
+      setIsUsernameTaken(false); // Reset if username is too short
+      setUsernameError("Username must be at least 5 characters.");
+      setUsernameAvailabilityMessage(""); // Clear availability message
+    }
+
+    if (debouncedUsername.length < 5) {
+      setUsernameError("Username must be at least 5 characters.");
+    }
+  }, [debouncedUsername]);
+
+  // Handle disallowed characters in username
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newUsername = e.target.value;
+
+    // Disallow special characters and check max length
+    const disallowedChars = /[^a-zA-Z0-9_.]/;
+    if (newUsername.length <= 20 && !disallowedChars.test(newUsername)) {
+      setValue("username", newUsername);
+      setUsernameError(""); // Clear error when username is valid
+    } else {
+      if (newUsername.length > 20) {
+        setUsernameError("Username cannot be longer than 20 characters.");
+      } else {
+        setUsernameError(
+          "Username can only contain letters, numbers, periods and underscores."
+        );
+      }
+    }
   };
 
   return (
@@ -135,6 +216,7 @@ const DemoCreatorDetails = () => {
               }}
               required
               type="text"
+              placeholder="Name"
               className="bg-transparent w-full h-full hover:outline-none active:outline-none"
             />
           </span>
@@ -145,14 +227,26 @@ const DemoCreatorDetails = () => {
           <span className="mt-1 flex items-center px-2 w-full h-[41px] bg-cultureGray border-white border-[1px] rounded-lg">
             <input
               value={username}
-              onChange={(e) => {
-                setValue("username", e.target.value);
-              }}
+              autoCapitalize="off"
+              placeholder="Username"
+              onChange={handleUsernameChange}
               required
               type="text"
               className="bg-transparent w-full h-full hover:outline-none active:outline-none"
             />
           </span>
+          {usernameError && (
+            <p className="text-red-500 text-sm mt-2">{usernameError}</p>
+          )}
+          {usernameAvailabilityMessage && !usernameError && (
+            <p
+              className={`text-sm mt-2 ${
+                isUsernameTaken ? "text-red-500" : "text-green-500"
+              }`}
+            >
+              {usernameAvailabilityMessage}
+            </p>
+          )}
         </label>
         {/* name */}
         <label className="mt-4" htmlFor="">
@@ -198,8 +292,9 @@ const DemoCreatorDetails = () => {
           type="submit"
           className="mt-6 h-[52px] text-cultureOrange bg-cultureGray font-groteskBold "
           variant={"outline"}
+          disabled={isUsernameTaken || Boolean(usernameError) || isSaving}
         >
-          Save And Proceed
+          {isSaving ? "Saving..." : "Save And Proceed"}
         </Button>
       </form>
     </div>

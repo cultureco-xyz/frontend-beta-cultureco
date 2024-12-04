@@ -140,6 +140,7 @@ const CreatorDetails = () => {
                 setValue("name", e.target.value);
               }}
               required
+              placeholder="Name"
               type="text"
               className="bg-transparent w-full h-full hover:outline-none active:outline-none"
             />
@@ -181,6 +182,7 @@ const CreatorDetails = () => {
               }}
               rows={3}
               className="bg-transparent w-full hover:outline-none active:outline-none"
+              placeholder="Tell us about yourself!"
             />
           </span>
         </label>
