@@ -34,7 +34,9 @@ function CopperXButton({
       variant={"outline"}
       className="bg-cultureGray border-2 border-cultureOrange text-lg h-[45px] font-groteskSemiBold w-full text-cultureOrange rounded px-4 py-2"
       disabled={loading}
-      onClick={handleCheckout}
+      onClick={() => {
+        location.href = "/base-payment/" + productId;
+      }}
     >
       {loading ? "Loading..." : "Pay with Crypto"}
     </Button>
