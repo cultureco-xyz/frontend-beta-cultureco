@@ -65,7 +65,7 @@ function BasicDetails() {
         profilePicture,
       });
       if (res.status == 200) {
-        location.href = "/account";
+        location.href = "/account/user";
       }
     }
   };
