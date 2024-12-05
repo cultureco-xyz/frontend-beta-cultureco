@@ -13,8 +13,16 @@ import axios from "axios";
 import { IProductData } from "@/types";
 import { WalletPayButton } from "@/components/paymentBtns/WalletPayBtn";
 
-const ConnectWallet = ({ params }: { params: { productId: string } }) => {
+const ConnectWallet = ({
+  params,
+}: {
+  params: { productId: string; userId: string };
+}) => {
   const productId = params.productId;
+  const userId = params.userId;
+
+  console.log(userId);
+
   const { address: userAddress, chainId } = useAccount();
 
   //fetch product
@@ -64,6 +72,7 @@ const ConnectWallet = ({ params }: { params: { productId: string } }) => {
                 <WalletPayButton
                   cost={Number(`${productDetails.data?.regularPrice}`)}
                   creator={productDetails.data.creator._id as string}
+                  userID={userId}
                   productId={productDetails.data._id as string}
                   onSuccess={(trx: string) => {
                     console.log(trx);

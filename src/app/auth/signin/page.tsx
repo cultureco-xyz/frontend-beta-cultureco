@@ -12,6 +12,9 @@ import BasicDetails from "@/components/onboarding/BasicDetails";
 import CreatorDetails from "@/components/onboarding/CreatorDetails";
 import DemoCreatorDetails from "@/components/onboarding/DemoCreatorDetails";
 import ClaimDemoCreator from "@/components/onboarding/ClaimDemoCreator";
+import { ConnectKitButton } from "connectkit";
+import { useAccount } from "wagmi";
+import { Button } from "@/components/ui/button";
 
 const GoogleAuth = ({ children }: { children: ReactNode }) => {
   return (
@@ -77,18 +80,58 @@ function Signin() {
     return res;
   };
 
+  const walletSignIn = async (wallet: string) => {
+    const res = await axios.post("/backend/auth/signin-wallet", {
+      access_token: wallet,
+    });
+
+    console.log(res.data);
+
+    if (res.status !== 200) {
+      alert("Sign in failed");
+    }
+
+    if (res.data.newUser === true) {
+      localStorage.setItem("SIGNUPTOKEN", res.data.signupToken);
+      setscreen("USER_FORM");
+    }
+
+    if (res.data.newUser === false) {
+      location.href = "/";
+    }
+
+    return res;
+  };
+
+  const { isConnected, address } = useAccount();
+
   return (
     <div className="bg-black flex w-full h-svh justify-center items-center">
       <div className="flex  flex-col justify-center items-center w-[361px] min-h-[603px] h-[650px] bg-grad-bg rounded-2xl overflow-y-auto">
         {screen == "SIGNIN" && (
-          <GoogleAuth>
-            <GoogleLogin
-              onSuccess={(credentialResponse) => {
-                SendAccessToken(credentialResponse.credential as string);
-              }}
-              onError={() => {}}
-            />
-          </GoogleAuth>
+          <span className="flex flex-col gap-2 items-center">
+            <GoogleAuth>
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  SendAccessToken(credentialResponse.credential as string);
+                }}
+                onError={() => {}}
+              />
+            </GoogleAuth>
+            <h1 className="text-white font-groteskSemiBold">Or</h1>
+            <ConnectKitButton />
+            {isConnected && (
+              <Button
+                className="text-cultureWhite hover:text-cultureOrange"
+                variant={"outline"}
+                onClick={() => {
+                  walletSignIn(`${address}`);
+                }}
+              >
+                Sign-in with Wallet
+              </Button>
+            )}
+          </span>
         )}
         {screen == "USER_FORM" && <BasicDetails />}
         {screen == "CREATOR_FORM" && <CreatorDetails />}

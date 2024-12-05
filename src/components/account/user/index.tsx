@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import CommentCrusaderBadge from "@/components/profile/profile-badges/Comment Crusader";
-import CrossCollectorBadge from "@/components/profile/profile-badges/Cross Collector";
-import GoingSteadyBadge from "@/components/profile/profile-badges/Going Steady";
-import TribeFounderBadge from "@/components/profile/profile-badges/TribeFounder";
+// import CommentCrusaderBadge from "@/components/profile/profile-badges/Comment Crusader";
+// import CrossCollectorBadge from "@/components/profile/profile-badges/Cross Collector";
+// import GoingSteadyBadge from "@/components/profile/profile-badges/Going Steady";
+// import TribeFounderBadge from "@/components/profile/profile-badges/TribeFounder";
 import { ShareIcon, EditIcon, ChevronLeft } from "lucide-react";
 import React, { useState } from "react";
 import { GrDiamond } from "react-icons/gr";
@@ -145,7 +145,7 @@ function UserProfile() {
           <p className="font-groteskRegular text-xs">Badges</p>
         </div>
       </div>
-      <div className="flex flex-col mt-2 p-2 w-full h-fit bg-cultureGrayVariant rounded-md">
+      {/* <div className="flex flex-col mt-2 p-2 w-full h-fit bg-cultureGrayVariant rounded-md">
         <div className="text-cultureBeige text-sm font-groteskSemiBold">
           Achievements
         </div>
@@ -155,7 +155,7 @@ function UserProfile() {
           <CommentCrusaderBadge />
           <CrossCollectorBadge />
         </div>
-      </div>
+      </div> */}
       <div className="flex flex-wrap w-full justify-center gap-4 mt-8 mb-36">
         <div className="flex justify-between w-full font-groteskRegular text-md h-8 my-4 mt-0 text-white">
           <span
@@ -248,7 +248,7 @@ function UserProfile() {
           onClose={() => setdetailedView(false)}
         />
       )}
-      <BottomNav className="fixed bottom-0 left-0 w-full max-w-mobile " />
+      <BottomNav className="fixed bottom-0 left-0 w-full max-w-mobile mx-auto right-0" />
       {openEditForm && (
         <div className="fixed top-0 left-0 bg-black/80 h-[100vh] w-full z-[1001] flex items-center justify-center overflow-y-auto">
           <div className="h-fit p-4 w-[90vw] bg-cultureGray rounded-md relative">
