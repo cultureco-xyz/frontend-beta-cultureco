@@ -30,6 +30,13 @@ export const WalletPayButton = ({
     productId: string
   ) => {
     try {
+      //get creator wallet
+      const walletQuery = await axios.get(`/backend/user/wallet/${creator}`);
+
+      if (walletQuery.status !== 200) {
+        throw new Error("Creator wallet not found");
+      }
+
       // Ensure MetaMask (or other wallet) is installed
       if (!window.ethereum) {
         throw new Error("MetaMask is not installed!");
@@ -53,12 +60,9 @@ export const WalletPayButton = ({
       // Set up the contract instance
       const contractAddress = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
       const contract = new ethers.Contract(contractAddress, ABI, signer);
-
+      const creatorWallet = walletQuery.data.wallet;
       // Execute the transaction
-      const tx = await contract.transfer(
-        "0x4861251014771B29e001c11e5CfedEA0F5D8A06A",
-        cost * 1000000
-      );
+      const tx = await contract.transfer(`${creatorWallet}`, cost * 1000000);
 
       // Wait for transaction confirmation
       const receipt = await tx.wait();

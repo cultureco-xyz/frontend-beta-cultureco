@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { MdSort, MdClose } from "react-icons/md";
 import { motion } from "framer-motion";
-import { Bug, LogOut, UserPlus } from "lucide-react";
+import { Bug, KeyRound, LogOut, UserPlus } from "lucide-react";
 import { Button } from "../ui/button";
 import axios from "axios";
 import { UserData } from "@/types";
@@ -111,6 +111,12 @@ function TopNav({ className }: { className?: string }) {
               <UserPlus /> Create Demo Creator Profile
             </Link>
           )}
+          <Link
+            href={"/export-wallet"}
+            className="flex gap-3 font-groteskSemiBold"
+          >
+            <KeyRound /> Export Wallet Keys
+          </Link>
           <div className="flex flex-col w-full mt-auto gap-8">
             <span
               onClick={() => {
