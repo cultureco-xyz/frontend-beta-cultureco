@@ -24,9 +24,9 @@ function Wallet() {
         {privateKey.isSuccess ? (
           <div className="flex gap-4 w-full h-full flex-col  items-center justify-center p-8">
             <h1 className="font-bold text-white text-xl">
-              Export your Private key
+              Export your Seed phrase
             </h1>
-            <p className=" text-white  break-words w-full bg-cultureGray text-xl p-4 rounded-xl h-32">
+            <p className=" text-cultureWhite font-mono  break-words w-full border-2 border-white border-dotted text-xl p-4 rounded-xl h-40">
               {showKey
                 ? `${privateKey.data}`
                 : new Array(privateKey.data.length).fill("x")}
@@ -41,11 +41,11 @@ function Wallet() {
               >
                 {showKey ? (
                   <>
-                    <EyeClosed /> {"Hide Key"}
+                    <EyeClosed /> {"Hide Phrase"}
                   </>
                 ) : (
                   <>
-                    <EyeOpenIcon /> {"Show Key"}
+                    <EyeOpenIcon /> {"Show Phrase"}
                   </>
                 )}
               </Button>
@@ -64,7 +64,7 @@ function Wallet() {
                 }}
               >
                 <CopyIcon />
-                Copy Key
+                Copy Phrase
               </Button>
             </span>
           </div>

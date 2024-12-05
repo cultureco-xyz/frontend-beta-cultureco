@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
+import { useAuthenticated } from "@/hooks/useAuthenticated";
 
 function CopperXButton({
   creator,
@@ -11,6 +12,8 @@ function CopperXButton({
   cost: number;
 }) {
   const [loading, setLoading] = useState(false);
+
+  const { user } = useAuthenticated();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleCheckout = async () => {
@@ -36,7 +39,7 @@ function CopperXButton({
       className="bg-cultureGray border-2 border-cultureOrange text-lg h-[45px] font-groteskSemiBold w-full text-cultureOrange rounded px-4 py-2"
       disabled={loading}
       onClick={() => {
-        location.href = "/base-payment/" + productId;
+        location.href = "/base-payment/" + productId + "/" + user?._id;
       }}
     >
       {loading ? "Loading..." : "Pay with Crypto"}

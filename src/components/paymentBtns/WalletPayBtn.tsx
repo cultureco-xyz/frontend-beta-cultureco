@@ -11,12 +11,14 @@ export const WalletPayButton = ({
   cost,
   creator,
   productId,
+  userID,
   onSuccess,
   onFailed,
 }: {
   cost: number;
   creator: string;
   productId: string;
+  userID: string;
   onSuccess: (trx: string) => void;
   onFailed: () => void;
 }) => {
@@ -74,6 +76,7 @@ export const WalletPayButton = ({
         body: JSON.stringify({
           cost,
           creator,
+          user: userID,
           productId,
           trx: receipt.hash,
         }),
