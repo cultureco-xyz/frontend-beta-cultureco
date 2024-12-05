@@ -64,6 +64,8 @@ export const WalletPayButton = ({
       const contract = new ethers.Contract(contractAddress, ABI, signer);
       const creatorWallet = walletQuery.data.wallet;
       // Execute the transaction
+
+      console.log({ creatorWallet });
       const tx = await contract.transfer(`${creatorWallet}`, cost * 1000000);
 
       // Wait for transaction confirmation
