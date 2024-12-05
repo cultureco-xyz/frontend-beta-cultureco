@@ -6,7 +6,13 @@ import { IComment, IProductData, UserData } from "@/types";
 import React, { useState } from "react";
 import { LuArrowRightCircle } from "react-icons/lu";
 
-import { ChevronDown, ChevronLeft, MessageSquare, Share, VerifiedIcon } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronLeft,
+  MessageSquare,
+  Share,
+  VerifiedIcon,
+} from "lucide-react";
 import { PiFire, PiFireBold } from "react-icons/pi";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -291,34 +297,34 @@ function DetailedView({
             )}
           </Button>
         )}
-        {(product.audioUrl && !musicPlayerOpen) ||
-          (!product.audioUrl && (
-            <div className="flex justify-between">
-              <span className="flex flex-col">
-                <h1 className="text-white text-2xl capitalize font-groteskBold">
-                  {product.title}
+        {(product.audioUrl && !musicPlayerOpen) || !product.audioUrl ? (
+          <div className="flex justify-between">
+            <span className="flex flex-col">
+              <h1 className="text-white text-2xl capitalize font-groteskBold">
+                {product.title}
+              </h1>
+              <p className="text-white text-md leading-3 capitalize">
+                {productDetails.isSuccess &&
+                  productDetails.data.productData.creator.name}
+              </p>
+              {/* TO-DO: Implement real album functionality */}
+              {/* <Album className="mt-3" /> */}
+            </span>
+            <span className="text-white items-end flex flex-col mt-4">
+              <p className="flex items-center gap-1">
+                <CultureCoLogoIcon fillColor={"#fe621d"} />
+                <h1 className="text-2xl font-groteskBold text-cultureOrange">
+                  ₹{product.memberPrice}
                 </h1>
-                <p className="text-white text-md leading-3 capitalize">
-                  {productDetails.isSuccess &&
-                    productDetails.data.productData.creator.name}
-                </p>
-                {/* TO-DO: Implement real album functionality */}
-                {/* <Album className="mt-3" /> */}
-              </span>
-              <span className="text-white items-end flex flex-col mt-4">
-                <p className="flex items-center gap-1">
-                  <CultureCoLogoIcon fillColor={"#fe621d"} />
-                  <h1 className="text-2xl font-groteskBold text-cultureOrange">
-                    ₹{product.memberPrice}
-                  </h1>
-                </p>
-                <p className="text-md font-groteskMedium">
-                  ₹{product.regularPrice}
-                </p>
-                <p className="text-xs">for non-members</p>
-              </span>
-            </div>
-          ))}
+              </p>
+              <p className="text-md font-groteskMedium">
+                ₹{product.regularPrice}
+              </p>
+              <p className="text-xs">for non-members</p>
+            </span>
+          </div>
+        ) : null}
+
         {musicPlayerOpen && (
           <div
             className="w-full px-6"
